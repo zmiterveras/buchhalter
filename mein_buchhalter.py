@@ -24,9 +24,11 @@ class MainWindow(QtWidgets.QMainWindow):
         menu_bar = self.menuBar()
         self.set_interface_language(menu_language)
         self.db_handler = SqlHandler(self.app_dir)
+        self.check_db()
         self.view = CentralWidget(self.interface_language)
         self.view.start_screen()
         self.setCentralWidget(self.view)
+        self.view.btn_close.clicked.connect(self.close)
 
     def set_interface_language(self, language):
         if language == 'en':
@@ -37,7 +39,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def check_db(self):
         if not self.db_handler.is_db_available():
-            self.db_handler.create_db()
+            # self.db_handler.create_db()
+            print('DB is not exist')
         else:
             pass
 

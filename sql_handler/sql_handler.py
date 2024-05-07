@@ -11,6 +11,13 @@ class SqlHandler:
 
     def create_db(self):
         connect, query = self.connect_db()
+        self.create_credit(connect, query)
+        self.create_debit(connect, query)
+        self.create_accounts(connect, query)
+        self.create_category(connect, query)
+        connect.close()
+
+    def create_credit(self, connect, query):
         if 'Credit' not in connect.tables():
             query_create_credit = '''
             create table Credit (id integer primary key autoincrement,
@@ -18,6 +25,8 @@ class SqlHandler:
             '''
             query.exec(query_create_credit)
             query.clear()
+
+    def create_debit(self, connect, query):
         if 'Debit' not in connect.tables():
             query_create_debit = '''
             create table Debit (id integer primary key autoincrement,
@@ -25,6 +34,8 @@ class SqlHandler:
             '''
             query.exec(query_create_debit)
             query.clear()
+
+    def create_accounts(self, connect, query):
         if 'Accounts' not in connect.tables():
             query_create_accounts = '''
             create table Accounts (id integer primary key autoincrement,
@@ -32,13 +43,30 @@ class SqlHandler:
             '''
             query.exec(query_create_accounts)
             query.clear()
+
+    def create_category(self, connect, query):
         if 'Category' not in connect.tables():
             query_create_category = '''
-            create table Category (id integer, category text)
+            create table Category (id integer, category_en text, category_ru text)
             '''
             query.exec(query_create_category)
             query.clear()
-        connect.close()
+            self.fill_category(query)
+
+    def get_category_names(self):
+        from menu_languages.menulanguages import MenuLanguages
+        en_dict = MenuLanguages.en
+        self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys]
+        ru_dict = MenuLanguages.ru
+        self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys]
+
+    def fill_category(self, query):
+        self.get_category_names()
+        query.prepare("insert into category (null, :en_names, :ru_names)")
+        query.bindValue(':en_names', self.en_names)
+        query.bindValue(':ru_names', self.ru_names)
+        query.execBatch()
+        query.clear()
 
     def connect_db(self):
         connect = QtSql.QSqlDatabase.addDatabase('QSQLITE')
