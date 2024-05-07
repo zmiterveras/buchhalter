@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
 from central_widget import CentralWidget
+from tools.date_time_tool import get_current_date
 
 
 settings = QtCore.QSettings('@zmv', 'Buchhalter')
@@ -29,6 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.view.start_screen()
         self.setCentralWidget(self.view)
         self.view.btn_close.clicked.connect(self.close)
+        get_current_date()
 
     def set_interface_language(self, language):
         if language == 'en':

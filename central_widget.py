@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtCore
+from tools.date_time_tool import get_current_date
 
 
 class CentralWidget(QtWidgets.QWidget):
@@ -19,6 +20,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.setLayout(self.top_widget)
 
     def start_screen(self):
+        self.show_current_date()
         start_screen_header = QtWidgets.QLabel(self.interface_languages['current_balance'])
         start_screen_header.setAlignment(QtCore.Qt.AlignCenter)
         self.view_box.addWidget(start_screen_header)
@@ -35,6 +37,11 @@ class CentralWidget(QtWidgets.QWidget):
         start_screen_main_box.addLayout(start_screen_second_box)
         start_screen_widget.setLayout(start_screen_main_box)
         self.view_box.addWidget(start_screen_widget)
+
+    def show_current_date(self):
+        label_date = QtWidgets.QLabel(get_current_date())
+        label_date.setAlignment(QtCore.Qt.AlignCenter)
+        self.view_box.addWidget(label_date)
 
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new'], None),
