@@ -7,7 +7,8 @@ from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
 from central_widget import CentralWidget
-from tools.date_time_tool import get_current_date
+from tools.date_time_tool import get_current_month
+from tools.my_logger import logger
 
 
 settings = QtCore.QSettings('@zmv', 'Buchhalter')
@@ -20,19 +21,19 @@ else:
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
-        super().__init__(parent)
+        QtWidgets.QMainWindow.__init__(self, parent)
         self.app_dir = os.path.dirname(os.path.abspath(__file__))
         menu_bar = self.menuBar()
         self.set_interface_language(menu_language)
         self.db_handler = SqlHandler(self.app_dir)
         self.check_db()
-        self.view = CentralWidget(self.interface_language)
+        self.view = CentralWidget(self.interface_language, self.db_handler)
         self.view.start_screen()
         self.setCentralWidget(self.view)
         self.view.btn_close.clicked.connect(self.close)
-        get_current_date()
+        # print(self.db_handler.get_current_credit())
 
-    def set_interface_language(self, language):
+    def set_interface_language(self, language: str):
         if language == 'en':
             self.interface_language = MenuLanguages.en
         else:
@@ -42,9 +43,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def check_db(self):
         if not self.db_handler.is_db_available():
             # self.db_handler.create_db()
-            print('DB is not exist')
+            logger.info('DB is not exist')
+            # print('DB created')
         else:
-            pass
+            logger.info('DB is available')
 
 
 if __name__ == '__main__':
