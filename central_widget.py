@@ -4,6 +4,7 @@ import datetime
 
 from PyQt5 import QtWidgets, QtCore
 from tools.date_time_tool import get_current_date
+from tools.money_parser import get_view_money
 from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
@@ -42,8 +43,6 @@ class CentralWidget(QtWidgets.QWidget):
         start_screen_second_box = QtWidgets.QVBoxLayout()
         start_screen_second_box.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
         self.show_current_expense(start_screen_first_box)
-        # start_screen_second_box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
-        # start_screen_second_box.addWidget(QtWidgets.QLabel('0'))
         self.show_current_income(start_screen_second_box)
         start_screen_main_box.addLayout(start_screen_first_box)
         start_screen_main_box.addLayout(start_screen_second_box)
@@ -53,17 +52,12 @@ class CentralWidget(QtWidgets.QWidget):
     def show_current_expense(self, box):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['expense']))
         current_expense = self.sql_handler.get_current_credit()
-        box.addWidget(QtWidgets.QLabel(self.get_view_money(current_expense)))
+        box.addWidget(QtWidgets.QLabel(get_view_money(current_expense)))
 
     def show_current_income(self, box):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
         current_income = self.sql_handler.get_current_debit()
-        box.addWidget(QtWidgets.QLabel(self.get_view_money(current_income)))
-
-    def get_view_money(self, money):
-        money_int = str(money // 100)
-        money_dec = str(money % 100) if money % 100 > 9 else '0' + str(money % 100)
-        return money_int + ',' + money_dec
+        box.addWidget(QtWidgets.QLabel(get_view_money(current_income)))
 
     def show_current_balance(self):
         pass
