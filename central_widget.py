@@ -7,7 +7,6 @@ from tools.date_time_tool import get_current_date
 from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
-
 logger = getLogger(__name__)
 
 
@@ -42,14 +41,32 @@ class CentralWidget(QtWidgets.QWidget):
         start_screen_first_box = QtWidgets.QVBoxLayout()
         start_screen_second_box = QtWidgets.QVBoxLayout()
         start_screen_second_box.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
-        start_screen_first_box.addWidget(QtWidgets.QLabel(self.interface_languages['expense']))
-        start_screen_first_box.addWidget(QtWidgets.QLabel('0'))
-        start_screen_second_box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
-        start_screen_second_box.addWidget(QtWidgets.QLabel('0'))
+        self.show_current_expense(start_screen_first_box)
+        # start_screen_second_box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
+        # start_screen_second_box.addWidget(QtWidgets.QLabel('0'))
+        self.show_current_income(start_screen_second_box)
         start_screen_main_box.addLayout(start_screen_first_box)
         start_screen_main_box.addLayout(start_screen_second_box)
         start_screen_widget.setLayout(start_screen_main_box)
         self.view_box.addWidget(start_screen_widget)
+
+    def show_current_expense(self, box):
+        box.addWidget(QtWidgets.QLabel(self.interface_languages['expense']))
+        current_expense = self.sql_handler.get_current_credit()
+        box.addWidget(QtWidgets.QLabel(self.get_view_money(current_expense)))
+
+    def show_current_income(self, box):
+        box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
+        current_income = self.sql_handler.get_current_debit()
+        box.addWidget(QtWidgets.QLabel(self.get_view_money(current_income)))
+
+    def get_view_money(self, money):
+        money_int = str(money // 100)
+        money_dec = str(money % 100) if money % 100 > 9 else '0' + str(money % 100)
+        return money_int + ',' + money_dec
+
+    def show_current_balance(self):
+        pass
 
     def show_current_date(self):
         label_date = QtWidgets.QLabel(get_current_date())
@@ -59,7 +76,7 @@ class CentralWidget(QtWidgets.QWidget):
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new_expense'], self.add_new_expense),
                            (self.interface_languages['new_income'], self.add_new_income),
-                           (self.interface_languages['viewing'], self.information_widget)):
+                           (self.interface_languages['viewing'], self.test)):
             btn = QtWidgets.QPushButton(name)
             btn.clicked.connect(func)
             self.buttons_box.addWidget(btn)
@@ -77,7 +94,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.calendar.setDisplayFormat('yyyy.MM.dd')
         self.calendar.setDate(datetime.date.today())
         self.expense_int = QtWidgets.QSpinBox()
-        self.expense_int.setMaximum(1000)
+        self.expense_int.setMaximum(100000)
         self.expense_dec = QtWidgets.QSpinBox()
         self.expense_dec.setRange(0, 99)
         point = QtWidgets.QLabel(',')
@@ -105,7 +122,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.add_new_expense_widget.show()
 
     def add_new_income(self):
-        print("Add New Income")
+        logger.info("Add New Income")
         self.add_new_income_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
         self.add_new_income_widget.setWindowTitle(self.interface_languages['new_income'])
         self.add_new_income_widget.setWindowModality(QtCore.Qt.WindowModal)
@@ -119,14 +136,13 @@ class CentralWidget(QtWidgets.QWidget):
         for name in ('salary', 'bonus', 'gift', 'percent'):
             box = QtWidgets.QHBoxLayout()
             int_value = QtWidgets.QSpinBox()
-            int_value.setMaximum(50000)
+            int_value.setMaximum(100000)
             dec_value = QtWidgets.QSpinBox()
             dec_value.setRange(0, 99)
             point = QtWidgets.QLabel(',')
             for wid in int_value, point, dec_value:
                 box.addWidget(wid)
             self.income_dic[name] = (box, int_value, dec_value)
-
 
         ############################################################################
         # self.salary_int = QtWidgets.QSpinBox()
@@ -156,14 +172,14 @@ class CentralWidget(QtWidgets.QWidget):
         btn_close.clicked.connect(self.add_new_income_widget.close)
         self.add_new_income_widget.setLayout(form)
         self.add_new_income_widget.show()
-        
+
     def get_expense(self):
         date = self.calendar.text()
         expense = self.expense_int.value() * 100 + self.expense_dec.value()
         category = self.category.currentIndex()
         note = self.note.text()
-        print(date + '/' + str(expense) + '/' + str(category) + '/' + note)
-        # self.add_expense_to_db(date, expense, category, note)
+        logger.info(date + '/' + str(expense) + '/' + str(category) + '/' + note)
+        self.add_expense_to_db(date, expense, category, note)
         self.add_new_expense_widget.close()
 
     def add_expense_to_db(self, date, value, category, note):
@@ -171,27 +187,17 @@ class CentralWidget(QtWidgets.QWidget):
 
     def get_income(self):
         date = self.calendar_in.text()
-        salary = self.income_dic['salary'][1].value()*100 + self.income_dic['salary'][2].value()
-        bonus = self.income_dic['bonus'][1].value()*100 + self.income_dic['bonus'][2].value()
-        gift = self.income_dic['gift'][1].value()*100 + self.income_dic['gift'][2].value()
-        percent = self.income_dic['percent'][1].value()*100 + self.income_dic['percent'][2].value()
+        salary = self.income_dic['salary'][1].value() * 100 + self.income_dic['salary'][2].value()
+        bonus = self.income_dic['bonus'][1].value() * 100 + self.income_dic['bonus'][2].value()
+        gift = self.income_dic['gift'][1].value() * 100 + self.income_dic['gift'][2].value()
+        percent = self.income_dic['percent'][1].value() * 100 + self.income_dic['percent'][2].value()
         note = self.note_in.text()
-        print(date + '/' + str(salary) + '/' + str(bonus) + '/' + str(gift) + '/' + str(percent) + '/' + note)
+        logger.info(date + '/' + str(salary) + '/' + str(bonus) + '/' + str(gift) + '/' + str(percent) + '/' + note)
+        self.add_income_to_db(date, salary, bonus, gift, percent, note)
         self.add_new_income_widget.close()
 
+    def add_income_to_db(self, date, salary, bonus, gift, percent, note):
+        self.sql_handler.add_debit(date, salary, bonus, gift, percent, note)
 
-    def test_top_level(self):
-        tl = QtWidgets.QWidget(parent=None, flags=QtCore.Qt.Window)
-        tl.setWindowTitle('test')
-        lE_key = QtWidgets.QLineEdit()
-        form = QtWidgets.QFormLayout()
-        form.addRow('test field', lE_key)
-        tl.setLayout(form)
-        tl.show()
-
-    def information_widget(self):
-        QtWidgets.QMessageBox.information(None, 'test', 'test')
-
-
-
-
+    def test(self):
+        pass

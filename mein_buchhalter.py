@@ -42,9 +42,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def check_db(self):
         if not self.db_handler.is_db_available():
-            # self.db_handler.create_db()
             logger.info('DB is not exist')
-            # print('DB created')
+            self.db_handler.create_db()
         else:
             logger.info('DB is available')
 

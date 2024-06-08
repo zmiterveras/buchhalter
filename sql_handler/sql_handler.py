@@ -18,6 +18,7 @@ class SqlHandler:
         connect, query = self.connect_db()
         self.create_credit(connect, query)
         self.create_debit(connect, query)
+        self.create_balance(connect, query)
         self.create_accounts(connect, query)
         self.create_category(connect, query)
         connect.close()
@@ -40,6 +41,22 @@ class SqlHandler:
             '''
             query.exec(query_create_debit)
             query.clear()
+
+    def create_balance(self, connect, query):
+        if 'Balance' not in connect.tables():
+            query_create_balance = '''
+            create table Balance (id integer primary key autoincrement, balance integer)
+            '''
+            query.exec(query_create_balance)
+            query.clear()
+            self.fill_balance(query)
+
+    def fill_balance(self, query):
+        query_fill_balance = '''
+        insert into Balance (null, 0)
+        '''
+        query.exec(query_fill_balance)
+        query.clear()
 
     def create_accounts(self, connect, query):
         if 'Accounts' not in connect.tables():
@@ -84,17 +101,43 @@ class SqlHandler:
     def is_db_available(self):
         return True if os.path.exists(self.database) else False
 
-    def get_current_credit(self):
-        # connect, query = self.connect_db()
-        query_get_current_credit = '''
-        select sum(value) from Credit where date>=%s 
-        ''' % get_current_month()
-        logger.info('get_current_credit')
-        # connect.close()
-
-    def get_current_debit(self):
+    def get_current_credit(self) -> int:
+        credit_sum = 0
         connect, query = self.connect_db()
+        current_month_date, _ = get_current_month()
+        query_get_current_credit = '''
+        select sum(value) as credit_sum from Credit where date>="%s"
+        ''' % current_month_date
+        query.exec(query_get_current_credit)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                credit_sum = query.value('credit_sum')
+                query.next()
+                logger.info('get_current_credit: ' + str(credit_sum))
+        else:
+            logger.error('Problem with query')
         connect.close()
+        return credit_sum
+
+    def get_current_debit(self) -> int:
+        debit_sum = 0
+        connect, query = self.connect_db()
+        current_month_date, _ = get_current_month()
+        query_get_current_debit = '''
+        select sum(salary) + sum(bonus) + sum(gift) + sum(percents) as debit_sum from Debit where date>="%s"
+        ''' % current_month_date
+        query.exec(query_get_current_debit)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                debit_sum = query.value('debit_sum')
+                query.next()
+                logger.info('get_current_debit: ' + str(debit_sum))
+        else:
+            logger.error('Problem with query')
+        connect.close()
+        return debit_sum
 
     def add_credit(self, date, value, cat_id, note):
         connect, query = self.connect_db()
@@ -104,12 +147,14 @@ class SqlHandler:
         query.addBindValue(cat_id)
         query.addBindValue(note)
         query.exec_()
+        query.clear()
+        # self.update_balance(query, credit=value)
         connect.close()
         logger.info('Add new record to Credit')
 
-    def add_debit(self, date, salary=0, bonus=0, gift=0, percent=0,  note=''):
+    def add_debit(self, date, salary, bonus, gift, percent,  note):
         connect, query = self.connect_db()
-        query.prepare('insert into Credit values (null, ?, ?, ?, ?, ?, ?)')
+        query.prepare('insert into Debit values (null, ?, ?, ?, ?, ?, ?)')
         query.addBindValue(salary)
         query.addBindValue(bonus)
         query.addBindValue(gift)
@@ -117,7 +162,37 @@ class SqlHandler:
         query.addBindValue(date)
         query.addBindValue(note)
         query.exec_()
+        query.clear()
+        # self.update_balance(query, debit=salary+bonus+gift+percent)
         connect.close()
         logger.info('Add new record to Debit')
 
+    def update_balance(self, query, credit=0, debit=0):
+        balance = self.get_balance(query)
+        balance = balance + debit - credit
+        self.set_balance(query, balance)
+
+    def get_balance(self, query):
+        balance = 0
+        query_get_balance = '''
+        select balance from Balance
+        '''
+        query.exec(query_get_balance)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                balance = query.value('balance')
+                query.next()
+                logger.info('Got Balance: ' + balance)
+        else:
+            logger.error('Problem with query')
+        query.clear()
+        return balance
+
+    def set_balance(self, query, balance):
+        query_set_balance = '''
+        update Balance set balance="%d"''' % balance
+        query.exec(query_set_balance)
+        logger.info('Set Balance: ' + str(balance))
+        query.clear()
 
