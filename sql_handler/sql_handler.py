@@ -168,12 +168,13 @@ class SqlHandler:
         logger.info('Add new record to Debit')
 
     def update_balance(self, query, credit=0, debit=0):
-        balance = self.get_balance(query)
+        balance = self.get_balance()
         balance = balance + debit - credit
         self.set_balance(query, balance)
 
-    def get_balance(self, query):
+    def get_balance(self):
         balance = 0
+        connect, query = self.connect_db()
         query_get_balance = '''
         select balance from Balance
         '''
@@ -186,7 +187,7 @@ class SqlHandler:
                 logger.info('Got Balance: ' + balance)
         else:
             logger.error('Problem with query')
-        query.clear()
+        connect.close()
         return balance
 
     def set_balance(self, query, balance):

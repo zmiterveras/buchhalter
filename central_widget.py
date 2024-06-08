@@ -34,9 +34,10 @@ class CentralWidget(QtWidgets.QWidget):
 
     def start_screen(self):
         self.show_current_date()
-        start_screen_header = QtWidgets.QLabel(self.interface_languages['current_balance'])
-        start_screen_header.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.view_box.addWidget(start_screen_header)
+        # start_screen_header = QtWidgets.QLabel(self.interface_languages['current_balance'])
+        # start_screen_header.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+        # self.view_box.addWidget(start_screen_header)
+        self.show_current_balance()
         start_screen_widget = QtWidgets.QWidget()
         start_screen_main_box = QtWidgets.QHBoxLayout()
         start_screen_first_box = QtWidgets.QVBoxLayout()
@@ -60,7 +61,13 @@ class CentralWidget(QtWidgets.QWidget):
         box.addWidget(QtWidgets.QLabel(get_view_money(current_income)))
 
     def show_current_balance(self):
-        pass
+        start_screen_header = QtWidgets.QLabel(self.interface_languages['current_balance'])
+        start_screen_header.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.view_box.addWidget(start_screen_header)
+        current_balance = self.sql_handler.get_balance()
+        start_screen_header_value = QtWidgets.QLabel(get_view_money(current_balance))
+        start_screen_header_value.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.view_box.addWidget(start_screen_header_value)
 
     def show_current_date(self):
         label_date = QtWidgets.QLabel(get_current_date())
