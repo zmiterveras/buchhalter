@@ -33,7 +33,6 @@ class CentralWidget(QtWidgets.QWidget):
         self.setLayout(self.top_widget)
 
     def start_screen(self):
-        self.show_current_date()
         self.show_current_balance()
         start_screen_widget = QtWidgets.QWidget()
         start_screen_main_box = QtWidgets.QHBoxLayout()
@@ -65,11 +64,6 @@ class CentralWidget(QtWidgets.QWidget):
         start_screen_header_value = QtWidgets.QLabel(get_view_money(current_balance))
         start_screen_header_value.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.view_box.addWidget(start_screen_header_value)
-
-    def show_current_date(self):
-        label_date = QtWidgets.QLabel(get_current_date())
-        label_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.view_box.addWidget(label_date)
 
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new_expense'], self.add_new_expense),
