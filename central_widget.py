@@ -34,9 +34,6 @@ class CentralWidget(QtWidgets.QWidget):
 
     def start_screen(self):
         self.show_current_date()
-        # start_screen_header = QtWidgets.QLabel(self.interface_languages['current_balance'])
-        # start_screen_header.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
-        # self.view_box.addWidget(start_screen_header)
         self.show_current_balance()
         start_screen_widget = QtWidgets.QWidget()
         start_screen_main_box = QtWidgets.QHBoxLayout()
@@ -144,16 +141,6 @@ class CentralWidget(QtWidgets.QWidget):
             for wid in int_value, point, dec_value:
                 box.addWidget(wid)
             self.income_dic[name] = (box, int_value, dec_value)
-
-        ############################################################################
-        # self.salary_int = QtWidgets.QSpinBox()
-        # self.salary_int.setMinimum(0)
-        # self.salary_dec = QtWidgets.QSpinBox()
-        # self.salary_dec.setRange(0, 99)
-        # point = QtWidgets.QLabel(',')
-        # salary_box = QtWidgets.QHBoxLayout()
-        # for wid in self.expense_int, point, self.expense_dec:
-        #     salary_box.addWidget(wid)
         self.note_in = QtWidgets.QLineEdit()
         btn_add = QtWidgets.QPushButton(self.interface_languages['add'])
         btn_close = QtWidgets.QPushButton(self.interface_languages['close'])

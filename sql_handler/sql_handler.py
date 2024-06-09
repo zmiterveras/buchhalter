@@ -53,7 +53,7 @@ class SqlHandler:
 
     def fill_balance(self, query):
         query_fill_balance = '''
-        insert into Balance (null, 0)
+        insert into Balance values (null, 0)
         '''
         query.exec(query_fill_balance)
         query.clear()
@@ -70,7 +70,7 @@ class SqlHandler:
     def create_category(self, connect, query):
         if 'Category' not in connect.tables():
             query_create_category = '''
-            create table Category (id integer, category_en text, category_ru text)
+            create table Category (id integer primary key autoincrement, category_en text, category_ru text)
             '''
             query.exec(query_create_category)
             query.clear()
@@ -85,7 +85,7 @@ class SqlHandler:
 
     def fill_category(self, query):
         self.get_category_names()
-        query.prepare("insert into Category (null, :en_names, :ru_names)")
+        query.prepare("insert into Category values (null, :en_names, :ru_names)")
         query.bindValue(':en_names', self.en_names)
         query.bindValue(':ru_names', self.ru_names)
         query.execBatch()
@@ -102,7 +102,7 @@ class SqlHandler:
         return True if os.path.exists(self.database) else False
 
     def get_current_credit(self) -> int:
-        credit_sum = 0
+        credit_sum = ''
         connect, query = self.connect_db()
         current_month_date, _ = get_current_month()
         query_get_current_credit = '''
@@ -112,12 +112,13 @@ class SqlHandler:
         if query.isActive():
             query.first()
             while query.isValid():
-                credit_sum = query.value('credit_sum')
+                credit_sum = 0 if query.isNull('credit_sum') else query.value('credit_sum')
                 query.next()
                 logger.info('get_current_credit: ' + str(credit_sum))
         else:
             logger.error('Problem with query')
         connect.close()
+
         return credit_sum
 
     def get_current_debit(self) -> int:
@@ -131,7 +132,7 @@ class SqlHandler:
         if query.isActive():
             query.first()
             while query.isValid():
-                debit_sum = query.value('debit_sum')
+                debit_sum = 0 if query.isNull('debit_sum') else query.value('debit_sum')
                 query.next()
                 logger.info('get_current_debit: ' + str(debit_sum))
         else:
@@ -148,8 +149,8 @@ class SqlHandler:
         query.addBindValue(note)
         query.exec_()
         query.clear()
-        # self.update_balance(query, credit=value)
         connect.close()
+        self.update_balance(credit=value)
         logger.info('Add new record to Credit')
 
     def add_debit(self, date, salary, bonus, gift, percent,  note):
@@ -163,14 +164,14 @@ class SqlHandler:
         query.addBindValue(note)
         query.exec_()
         query.clear()
-        # self.update_balance(query, debit=salary+bonus+gift+percent)
         connect.close()
+        self.update_balance(debit=salary + bonus + gift + percent)
         logger.info('Add new record to Debit')
 
-    def update_balance(self, query, credit=0, debit=0):
+    def update_balance(self, credit=0, debit=0):
         balance = self.get_balance()
         balance = balance + debit - credit
-        self.set_balance(query, balance)
+        self.set_balance(balance)
 
     def get_balance(self):
         balance = 0
@@ -184,16 +185,17 @@ class SqlHandler:
             while query.isValid():
                 balance = query.value('balance')
                 query.next()
-                logger.info('Got Balance: ' + balance)
+                logger.info('Got Balance: ' + str(balance))
         else:
             logger.error('Problem with query')
         connect.close()
         return balance
 
-    def set_balance(self, query, balance):
+    def set_balance(self, balance):
+        connect, query = self.connect_db()
         query_set_balance = '''
-        update Balance set balance="%d"''' % balance
+        update Balance set balance=%d''' % balance
         query.exec(query_set_balance)
         logger.info('Set Balance: ' + str(balance))
-        query.clear()
+        connect.close()
 
