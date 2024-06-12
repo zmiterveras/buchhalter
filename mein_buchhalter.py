@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
 from widgets.central_widget import CentralWidget
+from widgets.simple_balance_view import SimpleBalanceView
 from tools.date_time_tool import get_current_date
 from tools.my_logger import logger
 
@@ -27,7 +28,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_interface_language(menu_language)
         self.db_handler = SqlHandler(self.app_dir)
         self.check_db()
-        self.view = CentralWidget(self.interface_language, self.db_handler)
+        # self.view = CentralWidget(self.interface_language, self.db_handler)
+        self.view = SimpleBalanceView(self.interface_language, self.db_handler)
         self.view.start_screen()
         self.setCentralWidget(self.view)
         self.view.btn_close.clicked.connect(self.close)
