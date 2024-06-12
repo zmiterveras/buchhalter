@@ -3,7 +3,6 @@
 import datetime
 
 from PyQt5 import QtWidgets, QtCore
-from tools.date_time_tool import get_current_date
 from tools.money_parser import get_view_money
 from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
@@ -49,21 +48,34 @@ class CentralWidget(QtWidgets.QWidget):
     def show_current_expense(self, box):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['expense']))
         current_expense = self.sql_handler.get_current_credit()
-        box.addWidget(QtWidgets.QLabel(get_view_money(current_expense)))
+        self.current_expense_label = QtWidgets.QLabel(get_view_money(current_expense))
+        box.addWidget(self.current_expense_label)
 
     def show_current_income(self, box):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
         current_income = self.sql_handler.get_current_debit()
-        box.addWidget(QtWidgets.QLabel(get_view_money(current_income)))
+        self.current_income_label = QtWidgets.QLabel(get_view_money(current_income))
+        box.addWidget(self.current_income_label)
 
     def show_current_balance(self):
         start_screen_header = QtWidgets.QLabel(self.interface_languages['current_balance'])
         start_screen_header.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.view_box.addWidget(start_screen_header)
         current_balance = self.sql_handler.get_balance()
-        start_screen_header_value = QtWidgets.QLabel(get_view_money(current_balance))
-        start_screen_header_value.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.view_box.addWidget(start_screen_header_value)
+        self.current_balance_label = QtWidgets.QLabel(get_view_money(current_balance))
+        self.current_balance_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.view_box.addWidget(self.current_balance_label)
+
+    def balance_update(self, current_balance: str):
+        match current_balance:
+            case 'credit':
+                credit = self.sql_handler.get_current_credit()
+                self.current_expense_label.setText(get_view_money(credit))
+            case 'debit':
+                debit = self.sql_handler.get_current_debit()
+                self.current_income_label.setText(get_view_money(debit))
+        balance = self.sql_handler.get_balance()
+        self.current_balance_label.setText(get_view_money(balance))
 
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new_expense'], self.add_new_expense),
@@ -160,9 +172,10 @@ class CentralWidget(QtWidgets.QWidget):
         expense = self.expense_int.value() * 100 + self.expense_dec.value()
         category = self.category.currentIndex()
         note = self.note.text()
-        logger.info(date + '/' + str(expense) + '/' + str(category) + '/' + note)
+        logger.info('credit: ' + date + '/' + str(expense) + '/' + str(category) + '/' + note)
         self.add_expense_to_db(date, expense, category, note)
         self.add_new_expense_widget.close()
+        self.balance_update('credit')
 
     def add_expense_to_db(self, date, value, category, note):
         self.sql_handler.add_credit(date, value, category, note)
@@ -174,9 +187,11 @@ class CentralWidget(QtWidgets.QWidget):
         gift = self.income_dic['gift'][1].value() * 100 + self.income_dic['gift'][2].value()
         percent = self.income_dic['percent'][1].value() * 100 + self.income_dic['percent'][2].value()
         note = self.note_in.text()
-        logger.info(date + '/' + str(salary) + '/' + str(bonus) + '/' + str(gift) + '/' + str(percent) + '/' + note)
+        logger.info('debit' + date + '/' + str(salary) + '/' + str(bonus) + '/' + str(gift) + '/' + str(percent)
+                    + '/' + note)
         self.add_income_to_db(date, salary, bonus, gift, percent, note)
         self.add_new_income_widget.close()
+        self.balance_update('debit')
 
     def add_income_to_db(self, date, salary, bonus, gift, percent, note):
         self.sql_handler.add_debit(date, salary, bonus, gift, percent, note)

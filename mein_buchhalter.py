@@ -6,7 +6,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
-from central_widget import CentralWidget
+from widgets.central_widget import CentralWidget
 from tools.date_time_tool import get_current_date
 from tools.my_logger import logger
 
