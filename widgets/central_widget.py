@@ -21,3 +21,21 @@ class CentralWidget(QtWidgets.QWidget):
         self.top_widget.addLayout(self.view_box)
         self.top_widget.addLayout(self.buttons_box)
         self.setLayout(self.top_widget)
+
+    def clear_top_widget(self):
+        self.clear_view_box()
+        self.clear_buttons_box()
+
+    def clear_view_box(self):
+        for i in reversed(range(self.view_box.count())):
+            widget = self.view_box.itemAt(i).widget()
+            widget.setParent(None)
+            widget.deleteLater()
+
+    def clear_buttons_box(self):
+        for i in reversed(range(self.buttons_box.count())):
+            widget = self.buttons_box.itemAt(i).widget()
+            widget.setParent(None)
+            widget.deleteLater()
+
+
