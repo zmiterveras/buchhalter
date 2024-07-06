@@ -64,8 +64,8 @@ class CentralWidget(QtWidgets.QWidget):
             self.buttons_box.addWidget(btn)
 
     def make_view_buttons_box(self):
-        self.simple_balance_button = QtWidgets.QPushButton(self.interface_languages['none'])
-        self.month_balance_button = QtWidgets.QPushButton(self.interface_languages['none'])
+        self.simple_balance_button = QtWidgets.QPushButton(self.interface_languages['simple_view'])
+        self.month_balance_button = QtWidgets.QPushButton(self.interface_languages['month_view'])
         self.btn_close = QtWidgets.QPushButton(self.interface_languages['close'])
         for i in (self.simple_balance_button,
                   self.month_balance_button,
@@ -181,5 +181,7 @@ class CentralWidget(QtWidgets.QWidget):
     def add_income_to_db(self, date, salary, bonus, gift, percent, note):
         self.sql_handler.add_debit(date, salary, bonus, gift, percent, note)
 
+    def test(self):
+        logger.info('Test')
 
 
