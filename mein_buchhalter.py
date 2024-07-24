@@ -87,7 +87,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.setWindowTitle("Mein Buchhalter")
-    window.resize(250, 150)
+    window.resize(350, 150)
     desktop = QtWidgets.QApplication.desktop()
     x = (desktop.width() // 2) - window.width()
     window.move(x, 250)

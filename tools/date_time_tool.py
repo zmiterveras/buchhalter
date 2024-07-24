@@ -5,9 +5,13 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 
-def get_current_date() -> str:
+def get_current_date(formatting=None) -> str:
     current_date = datetime.date.today()
-    current_date = current_date.strftime('%d %B %Y')
+    match formatting:
+        case None:
+            current_date = current_date.strftime('%d %B %Y')
+        case 'month':
+            current_date = current_date.strftime('%B')
     return current_date
 
 

@@ -121,6 +121,29 @@ class SqlHandler:
 
         return credit_sum
 
+    def get_month_credits(self):
+        month_credits = []
+        connect, query = self.connect_db()
+        current_month_date, _ = get_current_month()
+        query_get_month_credits = '''
+        select cr.id, cr.date, cr.value, cat.category_en  
+        from Credit cr join Category cat 
+        on cr.cat_id = cat.id
+        where cr.date>="%s"
+        order by cr.date
+        ''' % current_month_date
+        query.exec(query_get_month_credits)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                month_credits.append((query.value('id'), query.value('date'), query.value('value'),
+                                      query.value('category_en')))
+                query.next()
+        else:
+            logger.error('Problem with query')
+        connect.close()
+        return month_credits
+
     def get_current_debit(self) -> int:
         debit_sum = 0
         connect, query = self.connect_db()

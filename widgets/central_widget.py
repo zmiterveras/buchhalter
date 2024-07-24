@@ -55,6 +55,9 @@ class CentralWidget(QtWidgets.QWidget):
     def get_current_income(self):
         return self.sql_handler.get_current_debit()
 
+    def get_month_expense(self):
+        return self.sql_handler.get_month_credits()
+
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new_expense'], self.add_new_expense),
                            (self.interface_languages['new_income'], self.add_new_income),
