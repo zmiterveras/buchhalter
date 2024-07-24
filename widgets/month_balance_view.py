@@ -14,15 +14,14 @@ logger = getLogger(__name__)
 class MonthBalanceView(CentralWidget):
 
     def month_balance_screen(self):
-        label = QtWidgets.QLabel('MonthBalanceView')
+        month = get_current_date('month') + ':'
+        label = QtWidgets.QLabel(month.capitalize())
         self.view_box.addWidget(label)
         self.set_table_month_expense()
 
     def set_table_month_expense(self):
         ids, dates, values, categories = self.unpacking_month_expense(self.get_month_expense())
         total_value = get_view_money(self.get_current_expense())
-        month = get_current_date('month')
-        print(total_value)
         table_view = QtWidgets.QTableView(parent=None)
         standard_item = QtGui.QStandardItemModel(parent=None)
         for row in range(0, len(ids)):

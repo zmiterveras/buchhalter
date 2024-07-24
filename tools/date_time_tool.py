@@ -11,7 +11,7 @@ def get_current_date(formatting=None) -> str:
         case None:
             current_date = current_date.strftime('%d %B %Y')
         case 'month':
-            current_date = current_date.strftime('%B')
+            current_date = current_date.strftime('%b')
     return current_date
 
 
