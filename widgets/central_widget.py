@@ -158,7 +158,7 @@ class CentralWidget(QtWidgets.QWidget):
     def get_expense(self):
         date = self.calendar.text()
         expense = self.expense_int.value() * 100 + self.expense_dec.value()
-        category = self.category.currentIndex()
+        category = self.category.currentIndex() + 1
         note = self.note.text()
         logger.info('credit: ' + date + '/' + str(expense) + '/' + str(category) + '/' + note)
         self.add_expense_to_db(date, expense, category, note)
