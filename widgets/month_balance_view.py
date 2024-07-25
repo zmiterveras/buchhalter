@@ -17,9 +17,9 @@ class MonthBalanceView(CentralWidget):
         month = get_current_date('month')
         balance = get_view_money(self.get_current_balance())
         label_month = QtWidgets.QLabel(self.interface_languages['month_view'] + ': ' + month)
-        label_balance = QtWidgets.QLabel(self.interface_languages['current_balance'] + ' ' + balance)
+        self.label_balance = QtWidgets.QLabel(self.interface_languages['current_balance'] + ' ' + balance)
         self.view_box.addWidget(label_month)
-        self.view_box.addWidget(label_balance)
+        self.view_box.addWidget(self.label_balance)
         self.set_table_month_expense()
 
     def set_table_month_expense(self):
@@ -62,6 +62,8 @@ class MonthBalanceView(CentralWidget):
                 self.clear_view_box()
                 self.month_balance_screen()
             case 'debit':
-                pass
+                balance = get_view_money(self.get_current_balance())
+                self.label_balance.setText(self.interface_languages['current_balance'] + ' ' + balance)
+
 
 
