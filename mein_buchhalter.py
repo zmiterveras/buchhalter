@@ -51,6 +51,15 @@ class MainWindow(QtWidgets.QMainWindow):
                                                                                              self.db_handler))
         self.view.month_balance_button.clicked.connect(lambda: self.set_month_balance_view(self.interface_language,
                                                                                            self.db_handler))
+        self.view.btn_submit_choose_viewing.clicked.connect(self.select_view)
+
+    def select_view(self):
+        type_viewing = self.view.get_type_viewing()
+        match type_viewing:
+            case 0:
+                self.set_simple_balance_view(self.interface_language, self.db_handler)
+            case 1:
+                self.set_month_balance_view(self.interface_language, self.db_handler)
 
     def set_simple_balance_view(self, interface_language, db_handler):
         if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':

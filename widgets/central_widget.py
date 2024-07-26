@@ -19,6 +19,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.make_widget()
         self.make_buttons_box()
         self.make_view_buttons_box()
+        self.btn_submit_choose_viewing = QtWidgets.QPushButton(self.interface_languages['select'])
 
     def make_widget(self):
         self.top_widget = QtWidgets.QVBoxLayout()
@@ -61,7 +62,7 @@ class CentralWidget(QtWidgets.QWidget):
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new_expense'], self.add_new_expense),
                            (self.interface_languages['new_income'], self.add_new_income),
-                           (self.interface_languages['viewing'], self.test)):
+                           (self.interface_languages['viewing'], self.choose_viewing)):
             btn = QtWidgets.QPushButton(name)
             btn.clicked.connect(func)
             self.buttons_box.addWidget(btn)
@@ -183,6 +184,23 @@ class CentralWidget(QtWidgets.QWidget):
 
     def add_income_to_db(self, date, salary, bonus, gift, percent, note):
         self.sql_handler.add_debit(date, salary, bonus, gift, percent, note)
+
+    def choose_viewing(self):
+        self.choose_viewing_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
+        viewing_list = [self.interface_languages['simple_view'],
+                        self.interface_languages['month_view']]
+        choose_viewing_box = QtWidgets.QVBoxLayout()
+        self.cb_viewing = QtWidgets.QComboBox()
+        self.cb_viewing.addItems(viewing_list)
+        choose_viewing_box.addWidget(self.cb_viewing)
+        choose_viewing_box.addWidget(self.btn_submit_choose_viewing)
+        self.choose_viewing_widget.setLayout(choose_viewing_box)
+        self.choose_viewing_widget.show()
+
+    def get_type_viewing(self) -> int:
+        type_viewing = self.cb_viewing.currentIndex()
+        self.choose_viewing_widget.close()
+        return type_viewing
 
     def test(self):
         logger.info('Test')
