@@ -35,7 +35,8 @@ class MenuLanguages:
         'television': 'Television',
         'transport': 'Transport',
         'utility': 'Utility',
-        'viewing': 'Viewing'
+        'viewing': 'Viewing',
+        'week': 'Week'
     }
     ru = {
         'add': 'Добавить',
@@ -70,7 +71,8 @@ class MenuLanguages:
         'television': 'Телевидение',
         'transport': 'Транспорт',
         'utility': 'Коммунальные',
-        'viewing': 'Просмотр'
+        'viewing': 'Просмотр',
+        'week': 'Неделя'
     }
     cat_keys = ['other',
                 'amuse',
