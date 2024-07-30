@@ -30,7 +30,7 @@ def get_last_week(purpose=None) -> str:
     last_week = current_date - datetime.timedelta(days=7)
     match purpose:
         case None:
-            return last_week.strftime('%d.%m.%Y')
+            return last_week.strftime('%Y.%m.%d')
         case 'view':
             return last_week.strftime('%d %B %Y')
 

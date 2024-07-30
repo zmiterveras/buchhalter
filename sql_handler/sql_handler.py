@@ -123,6 +123,7 @@ class SqlHandler:
 
     def get_last_time_span_credits(self, date):
         last_time_span_credits = []
+        logger.debug('Timespan: ' + date)
         connect, query = self.connect_db()
         # current_month_date, _ = get_current_month()
         query_get_month_credits = '''
