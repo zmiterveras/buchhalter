@@ -24,3 +24,10 @@ def get_current_month() -> tuple:
     logger.info('get current date')
     return str(year) + '.' + str(month) + '.' + '01', str(month)
 
+
+def get_last_week():
+    current_date = datetime.date.today()
+    last_week = current_date - datetime.timedelta(days=7)
+    return last_week.strftime('%d.%m.%Y')
+
+

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui
 
+from tools.data_unpacking import unpacking_expense
 from widgets.central_widget import CentralWidget
 from tools.money_parser import get_view_money
 from logging import getLogger
@@ -23,7 +24,7 @@ class MonthBalanceView(CentralWidget):
         self.set_table_expense()
 
     def set_table_expense(self):
-        ids, dates, values, categories = self.unpacking_expense(self.get_month_expense())
+        ids, dates, values, categories = unpacking_expense(self.get_month_expense())
         total_value = get_view_money(self.get_current_expense())
         table_view = QtWidgets.QTableView(parent=None)
         standard_item = QtGui.QStandardItemModel(parent=None)
@@ -43,18 +44,6 @@ class MonthBalanceView(CentralWidget):
         table_view.setModel(standard_item)
         table_view.hideColumn(0)
         self.view_box.addWidget(table_view)
-
-    def unpacking_expense(self, month_expense):
-        ids = []
-        dates = []
-        values = []
-        categories = []
-        for id_note, date, value, category in month_expense:
-            ids.append(id_note)
-            dates.append(date)
-            values.append(get_view_money(value))
-            categories.append(category)
-        return ids, dates, values, categories
 
     def balance_update(self, current_balance: str):
         match current_balance:
