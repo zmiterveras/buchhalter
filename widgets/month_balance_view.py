@@ -8,26 +8,25 @@ from tools.money_parser import get_view_money
 from logging import getLogger
 from tools.date_time_tool import get_current_date
 
-
 logger = getLogger(__name__)
 
 
 class MonthBalanceView(CentralWidget):
 
-    def balance_screen(self):
+    def balance_screen(self, date):
         balance = get_view_money(self.get_current_balance())
         label_month = self.set_title_label()
         self.label_balance = QtWidgets.QLabel(self.interface_languages['current_balance'] + ' ' + balance)
         self.view_box.addWidget(label_month)
         self.view_box.addWidget(self.label_balance)
-        self.set_table_expense()
+        self.set_table_expense(date)
 
     def set_title_label(self):
         month = get_current_date('month')
         return QtWidgets.QLabel(self.interface_languages['month_view'] + ': ' + month)
 
-    def set_table_expense(self):
-        ids, dates, values, categories = unpacking_expense(self.get_month_expense())
+    def set_table_expense(self, date):
+        ids, dates, values, categories = unpacking_expense(self.get_last_time_span_expense(date))
         total_value = get_view_money(self.get_current_expense())
         table_view = QtWidgets.QTableView(parent=None)
         standard_item = QtGui.QStandardItemModel(parent=None)

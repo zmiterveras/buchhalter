@@ -8,7 +8,7 @@ from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
 from widgets.month_balance_view import MonthBalanceView
 from widgets.simple_balance_view import SimpleBalanceView
-from tools.date_time_tool import get_current_date
+from tools.date_time_tool import get_current_date, get_current_month
 from tools.my_logger import logger
 
 
@@ -76,8 +76,10 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.view = MonthBalanceView(self.interface_language, self.db_handler)
             self.setCentralWidget(self.view)
-            self.view.balance_screen()
+            current_month_date, _ = get_current_month()
+            self.view.balance_screen(current_month_date)
             self.update_view()
+            window.resize(360, 350)
 
     def check_db(self):
         if not self.db_handler.is_db_available():
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.setWindowTitle("Mein Buchhalter")
-    window.resize(350, 150)
+    window.resize(360, 150)
     desktop = QtWidgets.QApplication.desktop()
     x = (desktop.width() // 2) - window.width()
     window.move(x, 250)
