@@ -25,9 +25,13 @@ def get_current_month() -> tuple:
     return str(year) + '.' + str(month) + '.' + '01', str(month)
 
 
-def get_last_week():
+def get_last_week(purpose=None) -> str:
     current_date = datetime.date.today()
     last_week = current_date - datetime.timedelta(days=7)
-    return last_week.strftime('%d.%m.%Y')
+    match purpose:
+        case None:
+            return last_week.strftime('%d.%m.%Y')
+        case 'view':
+            return last_week.strftime('%d %B %Y')
 
 
