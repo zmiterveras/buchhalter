@@ -50,8 +50,8 @@ class CentralWidget(QtWidgets.QWidget):
     def get_current_balance(self):
         return self.sql_handler.get_balance()
 
-    def get_current_expense(self):
-        return self.sql_handler.get_current_credit()
+    def get_current_expense(self, date):
+        return self.sql_handler.get_current_credit(date)
 
     def get_current_income(self):
         return self.sql_handler.get_current_debit()

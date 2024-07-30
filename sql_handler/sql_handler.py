@@ -101,13 +101,12 @@ class SqlHandler:
     def is_db_available(self):
         return True if os.path.exists(self.database) else False
 
-    def get_current_credit(self) -> int:
+    def get_current_credit(self, date) -> int:
         credit_sum = ''
         connect, query = self.connect_db()
-        current_month_date, _ = get_current_month()
         query_get_current_credit = '''
         select sum(value) as credit_sum from Credit where date>="%s"
-        ''' % current_month_date
+        ''' % date
         query.exec(query_get_current_credit)
         if query.isActive():
             query.first()

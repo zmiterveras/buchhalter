@@ -67,7 +67,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.view = SimpleBalanceView(self.interface_language, self.db_handler)
             self.setCentralWidget(self.view)
-            self.view.start_screen()
+            current_month_date, _ = get_current_month()
+            self.view.start_screen(current_month_date)
             self.update_view()
 
     def set_month_balance_view(self):
