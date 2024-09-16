@@ -5,6 +5,7 @@ import datetime
 from PyQt5 import QtWidgets, QtCore
 
 from tools.money_parser import get_view_money
+from tools.date_time_tool import get_current_month
 from widgets.central_widget import CentralWidget
 from logging import getLogger
 
@@ -52,7 +53,8 @@ class SimpleBalanceView(CentralWidget):
     def balance_update(self, current_balance: str):
         match current_balance:
             case 'credit':
-                credit = self.get_current_expense()
+                date, _ = get_current_month()
+                credit = self.get_current_expense(date)
                 self.current_expense_label.setText(get_view_money(credit))
             case 'debit':
                 debit = self.get_current_income()

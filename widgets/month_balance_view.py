@@ -23,7 +23,7 @@ class MonthBalanceView(CentralWidget):
 
     def set_title_label(self):
         month = get_current_date('month')
-        return QtWidgets.QLabel(self.interface_languages['month_view'] + ': ' + month)
+        return QtWidgets.QLabel(self.interface_languages['month'] + ': ' + month)
 
     def set_table_expense(self, date):
         ids, dates, values, categories = unpacking_expense(self.get_last_time_span_expense(date))
