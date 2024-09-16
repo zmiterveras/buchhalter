@@ -120,7 +120,7 @@ class SqlHandler:
 
         return credit_sum
 
-    def get_last_time_span_credits(self, date):
+    def get_last_time_span_credits(self, date) -> []:
         last_time_span_credits = []
         logger.debug('Timespan: ' + date)
         connect, query = self.connect_db()

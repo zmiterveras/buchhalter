@@ -6,6 +6,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
+from widgets.day_balance_view import DayBalanceView
 from widgets.month_balance_view import MonthBalanceView
 from widgets.simple_balance_view import SimpleBalanceView
 from tools.date_time_tool import get_current_date, get_current_month, get_last_week
@@ -60,6 +61,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.set_month_balance_view()
             case 2:
                 self.set_week_balance_view()
+            case 3:
+                self.set_day_balance_view()
 
     def set_simple_balance_view(self):
         if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
@@ -90,6 +93,17 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setCentralWidget(self.view)
             last_week = get_last_week()
             self.view.balance_screen(last_week)
+            self.update_view()
+            window.resize(360, 350)
+
+    def set_day_balance_view(self):
+        if self.view.__class__.__name__ == 'DayBalanceView':
+            logger.info('Class: DayBalanceView')
+        else:
+            self.view = DayBalanceView(self.interface_language, self.db_handler)
+            self.setCentralWidget(self.view)
+            current_day = get_current_date('day')
+            self.view.balance_screen(current_day)
             self.update_view()
             window.resize(360, 350)
 
