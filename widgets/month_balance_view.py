@@ -13,7 +13,7 @@ logger = getLogger(__name__)
 
 class MonthBalanceView(CentralWidget):
 
-    def balance_screen(self, date):
+    def balance_screen(self, date: str):
         balance = get_view_money(self.get_current_balance())
         label_month = self.set_title_label()
         self.label_balance = QtWidgets.QLabel(self.interface_languages['current_balance'] + ' ' + balance)
@@ -25,7 +25,7 @@ class MonthBalanceView(CentralWidget):
         month = get_current_date('month')
         return QtWidgets.QLabel(self.interface_languages['month'] + ': ' + month)
 
-    def set_table_expense(self, date):
+    def set_table_expense(self, date: str):
         ids, dates, values, categories = unpacking_expense(self.get_last_time_span_expense(date))
         total_value = get_view_money(self.get_current_expense(date))
         table_view = QtWidgets.QTableView(parent=None)

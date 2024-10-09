@@ -6,12 +6,13 @@ from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
+from sql_handler.sql_handler import SqlHandler
 
 logger = getLogger(__name__)
 
 
 class CentralWidget(QtWidgets.QWidget):
-    def __init__(self, interface, sql_handler, parent=None):
+    def __init__(self, interface: dict, sql_handler: SqlHandler, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         self.interface_languages = interface
         self.sql_handler = sql_handler
@@ -47,16 +48,16 @@ class CentralWidget(QtWidgets.QWidget):
             widget.setParent(None)
             widget.deleteLater()
 
-    def get_current_balance(self):
+    def get_current_balance(self) -> int:
         return self.sql_handler.get_balance()
 
-    def get_current_expense(self, date):
+    def get_current_expense(self, date: str) -> int:
         return self.sql_handler.get_current_credit(date)
 
-    def get_current_income(self):
+    def get_current_income(self) -> int:
         return self.sql_handler.get_current_debit()
 
-    def get_last_time_span_expense(self, date):
+    def get_last_time_span_expense(self, date: str) -> []:
         return self.sql_handler.get_last_time_span_credits(date)
 
     def make_buttons_box(self):
@@ -182,7 +183,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.add_new_income_widget.close()
         self.balance_update('debit')
 
-    def add_income_to_db(self, date, salary, bonus, gift, percent, note):
+    def add_income_to_db(self, date: str, salary: int, bonus: int, gift: int, percent: int, note: str):
         self.sql_handler.add_debit(date, salary, bonus, gift, percent, note)
 
     def choose_viewing(self):

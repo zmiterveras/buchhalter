@@ -15,7 +15,7 @@ logger = getLogger(__name__)
 
 class SimpleBalanceView(CentralWidget):
 
-    def start_screen(self, date):
+    def start_screen(self, date: str):
         self.show_current_balance()
         start_screen_widget = QtWidgets.QWidget()
         start_screen_main_box = QtWidgets.QHBoxLayout()
@@ -29,13 +29,13 @@ class SimpleBalanceView(CentralWidget):
         start_screen_widget.setLayout(start_screen_main_box)
         self.view_box.addWidget(start_screen_widget)
 
-    def show_current_expense(self, box, date):
+    def show_current_expense(self, box: QtWidgets.QVBoxLayout, date: str):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['expense']))
         current_expense = self.get_current_expense(date)
         self.current_expense_label = QtWidgets.QLabel(get_view_money(current_expense))
         box.addWidget(self.current_expense_label)
 
-    def show_current_income(self, box):
+    def show_current_income(self, box: QtWidgets.QVBoxLayout):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
         current_income = self.get_current_income()
         self.current_income_label = QtWidgets.QLabel(get_view_money(current_income))

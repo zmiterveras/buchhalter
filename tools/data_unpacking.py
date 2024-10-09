@@ -1,7 +1,7 @@
 from tools.money_parser import get_view_money
 
 
-def unpacking_expense(expense):
+def unpacking_expense(expense: list) -> tuple:
     ids = []
     dates = []
     values = []

@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 
 
 class SqlHandler:
-    def __init__(self, root_path):
+    def __init__(self, root_path: str):
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
 
     def create_db(self):
@@ -101,8 +101,8 @@ class SqlHandler:
     def is_db_available(self):
         return True if os.path.exists(self.database) else False
 
-    def get_current_credit(self, date) -> int:
-        credit_sum = ''
+    def get_current_credit(self, date: str) -> int:
+        credit_sum = 0
         connect, query = self.connect_db()
         query_get_current_credit = '''
         select sum(value) as credit_sum from Credit where date>="%s"
@@ -120,7 +120,7 @@ class SqlHandler:
 
         return credit_sum
 
-    def get_last_time_span_credits(self, date) -> []:
+    def get_last_time_span_credits(self, date: str) -> []:
         last_time_span_credits = []
         logger.debug('Timespan: ' + date)
         connect, query = self.connect_db()
@@ -163,7 +163,7 @@ class SqlHandler:
         connect.close()
         return debit_sum
 
-    def add_credit(self, date, value, cat_id, note):
+    def add_credit(self, date: str, value: int, cat_id: int, note: str):
         connect, query = self.connect_db()
         query.prepare('insert into Credit values (null, ?, ?, ?, ?)')
         query.addBindValue(date)
@@ -176,7 +176,7 @@ class SqlHandler:
         self.update_balance(credit=value)
         logger.info('Add new record to Credit')
 
-    def add_debit(self, date, salary, bonus, gift, percent,  note):
+    def add_debit(self, date: str, salary: int, bonus: int, gift: int, percent: int,  note: str):
         connect, query = self.connect_db()
         query.prepare('insert into Debit values (null, ?, ?, ?, ?, ?, ?)')
         query.addBindValue(salary)
@@ -191,12 +191,12 @@ class SqlHandler:
         self.update_balance(debit=salary + bonus + gift + percent)
         logger.info('Add new record to Debit')
 
-    def update_balance(self, credit=0, debit=0):
+    def update_balance(self, credit: int=0, debit: int=0):
         balance = self.get_balance()
         balance = balance + debit - credit
         self.set_balance(balance)
 
-    def get_balance(self):
+    def get_balance(self) -> int:
         balance = 0
         connect, query = self.connect_db()
         query_get_balance = '''
@@ -214,7 +214,7 @@ class SqlHandler:
         connect.close()
         return balance
 
-    def set_balance(self, balance):
+    def set_balance(self, balance: int):
         connect, query = self.connect_db()
         query_set_balance = '''
         update Balance set balance=%d''' % balance

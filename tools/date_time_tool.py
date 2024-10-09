@@ -5,10 +5,10 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 
-def get_current_date(formatting=None) -> str:
+def get_current_date(formatting: str='default') -> str:
     current_date = datetime.date.today()
     match formatting:
-        case None:
+        case 'default':
             current_date = current_date.strftime('%d %B %Y')
         case 'month':
             current_date = current_date.strftime('%b')
@@ -27,11 +27,11 @@ def get_current_month() -> tuple:
     return str(year) + '.' + str(month) + '.' + '01', str(month)
 
 
-def get_last_week(purpose=None) -> str:
+def get_last_week(purpose: str='default') -> str:
     current_date = datetime.date.today()
     last_week = current_date - datetime.timedelta(days=7)
     match purpose:
-        case None:
+        case 'default':
             return last_week.strftime('%Y.%m.%d')
         case 'view':
             return last_week.strftime('%d %B %Y')
