@@ -25,19 +25,15 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.app_dir = os.path.dirname(os.path.abspath(__file__))
-        menu_bar = self.menuBar()
+        self.menu_bar = self.menuBar()
         self.set_interface_language(menu_language)
+        self.make_menu()
         self.db_handler = SqlHandler(self.app_dir)
         self.check_db()
         self.set_simple_balance_view()
-        # self.view.start_screen()
-        # self.setCentralWidget(self.view)
-        # self.update_view()
-        # self.view.btn_close.clicked.connect(self.close)
-        # self.view.month_balance_button.clicked.connect(lambda: self.set_month_balance_view(self.interface_language,
-        #                                                                                    self.db_handler))
         self.status_bar = self.statusBar()
         self.show_current_date()
+
 
     def set_interface_language(self, language: str):
         if language == 'en':
@@ -45,6 +41,17 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.interface_language = MenuLanguages.ru
         settings.setValue('Language', language)
+
+    def make_menu(self):
+        my_menu = self.menu_bar.addMenu(self.interface_language['viewing'])
+        self.make_viewing_menu(my_menu)
+
+    def make_viewing_menu(self, my_menu: QtWidgets.QMenuBar):
+        my_menu.addAction(self.interface_language['simple_view'], self.set_simple_balance_view)
+        my_menu.addAction(self.interface_language['month_view'], self.set_month_balance_view)
+        my_menu.addAction(self.interface_language['week'], self.set_week_balance_view)
+        my_menu.addAction(self.interface_language['day'], self.set_day_balance_view)
+
 
     def update_view(self):
         self.view.btn_close.clicked.connect(self.close)
