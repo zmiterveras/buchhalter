@@ -6,7 +6,7 @@ from tools.data_unpacking import unpacking_expense
 from widgets.central_widget import CentralWidget
 from tools.money_parser import get_view_money
 from logging import getLogger
-from tools.date_time_tool import get_current_date
+from tools.date_time_tool import get_current_date, get_current_month
 
 logger = getLogger(__name__)
 
@@ -50,8 +50,9 @@ class MonthBalanceView(CentralWidget):
     def balance_update(self, current_balance: str):
         match current_balance:
             case 'credit':
+                current_month_date, _ = get_current_month()
                 self.clear_view_box()
-                self.balance_screen()
+                self.balance_screen(current_month_date)
             case 'debit':
                 balance = get_view_money(self.get_current_balance())
                 self.label_balance.setText(self.interface_languages['current_balance'] + ' ' + balance)
