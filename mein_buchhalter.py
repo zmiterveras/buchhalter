@@ -43,14 +43,19 @@ class MainWindow(QtWidgets.QMainWindow):
         settings.setValue('Language', language)
 
     def make_menu(self):
-        my_menu = self.menu_bar.addMenu(self.interface_language['viewing'])
-        self.make_viewing_menu(my_menu)
+        my_menu_viewing = self.menu_bar.addMenu(self.interface_language['viewing'])
+        my_menu_edit = self.menu_bar.addMenu(self.interface_language['edit'])
+        self.make_viewing_menu(my_menu_viewing)
+        self.make_edit_menu(my_menu_edit)
 
-    def make_viewing_menu(self, my_menu: QtWidgets.QMenuBar):
-        my_menu.addAction(self.interface_language['simple_view'], self.set_simple_balance_view)
-        my_menu.addAction(self.interface_language['month_view'], self.set_month_balance_view)
-        my_menu.addAction(self.interface_language['week'], self.set_week_balance_view)
-        my_menu.addAction(self.interface_language['day'], self.set_day_balance_view)
+    def make_viewing_menu(self, viewing: QtWidgets.QMenuBar):
+        viewing.addAction(self.interface_language['simple_view'], self.set_simple_balance_view)
+        viewing.addAction(self.interface_language['month_view'], self.set_month_balance_view)
+        viewing.addAction(self.interface_language['week'], self.set_week_balance_view)
+        viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
+
+    def make_edit_menu(self, editing: QtWidgets.QMenuBar):
+        pass
 
 
     def update_view(self):
