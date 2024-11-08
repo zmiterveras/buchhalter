@@ -55,7 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
-        pass
+        editing.addAction(self.interface_language['edit_record'])
 
 
     def update_view(self):

@@ -57,5 +57,8 @@ class MonthBalanceView(CentralWidget):
                 balance = get_view_money(self.get_current_balance())
                 self.label_balance.setText(self.interface_languages['current_balance'] + ' ' + balance)
 
+    def edit_record(self):
+        pass
+
 
 
