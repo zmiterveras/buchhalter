@@ -126,7 +126,7 @@ class SqlHandler:
         connect, query = self.connect_db()
         # current_month_date, _ = get_current_month()
         query_get_month_credits = '''
-        select cr.id, cr.date, cr.value, cat.category_en  
+        select cr.id, cr.date, cr.value, cat.category_en, cr.note  
         from Credit cr join Category cat 
         on cr.cat_id = cat.id
         where cr.date>="%s"
@@ -137,7 +137,7 @@ class SqlHandler:
             query.first()
             while query.isValid():
                 last_time_span_credits.append((query.value('id'), query.value('date'), query.value('value'),
-                                               query.value('category_en')))
+                                               query.value('category_en'), query.value('note')))
                 query.next()
         else:
             logger.error('Problem with query')

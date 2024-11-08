@@ -95,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
             current_month_date, _ = get_current_month()
             self.view.balance_screen(current_month_date)
             self.update_view()
-            window.resize(360, 350)
+            window.resize(475, 350)
 
     def set_week_balance_view(self):
         if self.view.__class__.__name__ == 'WeekBalanceView':
@@ -106,7 +106,7 @@ class MainWindow(QtWidgets.QMainWindow):
             last_week = get_last_week()
             self.view.balance_screen(last_week)
             self.update_view()
-            window.resize(360, 350)
+            window.resize(475, 350)
 
     def set_day_balance_view(self):
         if self.view.__class__.__name__ == 'DayBalanceView':
@@ -117,7 +117,7 @@ class MainWindow(QtWidgets.QMainWindow):
             current_day = get_current_date('day')
             self.view.balance_screen(current_day)
             self.update_view()
-            window.resize(360, 350)
+            window.resize(475, 350)
 
     def check_db(self):
         if not self.db_handler.is_db_available():

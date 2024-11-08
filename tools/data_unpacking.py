@@ -6,9 +6,11 @@ def unpacking_expense(expense: list) -> tuple:
     dates = []
     values = []
     categories = []
-    for id_note, date, value, category in expense:
+    notes = []
+    for id_note, date, value, category, note in expense:
         ids.append(id_note)
         dates.append(date)
         values.append(get_view_money(value))
         categories.append(category)
-    return ids, dates, values, categories
+        notes.append(note)
+    return ids, dates, values, categories, notes
