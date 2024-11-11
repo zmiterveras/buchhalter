@@ -13,3 +13,7 @@ def get_view_money(money: int) -> str:
     str_money = money_int + ',' + money_dec if not sign else sign + money_int + ',' + money_dec
     logger.info('convert_money: ' + str_money)
     return str_money
+
+def get_int_dec(money: str) -> (int, int):
+    money_list = money.split(',')
+    return int(money_list[0]), int(money_list[1])

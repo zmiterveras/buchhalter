@@ -7,6 +7,7 @@ from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
 from sql_handler.sql_handler import SqlHandler
+from tools.money_parser import get_int_dec
 
 logger = getLogger(__name__)
 
@@ -77,7 +78,23 @@ class CentralWidget(QtWidgets.QWidget):
                   self.btn_close):
             self.view_buttons_box.addWidget(i)
 
-    def add_new_expense(self):
+    def fill_widgets(self, widgets: list, values: list):
+        """
+        :param widgets: text widgets, spinbox widgets, combobox widgets, data widget
+        :param values: text, int, data
+        :return:
+        """
+        for w, v in zip(widgets[0], values[0]):
+            w.setText(v)
+        for w, v in zip(widgets[1], values[1]):
+            w.setValue(v)
+        for w, v in zip(widgets[2], values[2]):
+            w.setCurrentText(v)
+        date_list = values[3].split('.')
+        widgets[3].setDate(QtCore.QDate(int(date_list[0]), int(date_list[1]), int(date_list[2])))
+
+
+    def add_new_expense(self, change=None):
         logger.info("Add New Expense")
         self.add_new_expense_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
         self.add_new_expense_widget.setWindowTitle(self.interface_languages['new_expense'])
@@ -104,6 +121,12 @@ class CentralWidget(QtWidgets.QWidget):
         button_box.addWidget(btn_add)
         button_box.addWidget(btn_close)
         form = QtWidgets.QFormLayout()
+        if change:
+            self.add_new_expense_widget.setWindowTitle(self.interface_languages['change_expense'])
+            val_int, val_dec = get_int_dec(change[2])
+            self.fill_widgets([(self.note,), (self.expense_int, self.expense_dec), (self.category,),
+                               self.calendar],
+                              [(change[4],), (val_int, val_dec), (change[3],), change[1]])
         for name, field in ((self.interface_languages['date'], self.calendar),
                             (self.interface_languages['expense'], expense_box),
                             (self.interface_languages['category'], self.category),
