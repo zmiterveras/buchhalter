@@ -55,7 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
-        editing.addAction(self.interface_language['edit_record'])
+        editing.addAction(self.interface_language['edit_record'], self.change_record)
 
 
     def update_view(self):
@@ -130,6 +130,12 @@ class MainWindow(QtWidgets.QMainWindow):
         label_date = QtWidgets.QLabel(get_current_date())
         label_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.status_bar.addPermanentWidget(label_date)
+
+    def change_record(self):
+        if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
+            logger.info('Class: SimpleBalanceView')
+        else:
+            self.view.edit_record()
 
 
 if __name__ == '__main__':

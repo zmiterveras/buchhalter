@@ -40,6 +40,11 @@ class MenuLanguages:
         'transport': 'Transport',
         'utility': 'Utility',
         'viewing': 'Viewing',
+        'warning': 'Warning',
+        'warn_change_text': 'Do you really want to %s record',
+        'warn_select_record': 'No record selected',
+        'warn_change': 'change',
+        'warn_delete': 'delete',
         'week': 'Week'
     }
     ru = {
@@ -80,6 +85,11 @@ class MenuLanguages:
         'transport': 'Транспорт',
         'utility': 'Коммунальные',
         'viewing': 'Просмотр',
+        'warning': 'Предупреждение',
+        'warn_change_text': 'Вы действительно хотите %s запись',
+        'warn_select_record': 'Не выбрана запись',
+        'warn_change': 'изменить',
+        'warn_delete': 'удалить',
         'week': 'Неделя'
     }
     cat_keys = ['other',
