@@ -163,12 +163,12 @@ class SqlHandler:
         connect.close()
         return debit_sum
 
-    def add_credit(self, date: str, value: int, cat_id: int, note: str, id_: int=None):
+    def add_credit(self, date: str, value: int, cat_id: int, note: str, id_: None | int):
         connect, query = self.connect_db()
         if not id_:
             query.prepare('insert into Credit values (null, :date, :value, :cat_id, :note)')
         else:
-            query.prepare('update Credit set (:date, :value, :cat_id, :note) where (:id)')
+            query.prepare('update Credit set date=:date, value=:value, cat_id=:cat_id, note=:note where id=:id')
             query.bindValue(':id', id_)
             logger.info('Updated record in Credit')
         query.bindValue(':date', date)

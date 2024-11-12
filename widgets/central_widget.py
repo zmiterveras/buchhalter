@@ -127,13 +127,16 @@ class CentralWidget(QtWidgets.QWidget):
             self.fill_widgets([(self.note,), (self.expense_int, self.expense_dec), (self.category,),
                                self.calendar],
                               [(change[4],), (val_int, val_dec), (change[3],), change[1]])
+            id_ = int(change[0])
+        else:
+            id_ = None
         for name, field in ((self.interface_languages['date'], self.calendar),
                             (self.interface_languages['expense'], expense_box),
                             (self.interface_languages['category'], self.category),
                             (self.interface_languages['note'], self.note)):
             form.addRow(name, field)
         form.addRow(button_box)
-        btn_add.clicked.connect(self.get_expense)
+        btn_add.clicked.connect(lambda: self.get_expense(id_))
         btn_close.clicked.connect(self.add_new_expense_widget.close)
         self.add_new_expense_widget.setLayout(form)
         self.add_new_expense_widget.show()
@@ -180,18 +183,19 @@ class CentralWidget(QtWidgets.QWidget):
         self.add_new_income_widget.setLayout(form)
         self.add_new_income_widget.show()
 
-    def get_expense(self):
+    def get_expense(self, id_):
+        logger.debug('Get expense id: ' + str(id_))
         date = self.calendar.text()
         expense = self.expense_int.value() * 100 + self.expense_dec.value()
         category = self.category.currentIndex() + 1
         note = self.note.text()
         logger.info('credit: ' + date + '/' + str(expense) + '/' + str(category) + '/' + note)
-        self.add_expense_to_db(date, expense, category, note)
+        self.add_expense_to_db(date, expense, category, note, id_)
         self.add_new_expense_widget.close()
         self.balance_update('credit')
 
-    def add_expense_to_db(self, date, value, category, note):
-        self.sql_handler.add_credit(date, value, category, note)
+    def add_expense_to_db(self, date, value, category, note, id_):
+        self.sql_handler.add_credit(date, value, category, note, id_)
 
     def get_income(self):
         date = self.calendar_in.text()
