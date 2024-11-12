@@ -91,6 +91,7 @@ class MonthBalanceView(CentralWidget):
         result, row = self.change()
         if result == 16384:
             logger.debug('Get record: ' + str(row))
+            self.add_new_expense(change=row)
 
 
 

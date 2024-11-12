@@ -165,11 +165,11 @@ class SqlHandler:
 
     def add_credit(self, date: str, value: int, cat_id: int, note: str):
         connect, query = self.connect_db()
-        query.prepare('insert into Credit values (null, ?, ?, ?, ?)')
-        query.addBindValue(date)
-        query.addBindValue(value)
-        query.addBindValue(cat_id)
-        query.addBindValue(note)
+        query.prepare('insert into Credit values (null, :date, :value, :cat_id, :note?)')
+        query.bindValue(':date', date)
+        query.bindValue(':value', value)
+        query.bindValue(':cat_id', cat_id)
+        query.bindValue(':note', note)
         query.exec_()
         query.clear()
         connect.close()
@@ -190,6 +190,9 @@ class SqlHandler:
         connect.close()
         self.update_balance(debit=salary + bonus + gift + percent)
         logger.info('Add new record to Debit')
+
+    def change_credits(self, date: str, value: int, cat_id: int, note: str):
+        pass
 
     def update_balance(self, credit: int=0, debit: int=0):
         balance = self.get_balance()
