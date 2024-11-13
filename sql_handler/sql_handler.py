@@ -163,14 +163,16 @@ class SqlHandler:
         connect.close()
         return debit_sum
 
-    def add_credit(self, date: str, value: int, cat_id: int, note: str, id_: None | int):
+    def add_credit(self, date: str, value: int, cat_id: int, note: str, id_: None | int, old_value: int):
         connect, query = self.connect_db()
         if not id_:
             query.prepare('insert into Credit values (null, :date, :value, :cat_id, :note)')
+            delta_value = value
         else:
             query.prepare('update Credit set date=:date, value=:value, cat_id=:cat_id, note=:note where id=:id')
             query.bindValue(':id', id_)
             logger.info('Updated record in Credit')
+            delta_value = value - old_value
         query.bindValue(':date', date)
         query.bindValue(':value', value)
         query.bindValue(':cat_id', cat_id)
@@ -178,7 +180,7 @@ class SqlHandler:
         query.exec_()
         query.clear()
         connect.close()
-        self.update_balance(credit=value)
+        self.update_balance(credit=delta_value)
         logger.info('Add new record to Credit')
 
     def add_debit(self, date: str, salary: int, bonus: int, gift: int, percent: int,  note: str):

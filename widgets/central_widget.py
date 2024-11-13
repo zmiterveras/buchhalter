@@ -22,6 +22,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.make_buttons_box()
         self.make_view_buttons_box()
         self.btn_submit_choose_viewing = QtWidgets.QPushButton(self.interface_languages['select'])
+        self.old_value = 0
 
     def make_widget(self):
         self.top_widget = QtWidgets.QVBoxLayout()
@@ -128,6 +129,7 @@ class CentralWidget(QtWidgets.QWidget):
                                self.calendar],
                               [(change[4],), (val_int, val_dec), (change[3],), change[1]])
             id_ = int(change[0])
+            self.old_value = val_int * 100 + val_dec
         else:
             id_ = None
         for name, field in ((self.interface_languages['date'], self.calendar),
@@ -195,7 +197,8 @@ class CentralWidget(QtWidgets.QWidget):
         self.balance_update('credit')
 
     def add_expense_to_db(self, date, value, category, note, id_):
-        self.sql_handler.add_credit(date, value, category, note, id_)
+        self.sql_handler.add_credit(date, value, category, note, id_, self.old_value)
+        self.old_value = 0
 
     def get_income(self):
         date = self.calendar_in.text()
