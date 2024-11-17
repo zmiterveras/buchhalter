@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+from sqlite3 import connect
+
 from PyQt5 import QtSql
 from tools.date_time_tool import get_current_month
 from logging import getLogger
@@ -162,6 +164,28 @@ class SqlHandler:
             logger.error('Problem with query')
         connect.close()
         return debit_sum
+
+    def get_last_time_span_debits(self, date: str) -> []:
+        last_time_span_debits = []
+        logger.debug('Timespan: ' + date)
+        connect, query = self.connect_db()
+        query_get_month_debit = '''
+        select * from Debit 
+        where date>="%s"
+        order by date
+        ''' % date
+        query.exec(query_get_month_debit)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                last_time_span_debits.append((query.value('id'), query.value('salary'), query.value('bonus'),
+                                              query.value('gift'), query.value('percents'),
+                                              query.value('date'), query.value('note')))
+                query.next()
+        else:
+            logger.error('Problem with query')
+        connect.close()
+        return last_time_span_debits
 
     def add_credit(self, date: str, value: int, cat_id: int, note: str, id_: None | int, old_value: int):
         connect, query = self.connect_db()
