@@ -107,3 +107,10 @@ class MenuLanguages:
                 'television',
                 'transport',
                 'utility']
+
+    cat_keys_debit = ['other',
+                      'salary',
+                      'bonus',
+                      'gift',
+                      'percent']
+
