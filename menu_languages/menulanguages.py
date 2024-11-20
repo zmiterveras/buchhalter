@@ -94,7 +94,7 @@ class MenuLanguages:
         'warn_delete': 'удалить',
         'week': 'Неделя'
     }
-    cat_keys = ['other',
+    cat_keys_credit = ['other',
                 'amuse',
                 'clothes',
                 'food',

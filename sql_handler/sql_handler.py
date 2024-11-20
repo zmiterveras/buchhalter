@@ -75,8 +75,8 @@ class SqlHandler:
         en_dict = MenuLanguages.en
         ru_dict = MenuLanguages.ru
         if flag == 'Category_Credit':
-            self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys]
-            self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys]
+            self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys_credit]
+            self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys_credit]
         else:
             self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys_debit]
             self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys_debit]
