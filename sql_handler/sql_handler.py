@@ -132,7 +132,7 @@ class SqlHandler:
                 query.next()
                 logger.info('get_current_credit: ' + str(credit_sum))
         else:
-            logger.error('Problem with query')
+            logger.error('Problem with query: get_current_credit')
         connect.close()
 
         return credit_sum
@@ -157,7 +157,7 @@ class SqlHandler:
                                                query.value('category_en'), query.value('note')))
                 query.next()
         else:
-            logger.error('Problem with query')
+            logger.error('Problem with query: get_last_time_span_credits')
         connect.close()
         return last_time_span_credits
 
@@ -166,7 +166,7 @@ class SqlHandler:
         connect, query = self.connect_db()
         current_month_date, _ = get_current_month()
         query_get_current_debit = '''
-        select sum(salary) + sum(bonus) + sum(gift) + sum(percents) as debit_sum from Debit where date>="%s"
+        select sum(value) as debit_sum from Debit where date>="%s"
         ''' % current_month_date
         query.exec(query_get_current_debit)
         if query.isActive():
@@ -176,7 +176,7 @@ class SqlHandler:
                 query.next()
                 logger.info('get_current_debit: ' + str(debit_sum))
         else:
-            logger.error('Problem with query')
+            logger.error('Problem with query: get_current_debit')
         connect.close()
         return debit_sum
 
@@ -198,7 +198,7 @@ class SqlHandler:
                                               query.value('date'), query.value('note')))
                 query.next()
         else:
-            logger.error('Problem with query')
+            logger.error('Problem with query: get_lst_time_span_debits')
         connect.close()
         return last_time_span_debits
 
@@ -259,7 +259,7 @@ class SqlHandler:
                 query.next()
                 logger.info('Got Balance: ' + str(balance))
         else:
-            logger.error('Problem with query')
+            logger.error('Problem with query: get_balance')
         connect.close()
         return balance
 
