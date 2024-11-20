@@ -18,6 +18,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.interface_languages = interface
         self.sql_handler = sql_handler
         self.cat_keys_credit = MenuLanguages.cat_keys_credit
+        self.cat_keys_debit = MenuLanguages.cat_keys_debit
         self.make_widget()
         self.make_buttons_box()
         self.make_view_buttons_box()
@@ -67,7 +68,7 @@ class CentralWidget(QtWidgets.QWidget):
 
     def make_buttons_box(self):
         for name, func in ((self.interface_languages['new_expense'], lambda: self.add_new_value('expense')),
-                           (self.interface_languages['new_income'], self.test), # self.add_new_income),
+                           (self.interface_languages['new_income'], lambda: self.add_new_value('income')),
                            (self.interface_languages['viewing'], self.choose_viewing)):
             btn = QtWidgets.QPushButton(name)
             btn.clicked.connect(func)
