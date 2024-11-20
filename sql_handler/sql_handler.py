@@ -18,31 +18,22 @@ class SqlHandler:
 
     def create_db(self):
         connect, query = self.connect_db()
-        self.create_credit(connect, query)
-        self.create_debit(connect, query)
+        self.create_table(connect, query, 'Credit')
+        self.create_table(connect, query, 'Debit')
         self.create_balance(connect, query)
         self.create_accounts(connect, query)
-        self.create_category(connect, query)
-        self.create_category_debit(connect, query)
+        self.create_category(connect, query, 'Category_Credit')
+        self.create_category(connect, query, 'Category_Debit')
         connect.close()
         logger.info('Created database')
 
-    def create_credit(self, connect, query):
-        if 'Credit' not in connect.tables():
+    def create_table(self, connect, query, name):
+        if name not in connect.tables():
             query_create_credit = '''
-            create table Credit (id integer primary key autoincrement,
+            create table %s (id integer primary key autoincrement,
             date text, value integer, cat_id integer, note text)
-            '''
+            ''' % name
             query.exec(query_create_credit)
-            query.clear()
-
-    def create_debit(self, connect, query):
-        if 'Debit' not in connect.tables():
-            query_create_debit = '''
-            create table Debit (id integer primary key autoincrement, 
-            date text, value integer, cat_id integer, note text)
-            '''
-            query.exec(query_create_debit)
             query.clear()
 
     def create_balance(self, connect, query):
@@ -70,38 +61,29 @@ class SqlHandler:
             query.exec(query_create_accounts)
             query.clear()
 
-    def create_category(self, connect, query):
-        if 'Category' not in connect.tables():
+    def create_category(self, connect, query, name):
+        if name not in connect.tables():
             query_create_category = '''
-            create table Category (id integer primary key autoincrement, category_en text, category_ru text)
-            '''
+            create table %s (id integer primary key autoincrement, category_en text, category_ru text)
+            ''' % name
             query.exec(query_create_category)
             query.clear()
-            self.fill_category(query)
-
-    def create_category_debit(self, connect, query):
-        if 'Category_Debit' not in connect.tables():
-            query_create_category = '''
-            create table Category_Debit (id integer primary key autoincrement, category_en text, category_ru text)
-            '''
-            query.exec(query_create_category)
-            query.clear()
-            self.fill_category(query, flag='Debit')
+            self.fill_category(query, flag=name)
 
     def get_category_names(self, flag):
         from menu_languages.menulanguages import MenuLanguages
         en_dict = MenuLanguages.en
         ru_dict = MenuLanguages.ru
-        if flag == 'Credit':
+        if flag == 'Category_Credit':
             self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys]
             self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys]
         else:
             self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys_debit]
             self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys_debit]
 
-    def fill_category(self, query, flag='Credit'):
+    def fill_category(self, query, flag):
         self.get_category_names(flag)
-        table_name = 'Category' if flag == 'Credit' else 'Category_Debit'
+        table_name = 'Category_Credit' if flag == 'Category_Credit' else 'Category_Debit'
         query.prepare("insert into %s values (null, :en_names, :ru_names)" % table_name)
         query.bindValue(':en_names', self.en_names)
         query.bindValue(':ru_names', self.ru_names)
