@@ -59,36 +59,8 @@ class MonthBalanceView(CentralWidget):
                 balance = get_view_money(self.get_current_balance())
                 self.label_balance.setText(self.interface_languages['current_balance'] + ' ' + balance)
 
-    def get_row(self, col=5):
-        row_number = self.table_view.currentIndex().row()
-        row = []
-        for i in range(col):
-            index = self.standard_item.index(row_number, i)
-            row.append(self.standard_item.data(index))
-        logger.debug('Get row: ' + str(row))
-        return row
-
-    def change(self, flag='change') -> (int, list):
-        match flag:
-            case 'delete':
-                warn_word = self.interface_languages['warn_delete']
-            case _:
-                warn_word = self.interface_languages['warn_change']
-        row = self.get_row()
-        if None in row:
-            QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
-                                          self.interface_languages['warn_select_record'])
-            return 0, row
-        else:
-            result = QtWidgets.QMessageBox.question(None, self.interface_languages['warning'],
-                                                    self.interface_languages['warn_change_text'] % warn_word,
-                                                    buttons=QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                                                    defaultButton=QtWidgets.QMessageBox.No)
-            return result, row
-
-
-    def edit_record(self):
-        result, row = self.change()
+    def edit_record(self, table_view, standard_item, col=5):
+        result, row = self.change(table_view, standard_item, col)
         if result == 16384:
             logger.debug('Get record: ' + str(row))
             self.add_new_expense(change=row)

@@ -238,6 +238,33 @@ class CentralWidget(QtWidgets.QWidget):
         self.choose_viewing_widget.close()
         return type_viewing
 
+    def get_row(self, table_view, standard_item, col):
+        row_number = table_view.currentIndex().row()
+        row = []
+        for i in range(col):
+            index = standard_item.index(row_number, i)
+            row.append(standard_item.data(index))
+        logger.debug('Get row: ' + str(row))
+        return row
+
+    def change(self, table_view, standard_item, col, flag='change') -> (int, list):
+        match flag:
+            case 'delete':
+                warn_word = self.interface_languages['warn_delete']
+            case _:
+                warn_word = self.interface_languages['warn_change']
+        row = self.get_row(table_view, standard_item, col)
+        if None in row:
+            QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
+                                          self.interface_languages['warn_select_record'])
+            return 0, row
+        else:
+            result = QtWidgets.QMessageBox.question(None, self.interface_languages['warning'],
+                                                    self.interface_languages['warn_change_text'] % warn_word,
+                                                    buttons=QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                    defaultButton=QtWidgets.QMessageBox.No)
+            return result, row
+
     def test(self):
         logger.info('Test')
 

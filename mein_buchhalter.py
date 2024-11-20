@@ -135,7 +135,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
             logger.info('Class: SimpleBalanceView')
         else:
-            self.view.edit_record()
+            self.view.edit_record(self.view.table_view, self.view.standard_item)
 
 
 if __name__ == '__main__':
