@@ -51,13 +51,13 @@ class SimpleBalanceView(CentralWidget):
         self.view_box.addWidget(self.current_balance_label)
 
     def balance_update(self, current_balance: str):
+        date, _ = get_current_month()
         match current_balance:
             case 'credit':
-                date, _ = get_current_month()
                 credit = self.get_current_expense(date)
                 self.current_expense_label.setText(get_view_money(credit))
             case 'debit':
-                debit = self.get_current_income()
+                debit = self.get_current_income(date)
                 self.current_income_label.setText(get_view_money(debit))
         balance = self.get_current_balance()
         self.current_balance_label.setText(get_view_money(balance))
