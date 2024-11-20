@@ -100,24 +100,24 @@ class SqlHandler:
     def is_db_available(self):
         return True if os.path.exists(self.database) else False
 
-    def get_current_credit(self, date: str) -> int:
-        credit_sum = 0
+    def get_current_value(self, date: str, name: str) -> int:
+        value_sum = 0
         connect, query = self.connect_db()
-        query_get_current_credit = '''
-        select sum(value) as credit_sum from Credit where date>="%s"
-        ''' % date
-        query.exec(query_get_current_credit)
+        query_get_current_value = '''
+        select sum(value) as value_sum from %s where date>="%s"
+        ''' % (name, date)
+        query.exec(query_get_current_value)
         if query.isActive():
             query.first()
             while query.isValid():
-                credit_sum = 0 if query.isNull('credit_sum') else query.value('credit_sum')
+                value_sum = 0 if query.isNull('value_sum') else query.value('value_sum')
                 query.next()
-                logger.info('get_current_credit: ' + str(credit_sum))
+                logger.info('get_current_' + name + ': ' + str(value_sum))
         else:
-            logger.error('Problem with query: get_current_credit')
+            logger.error('Problem with query: get_current_' + name)
         connect.close()
 
-        return credit_sum
+        return value_sum
 
     def get_last_time_span_credits(self, date: str) -> []:
         last_time_span_credits = []
@@ -142,25 +142,6 @@ class SqlHandler:
             logger.error('Problem with query: get_last_time_span_credits')
         connect.close()
         return last_time_span_credits
-
-    def get_current_debit(self) -> int:
-        debit_sum = 0
-        connect, query = self.connect_db()
-        current_month_date, _ = get_current_month()
-        query_get_current_debit = '''
-        select sum(value) as debit_sum from Debit where date>="%s"
-        ''' % current_month_date
-        query.exec(query_get_current_debit)
-        if query.isActive():
-            query.first()
-            while query.isValid():
-                debit_sum = 0 if query.isNull('debit_sum') else query.value('debit_sum')
-                query.next()
-                logger.info('get_current_debit: ' + str(debit_sum))
-        else:
-            logger.error('Problem with query: get_current_debit')
-        connect.close()
-        return debit_sum
 
     def get_last_time_span_debits(self, date: str) -> []:
         last_time_span_debits = []

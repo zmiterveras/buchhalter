@@ -23,7 +23,7 @@ class SimpleBalanceView(CentralWidget):
         start_screen_second_box = QtWidgets.QVBoxLayout()
         start_screen_second_box.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight)
         self.show_current_expense(start_screen_first_box, date)
-        self.show_current_income(start_screen_second_box)
+        self.show_current_income(start_screen_second_box, date)
         start_screen_main_box.addLayout(start_screen_first_box)
         start_screen_main_box.addLayout(start_screen_second_box)
         start_screen_widget.setLayout(start_screen_main_box)
@@ -35,9 +35,9 @@ class SimpleBalanceView(CentralWidget):
         self.current_expense_label = QtWidgets.QLabel(get_view_money(current_expense))
         box.addWidget(self.current_expense_label)
 
-    def show_current_income(self, box: QtWidgets.QVBoxLayout):
+    def show_current_income(self, box: QtWidgets.QVBoxLayout, date: str):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
-        current_income = self.get_current_income()
+        current_income = self.get_current_income(date)
         self.current_income_label = QtWidgets.QLabel(get_view_money(current_income))
         box.addWidget(self.current_income_label)
 

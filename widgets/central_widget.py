@@ -17,7 +17,7 @@ class CentralWidget(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self, parent)
         self.interface_languages = interface
         self.sql_handler = sql_handler
-        self.cat_keys = MenuLanguages.cat_keys
+        self.cat_keys_credit = MenuLanguages.cat_keys_credit
         self.make_widget()
         self.make_buttons_box()
         self.make_view_buttons_box()
@@ -54,10 +54,10 @@ class CentralWidget(QtWidgets.QWidget):
         return self.sql_handler.get_balance()
 
     def get_current_expense(self, date: str) -> int:
-        return self.sql_handler.get_current_credit(date)
+        return self.sql_handler.get_current_value(date, 'Credit')
 
-    def get_current_income(self) -> int:
-        return self.sql_handler.get_current_debit()
+    def get_current_income(self, date: str) -> int:
+        return self.sql_handler.get_current_value(date, 'Debit')
 
     def get_last_time_span_expense(self, date: str) -> []:
         return self.sql_handler.get_last_time_span_credits(date)
@@ -117,7 +117,7 @@ class CentralWidget(QtWidgets.QWidget):
         for wid in self.expense_int, point, self.expense_dec:
             expense_box.addWidget(wid)
         self.category = QtWidgets.QComboBox()
-        self.category.addItems([self.interface_languages[key] for key in self.cat_keys])
+        self.category.addItems([self.interface_languages[key] for key in self.cat_keys_credit])
         self.note = QtWidgets.QLineEdit()
         btn_add = QtWidgets.QPushButton(self.interface_languages['add'])
         btn_close = QtWidgets.QPushButton(self.interface_languages['close'])
