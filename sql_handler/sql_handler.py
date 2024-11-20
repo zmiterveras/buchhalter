@@ -126,7 +126,7 @@ class SqlHandler:
         # current_month_date, _ = get_current_month()
         query_get_month_credits = '''
         select cr.id, cr.date, cr.value, cat.category_en, cr.note  
-        from Credit cr join Category cat 
+        from Credit cr join Category_Credit cat 
         on cr.cat_id = cat.id
         where cr.date>="%s"
         order by cr.date
