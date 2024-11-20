@@ -51,11 +51,11 @@ class MonthBalanceView(CentralWidget):
 
     def balance_update(self, current_balance: str):
         match current_balance:
-            case 'credit':
+            case 'Credit':
                 current_month_date, _ = get_current_month()
                 self.clear_view_box()
                 self.balance_screen(current_month_date)
-            case 'debit':
+            case 'Debit':
                 balance = get_view_money(self.get_current_balance())
                 self.label_balance.setText(self.interface_languages['current_balance'] + ' ' + balance)
 
@@ -63,7 +63,7 @@ class MonthBalanceView(CentralWidget):
         result, row = self.change(table_view, standard_item, col)
         if result == 16384:
             logger.debug('Get record: ' + str(row))
-            self.add_new_expense(change=row)
+            self.add_new_value(change=row, flag='expense')
 
 
 

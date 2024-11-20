@@ -66,8 +66,8 @@ class CentralWidget(QtWidgets.QWidget):
         return self.sql_handler.get_last_time_span_debits(date)
 
     def make_buttons_box(self):
-        for name, func in ((self.interface_languages['new_expense'], self.add_new_expense),
-                           (self.interface_languages['new_income'], self.add_new_income),
+        for name, func in ((self.interface_languages['new_expense'], lambda: self.add_new_value('expense')),
+                           (self.interface_languages['new_income'], self.test), # self.add_new_income),
                            (self.interface_languages['viewing'], self.choose_viewing)):
             btn = QtWidgets.QPushButton(name)
             btn.clicked.connect(func)
@@ -98,26 +98,27 @@ class CentralWidget(QtWidgets.QWidget):
         widgets[3].setDate(QtCore.QDate(int(date_list[0]), int(date_list[1]), int(date_list[2])))
 
 
-    def add_new_expense(self, change=None):
-        logger.info("Add New Expense")
-        self.add_new_expense_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
-        self.add_new_expense_widget.setWindowTitle(self.interface_languages['new_expense'])
-        self.add_new_expense_widget.setWindowModality(QtCore.Qt.WindowModal)
-        self.add_new_expense_widget.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+    def add_new_value(self, flag, change=None):
+        logger.info("Add New " + flag)
+        self.add_new_value_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
+        self.add_new_value_widget.setWindowTitle(self.interface_languages['new_' + flag])
+        self.add_new_value_widget.setWindowModality(QtCore.Qt.WindowModal)
+        self.add_new_value_widget.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         self.calendar = QtWidgets.QDateEdit()
         self.calendar.setCalendarPopup(True)
         self.calendar.setDisplayFormat('yyyy.MM.dd')
         self.calendar.setDate(datetime.date.today())
-        self.expense_int = QtWidgets.QSpinBox()
-        self.expense_int.setMaximum(100000)
-        self.expense_dec = QtWidgets.QSpinBox()
-        self.expense_dec.setRange(0, 99)
+        self.value_int = QtWidgets.QSpinBox()
+        self.value_int.setMaximum(100000)
+        self.value_dec = QtWidgets.QSpinBox()
+        self.value_dec.setRange(0, 99)
         point = QtWidgets.QLabel(',')
-        expense_box = QtWidgets.QHBoxLayout()
-        for wid in self.expense_int, point, self.expense_dec:
-            expense_box.addWidget(wid)
+        value_box = QtWidgets.QHBoxLayout()
+        for wid in self.value_int, point, self.value_dec:
+            value_box.addWidget(wid)
         self.category = QtWidgets.QComboBox()
-        self.category.addItems([self.interface_languages[key] for key in self.cat_keys_credit])
+        cat_keys = self.cat_keys_credit if flag == 'expense' else self.cat_keys_debit
+        self.category.addItems([self.interface_languages[key] for key in cat_keys])
         self.note = QtWidgets.QLineEdit()
         btn_add = QtWidgets.QPushButton(self.interface_languages['add'])
         btn_close = QtWidgets.QPushButton(self.interface_languages['close'])
@@ -126,9 +127,9 @@ class CentralWidget(QtWidgets.QWidget):
         button_box.addWidget(btn_close)
         form = QtWidgets.QFormLayout()
         if change:
-            self.add_new_expense_widget.setWindowTitle(self.interface_languages['change_expense'])
+            self.add_new_value_widget.setWindowTitle(self.interface_languages['change_' + flag])
             val_int, val_dec = get_int_dec(change[2])
-            self.fill_widgets([(self.note,), (self.expense_int, self.expense_dec), (self.category,),
+            self.fill_widgets([(self.note,), (self.value_int, self.value_dec), (self.category,),
                                self.calendar],
                               [(change[4],), (val_int, val_dec), (change[3],), change[1]])
             id_ = int(change[0])
@@ -136,71 +137,72 @@ class CentralWidget(QtWidgets.QWidget):
         else:
             id_ = None
         for name, field in ((self.interface_languages['date'], self.calendar),
-                            (self.interface_languages['expense'], expense_box),
+                            (self.interface_languages[flag], value_box),
                             (self.interface_languages['category'], self.category),
                             (self.interface_languages['note'], self.note)):
             form.addRow(name, field)
         form.addRow(button_box)
-        btn_add.clicked.connect(lambda: self.get_expense(id_))
-        btn_close.clicked.connect(self.add_new_expense_widget.close)
-        self.add_new_expense_widget.setLayout(form)
-        self.add_new_expense_widget.show()
+        btn_add.clicked.connect(lambda: self.get_value(id_, flag))
+        btn_close.clicked.connect(self.add_new_value_widget.close)
+        self.add_new_value_widget.setLayout(form)
+        self.add_new_value_widget.show()
 
-    def add_new_income(self):
-        logger.info("Add New Income")
-        self.add_new_income_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
-        self.add_new_income_widget.setWindowTitle(self.interface_languages['new_income'])
-        self.add_new_income_widget.setWindowModality(QtCore.Qt.WindowModal)
-        self.add_new_income_widget.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
-        self.calendar_in = QtWidgets.QDateEdit()
-        self.calendar_in.setCalendarPopup(True)
-        self.calendar_in.setDisplayFormat('yyyy.MM.dd')
-        self.calendar_in.setDate(datetime.date.today())
-        ############################################################################
-        self.income_dic = {}
-        for name in ('salary', 'bonus', 'gift', 'percent'):
-            box = QtWidgets.QHBoxLayout()
-            int_value = QtWidgets.QSpinBox()
-            int_value.setMaximum(100000)
-            dec_value = QtWidgets.QSpinBox()
-            dec_value.setRange(0, 99)
-            point = QtWidgets.QLabel(',')
-            for wid in int_value, point, dec_value:
-                box.addWidget(wid)
-            self.income_dic[name] = (box, int_value, dec_value)
-        self.note_in = QtWidgets.QLineEdit()
-        btn_add = QtWidgets.QPushButton(self.interface_languages['add'])
-        btn_close = QtWidgets.QPushButton(self.interface_languages['close'])
-        button_box = QtWidgets.QHBoxLayout()
-        button_box.addWidget(btn_add)
-        button_box.addWidget(btn_close)
-        form = QtWidgets.QFormLayout()
-        for name, field in ((self.interface_languages['date'], self.calendar_in),
-                            (self.interface_languages['salary'], self.income_dic['salary'][0]),
-                            (self.interface_languages['bonus'], self.income_dic['bonus'][0]),
-                            (self.interface_languages['gift'], self.income_dic['gift'][0]),
-                            (self.interface_languages['percent'], self.income_dic['percent'][0]),
-                            (self.interface_languages['note'], self.note_in)):
-            form.addRow(name, field)
-        form.addRow(button_box)
-        btn_add.clicked.connect(self.get_income)
-        btn_close.clicked.connect(self.add_new_income_widget.close)
-        self.add_new_income_widget.setLayout(form)
-        self.add_new_income_widget.show()
+    # def add_new_income(self):
+    #     logger.info("Add New Income")
+    #     self.add_new_income_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
+    #     self.add_new_income_widget.setWindowTitle(self.interface_languages['new_income'])
+    #     self.add_new_income_widget.setWindowModality(QtCore.Qt.WindowModal)
+    #     self.add_new_income_widget.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
+    #     self.calendar_in = QtWidgets.QDateEdit()
+    #     self.calendar_in.setCalendarPopup(True)
+    #     self.calendar_in.setDisplayFormat('yyyy.MM.dd')
+    #     self.calendar_in.setDate(datetime.date.today())
+    #     ############################################################################
+    #     self.income_dic = {}
+    #     for name in ('salary', 'bonus', 'gift', 'percent'):
+    #         box = QtWidgets.QHBoxLayout()
+    #         int_value = QtWidgets.QSpinBox()
+    #         int_value.setMaximum(100000)
+    #         dec_value = QtWidgets.QSpinBox()
+    #         dec_value.setRange(0, 99)
+    #         point = QtWidgets.QLabel(',')
+    #         for wid in int_value, point, dec_value:
+    #             box.addWidget(wid)
+    #         self.income_dic[name] = (box, int_value, dec_value)
+    #     self.note_in = QtWidgets.QLineEdit()
+    #     btn_add = QtWidgets.QPushButton(self.interface_languages['add'])
+    #     btn_close = QtWidgets.QPushButton(self.interface_languages['close'])
+    #     button_box = QtWidgets.QHBoxLayout()
+    #     button_box.addWidget(btn_add)
+    #     button_box.addWidget(btn_close)
+    #     form = QtWidgets.QFormLayout()
+    #     for name, field in ((self.interface_languages['date'], self.calendar_in),
+    #                         (self.interface_languages['salary'], self.income_dic['salary'][0]),
+    #                         (self.interface_languages['bonus'], self.income_dic['bonus'][0]),
+    #                         (self.interface_languages['gift'], self.income_dic['gift'][0]),
+    #                         (self.interface_languages['percent'], self.income_dic['percent'][0]),
+    #                         (self.interface_languages['note'], self.note_in)):
+    #         form.addRow(name, field)
+    #     form.addRow(button_box)
+    #     btn_add.clicked.connect(self.get_income)
+    #     btn_close.clicked.connect(self.add_new_income_widget.close)
+    #     self.add_new_income_widget.setLayout(form)
+    #     self.add_new_income_widget.show()
 
-    def get_expense(self, id_):
-        logger.debug('Get expense id: ' + str(id_))
+    def get_value(self, id_, flag):
+        logger.debug('Get value id: ' + str(id_))
         date = self.calendar.text()
-        expense = self.expense_int.value() * 100 + self.expense_dec.value()
+        value = self.value_int.value() * 100 + self.value_dec.value()
         category = self.category.currentIndex() + 1
         note = self.note.text()
-        logger.info('credit: ' + date + '/' + str(expense) + '/' + str(category) + '/' + note)
-        self.add_expense_to_db(date, expense, category, note, id_)
-        self.add_new_expense_widget.close()
-        self.balance_update('credit')
+        logger.info(flag + ': ' + date + '/' + str(value) + '/' + str(category) + '/' + note)
+        table_name = 'Credit' if flag == 'expense' else 'Debit'
+        self.add_value_to_db(date, value, category, note, id_, table_name)
+        self.add_new_value_widget.close()
+        self.balance_update(table_name)
 
-    def add_expense_to_db(self, date, value, category, note, id_):
-        self.sql_handler.add_credit(date, value, category, note, id_, self.old_value)
+    def add_value_to_db(self, date, value, category, note, id_, table_name):
+        self.sql_handler.add_value(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
 
     def get_income(self):

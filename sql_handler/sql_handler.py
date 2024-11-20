@@ -165,13 +165,13 @@ class SqlHandler:
         connect.close()
         return last_time_span_debits
 
-    def add_credit(self, date: str, value: int, cat_id: int, note: str, id_: None | int, old_value: int):
+    def add_value(self, date: str, value: int, cat_id: int, note: str, id_: None | int, old_value: int, table_name: str):
         connect, query = self.connect_db()
         if not id_:
-            query.prepare('insert into Credit values (null, :date, :value, :cat_id, :note)')
+            query.prepare('insert into %s values (null, :date, :value, :cat_id, :note)' % table_name)
             delta_value = value
         else:
-            query.prepare('update Credit set date=:date, value=:value, cat_id=:cat_id, note=:note where id=:id')
+            query.prepare('update %s set date=:date, value=:value, cat_id=:cat_id, note=:note where id=:id' % table_name)
             query.bindValue(':id', id_)
             logger.info('Updated record in Credit')
             delta_value = value - old_value
