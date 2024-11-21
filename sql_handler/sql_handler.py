@@ -183,7 +183,7 @@ class SqlHandler:
         query.clear()
         connect.close()
         self.update_balance(credit=delta_value) if table_name == 'Credit' else self.update_balance(debit=delta_value)
-        logger.info('Add new record to Credit')
+        logger.info('Add new record to ' + table_name)
 
     def add_debit(self, date: str, salary: int, bonus: int, gift: int, percent: int,  note: str):
         connect, query = self.connect_db()

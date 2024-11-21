@@ -1,13 +1,13 @@
 from tools.money_parser import get_view_money
 
 
-def unpacking_expense(expense: list) -> tuple:
+def unpacking(values: list) -> tuple:
     ids = []
     dates = []
     values = []
     categories = []
     notes = []
-    for id_note, date, value, category, note in expense:
+    for id_note, date, value, category, note in values:
         ids.append(id_note)
         dates.append(date)
         values.append(get_view_money(value))
@@ -15,20 +15,3 @@ def unpacking_expense(expense: list) -> tuple:
         notes.append(note)
     return ids, dates, values, categories, notes
 
-def unpacking_income(income: list) -> tuple:
-    ids = []
-    salaries = []
-    bonuses = []
-    gifts = []
-    percents = []
-    dates = []
-    notes = []
-    for id_income, salary, bonus, gift, percent, date, note in income:
-        ids.append(id_income)
-        salaries.append(salary)
-        bonuses.append(bonus)
-        gifts.append(gift)
-        percents.append(percents)
-        dates.append(date)
-        notes.append(note)
-    return ids, salaries, bonuses, gifts, percents, dates, notes
