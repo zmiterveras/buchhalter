@@ -123,14 +123,14 @@ class SqlHandler:
         last_time_span_values = []
         logger.debug('Timespan: ' + date)
         connect, query = self.connect_db()
-        query_get_month_credits = '''
+        query_get_month_values = '''
         select cr.id, cr.date, cr.value, cat.category_en, cr.note  
         from %s cr join %s cat 
         on cr.cat_id = cat.id
         where cr.date>="%s"
         order by cr.date
         ''' % (table_names[0], table_names[1], date)
-        query.exec(query_get_month_credits)
+        query.exec(query_get_month_values)
         if query.isActive():
             query.first()
             while query.isValid():
