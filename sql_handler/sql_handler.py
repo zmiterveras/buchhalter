@@ -119,29 +119,28 @@ class SqlHandler:
 
         return value_sum
 
-    def get_last_time_span_credits(self, date: str) -> []:
-        last_time_span_credits = []
+    def get_last_time_span_values(self, date: str, table_names: list) -> []:
+        last_time_span_values = []
         logger.debug('Timespan: ' + date)
         connect, query = self.connect_db()
-        # current_month_date, _ = get_current_month()
         query_get_month_credits = '''
         select cr.id, cr.date, cr.value, cat.category_en, cr.note  
-        from Credit cr join Category_Credit cat 
+        from %s cr join %s cat 
         on cr.cat_id = cat.id
         where cr.date>="%s"
         order by cr.date
-        ''' % date
+        ''' % (table_names[0], table_names[1], date)
         query.exec(query_get_month_credits)
         if query.isActive():
             query.first()
             while query.isValid():
-                last_time_span_credits.append((query.value('id'), query.value('date'), query.value('value'),
+                last_time_span_values.append((query.value('id'), query.value('date'), query.value('value'),
                                                query.value('category_en'), query.value('note')))
                 query.next()
         else:
             logger.error('Problem with query: get_last_time_span_credits')
         connect.close()
-        return last_time_span_credits
+        return last_time_span_values
 
     def get_last_time_span_debits(self, date: str) -> []:
         last_time_span_debits = []

@@ -19,14 +19,14 @@ class MonthBalanceView(CentralWidget):
         self.label_balance = QtWidgets.QLabel(self.interface_languages['current_balance'] + ' ' + balance)
         self.view_box.addWidget(label_month)
         self.view_box.addWidget(self.label_balance)
-        self.set_table_expense(date)
+        self.set_table(date)
 
     def set_title_label(self):
         month = get_current_date('month')
         return QtWidgets.QLabel(self.interface_languages['month'] + ': ' + month)
 
-    def set_table_expense(self, date: str):
-        ids, dates, values, categories, notes = unpacking(self.get_last_time_span_expense(date))
+    def set_table(self, date: str, table_names=['Credit', 'Category_Credit'], name='expense'):
+        ids, dates, values, categories, notes = unpacking(self.get_last_time_span_values(date, table_names))
         total_value = get_view_money(self.get_current_expense(date))
         self.table_view = QtWidgets.QTableView(parent=None)
         self.standard_item = QtGui.QStandardItemModel(parent=None)
@@ -42,7 +42,7 @@ class MonthBalanceView(CentralWidget):
             total_row.append(QtGui.QStandardItem(i))
         self.standard_item.appendRow(total_row)
         self.standard_item.setHorizontalHeaderLabels(['id', self.interface_languages['date'],
-                                                 self.interface_languages['expense'],
+                                                 self.interface_languages[name],
                                                  self.interface_languages['category'],
                                                  self.interface_languages['note']])
         self.table_view.setModel(self.standard_item)
