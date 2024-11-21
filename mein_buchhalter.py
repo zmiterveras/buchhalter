@@ -8,6 +8,7 @@ from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
 from widgets.day_balance_view import DayBalanceView
 from widgets.month_balance_view import MonthBalanceView
+from widgets.month_income_view import MonthIncomeView
 from widgets.simple_balance_view import SimpleBalanceView
 from tools.date_time_tool import get_current_date, get_current_month, get_last_week
 from tools.my_logger import logger
@@ -53,6 +54,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['month_view'], self.set_month_balance_view)
         viewing.addAction(self.interface_language['week'], self.set_week_balance_view)
         viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
+        viewing.addAction(self.interface_language['income'], self.set_month_income_view)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
@@ -116,6 +118,17 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setCentralWidget(self.view)
             current_day = get_current_date('day')
             self.view.balance_screen(current_day)
+            self.update_view()
+            window.resize(475, 350)
+
+    def set_month_income_view(self):
+        if self.view.__class__.__name__ == 'MonthIncomeView':
+            logger.info('Class: MonthIncomeView')
+        else:
+            self.view = MonthIncomeView(self.interface_language, self.db_handler)
+            self.setCentralWidget(self.view)
+            current_month_date, _ = get_current_month()
+            self.view.balance_screen(current_month_date)
             self.update_view()
             window.resize(475, 350)
 
