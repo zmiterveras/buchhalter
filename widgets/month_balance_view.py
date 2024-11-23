@@ -27,7 +27,8 @@ class MonthBalanceView(CentralWidget):
 
     def set_table(self, date: str, table_names=['Credit', 'Category_Credit'], name='expense'):
         ids, dates, values, categories, notes = unpacking(self.get_last_time_span_values(date, table_names))
-        total_value = get_view_money(self.get_current_expense(date))
+        total_value = get_view_money(self.get_current_expense(date)) \
+            if name == 'expense' else get_view_money(self.get_current_income(date))
         self.table_view = QtWidgets.QTableView(parent=None)
         self.standard_item = QtGui.QStandardItemModel(parent=None)
         for row in range(0, len(ids)):
