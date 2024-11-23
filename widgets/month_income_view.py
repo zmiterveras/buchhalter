@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 
 class MonthIncomeView(MonthBalanceView):
 
-    def set_table(self, date: str, table_names=['Credit', 'Category_Credit'], name='expense'):
-        super().set_table(date, table_names=['Debit', 'Category_Debit'], name='income')
+    def set_table(self, date: str, table_names=['Debit', 'Category_Debit'], name='income'):
+        super().set_table(date, table_names, name)
 
 
