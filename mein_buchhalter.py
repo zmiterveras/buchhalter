@@ -147,9 +147,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.status_bar.addPermanentWidget(label_date)
 
     def change_record(self):
-        if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
+        if self.view.__class__.__name__ == 'SimpleBalanceView':
             logger.info('Class: SimpleBalanceView')
-        elif hasattr(self, 'view') and self.view.__class__.__name__ == 'MonthIncomeView':
+        elif self.view.__class__.__name__ == 'MonthIncomeView':
             self.view.edit_record(self.view.table_view, self.view.standard_item, 'income')
         else:
             self.view.edit_record(self.view.table_view, self.view.standard_item)
