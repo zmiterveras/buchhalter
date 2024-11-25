@@ -227,7 +227,8 @@ class CentralWidget(QtWidgets.QWidget):
         viewing_list = [self.interface_languages['simple_view'],
                         self.interface_languages['month_view'],
                         self.interface_languages['week'],
-                        self.interface_languages['day']]
+                        self.interface_languages['day'],
+                        self.interface_languages['income']]
         choose_viewing_box = QtWidgets.QVBoxLayout()
         self.cb_viewing = QtWidgets.QComboBox()
         self.cb_viewing.addItems(viewing_list)

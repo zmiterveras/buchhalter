@@ -77,6 +77,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.set_week_balance_view()
             case 3:
                 self.set_day_balance_view()
+            case 4:
+                self.set_month_income_view()
 
     def set_simple_balance_view(self):
         if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
