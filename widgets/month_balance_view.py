@@ -61,8 +61,8 @@ class MonthBalanceView(CentralWidget):
                 self.label_balance.setText(self.interface_languages['current_balance'] + ' ' + balance)
 
 
-    def edit_record(self, table_view, standard_item, flag='expense', col=5):
-        result, row = self.change(table_view, standard_item, col)
+    def edit_record(self, table_view, standard_item, operation, flag='expense', col=5):
+        result, row = self.change(table_view, standard_item, col, operation)
         if result == 16384:
             logger.debug('Get record: ' + str(row))
             self.add_new_value(flag, change=row)

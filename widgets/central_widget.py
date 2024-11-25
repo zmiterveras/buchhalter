@@ -251,7 +251,7 @@ class CentralWidget(QtWidgets.QWidget):
         logger.debug('Get row: ' + str(row))
         return row
 
-    def change(self, table_view, standard_item, col, flag='change') -> (int, list):
+    def change(self, table_view, standard_item, col, flag) -> (int, list):
         match flag:
             case 'delete':
                 warn_word = self.interface_languages['warn_delete']

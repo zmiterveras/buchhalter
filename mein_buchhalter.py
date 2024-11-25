@@ -146,13 +146,13 @@ class MainWindow(QtWidgets.QMainWindow):
         label_date.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.status_bar.addPermanentWidget(label_date)
 
-    def change_record(self):
+    def change_record(self, operation='change'):
         if self.view.__class__.__name__ == 'SimpleBalanceView':
             logger.info('Class: SimpleBalanceView')
         elif self.view.__class__.__name__ == 'MonthIncomeView':
-            self.view.edit_record(self.view.table_view, self.view.standard_item, 'income')
+            self.view.edit_record(self.view.table_view, self.view.standard_item, operation, 'income')
         else:
-            self.view.edit_record(self.view.table_view, self.view.standard_item)
+            self.view.edit_record(self.view.table_view, self.view.standard_item, operation)
 
 
 if __name__ == '__main__':
