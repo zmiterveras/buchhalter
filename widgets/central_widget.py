@@ -129,12 +129,10 @@ class CentralWidget(QtWidgets.QWidget):
         form = QtWidgets.QFormLayout()
         if change:
             self.add_new_value_widget.setWindowTitle(self.interface_languages['change_' + flag])
-            val_int, val_dec = get_int_dec(change[2])
+            id_, self.old_value, val_int, val_dec = self.get_from_record(change)
             self.fill_widgets([(self.note,), (self.value_int, self.value_dec), (self.category,),
                                self.calendar],
                               [(change[4],), (val_int, val_dec), (change[3],), change[1]])
-            id_ = int(change[0])
-            self.old_value = val_int * 100 + val_dec
         else:
             id_ = None
         for name, field in ((self.interface_languages['date'], self.calendar),
@@ -202,9 +200,18 @@ class CentralWidget(QtWidgets.QWidget):
         self.add_new_value_widget.close()
         self.balance_update(table_name)
 
+    def delete_value(self, flag, change):
+        id_, value, _, _ = self.get_from_record(change)
+        table_name = 'Credit' if flag == 'expense' else 'Debit'
+        self.delete_value_from_db(id_, table_name, value)
+        self.balance_update(table_name)
+
     def add_value_to_db(self, date, value, category, note, id_, table_name):
         self.sql_handler.add_value(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
+
+    def delete_value_from_db(self, id_, table_name, value):
+        self.sql_handler.delete_value(id_, table_name, value)
 
     def get_income(self):
         date = self.calendar_in.text()
@@ -250,6 +257,12 @@ class CentralWidget(QtWidgets.QWidget):
             row.append(standard_item.data(index))
         logger.debug('Get row: ' + str(row))
         return row
+
+    def get_from_record(self, record: list) -> tuple:
+        id_ = int(record[0])
+        val_int, val_dec = get_int_dec(record[2])
+        value = val_int * 100 + val_dec
+        return id_, value, val_int, val_dec
 
     def change(self, table_view, standard_item, col, flag) -> (int, list):
         match flag:

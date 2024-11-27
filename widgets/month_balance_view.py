@@ -65,7 +65,11 @@ class MonthBalanceView(CentralWidget):
         result, row = self.change(table_view, standard_item, col, operation)
         if result == 16384:
             logger.debug('Get record: ' + str(row))
-            self.add_new_value(flag, change=row)
+            if operation == 'change':
+                self.add_new_value(flag, change=row)
+            else:
+                logger.debug('Delete record: ' + str(row))
+                self.delete_value(flag, row)
 
 
 

@@ -190,7 +190,7 @@ class SqlHandler:
         query.bindValue(':id', id_)
         query.exec_()
         connect.close()
-        self.update_balance(credit=value) if table_name == 'Credit' else self.update_balance(debit=-value)
+        self.update_balance(credit=-value) if table_name == 'Credit' else self.update_balance(debit=-value)
 
 
     def add_debit(self, date: str, salary: int, bonus: int, gift: int, percent: int,  note: str):

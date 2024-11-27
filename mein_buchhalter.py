@@ -58,6 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
+        editing.addAction(self.interface_language['delete_record'], lambda: self.change_record('delete'))
 
 
     def update_view(self):
