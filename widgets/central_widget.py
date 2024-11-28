@@ -110,6 +110,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.value_int.setMaximum(100000)
         self.value_dec = QtWidgets.QSpinBox()
         self.value_dec.setRange(0, 99)
+        self.value_dec.setWrapping(True)
         point = QtWidgets.QLabel(',')
         value_box = QtWidgets.QHBoxLayout()
         for wid in self.value_int, point, self.value_dec:
