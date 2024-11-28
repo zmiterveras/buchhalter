@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from sqlite3 import connect
 
 from PyQt5 import QtSql
-from tools.date_time_tool import get_current_month
 from logging import getLogger
 
 
@@ -142,28 +140,6 @@ class SqlHandler:
         connect.close()
         return last_time_span_values
 
-    def get_last_time_span_debits(self, date: str) -> []:
-        last_time_span_debits = []
-        logger.debug('Timespan: ' + date)
-        connect, query = self.connect_db()
-        query_get_month_debit = '''
-        select * from Debit 
-        where date>="%s"
-        order by date
-        ''' % date
-        query.exec(query_get_month_debit)
-        if query.isActive():
-            query.first()
-            while query.isValid():
-                last_time_span_debits.append((query.value('id'), query.value('salary'), query.value('bonus'),
-                                              query.value('gift'), query.value('percents'),
-                                              query.value('date'), query.value('note')))
-                query.next()
-        else:
-            logger.error('Problem with query: get_lst_time_span_debits')
-        connect.close()
-        return last_time_span_debits
-
     def add_value(self, date: str, value: int, cat_id: int, note: str, id_: None | int, old_value: int, table_name: str):
         connect, query = self.connect_db()
         if not id_:
@@ -191,25 +167,6 @@ class SqlHandler:
         query.exec_()
         connect.close()
         self.update_balance(credit=-value) if table_name == 'Credit' else self.update_balance(debit=-value)
-
-
-    def add_debit(self, date: str, salary: int, bonus: int, gift: int, percent: int,  note: str):
-        connect, query = self.connect_db()
-        query.prepare('insert into Debit values (null, ?, ?, ?, ?, ?, ?)')
-        query.addBindValue(salary)
-        query.addBindValue(bonus)
-        query.addBindValue(gift)
-        query.addBindValue(percent)
-        query.addBindValue(date)
-        query.addBindValue(note)
-        query.exec_()
-        query.clear()
-        connect.close()
-        self.update_balance(debit=salary + bonus + gift + percent)
-        logger.info('Add new record to Debit')
-
-    def change_credits(self, date: str, value: int, cat_id: int, note: str):
-        pass
 
     def update_balance(self, credit: int=0, debit: int=0):
         balance = self.get_balance()
