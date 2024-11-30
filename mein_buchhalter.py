@@ -138,7 +138,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def check_db(self):
         if not self.db_handler.is_db_available():
             logger.info('DB is not exist')
-            self.db_handler.create_db()
+            date, _ = get_current_month()
+            self.db_handler.create_db(date)
         else:
             logger.info('DB is available')
 
