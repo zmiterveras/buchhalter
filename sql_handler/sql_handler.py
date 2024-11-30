@@ -194,14 +194,22 @@ class SqlHandler:
         connect.close()
         return balance if id_ == 1 else balance, date
 
-    def set_balance(self, balance: int):
+    def set_balance(self, balance: int, id_=1, date=None):
         connect, query = self.connect_db()
-        query_set_balance = '''
-        update Balance set balance=%d where id=1''' % balance
+        if id_ == 1:
+            query_set_balance = '''
+            update Balance set balance=%d where id=1''' % balance
+        else:
+            query_set_balance = '''
+            update Balance set balance=%d, date=%s where id=2''' % balance, date
         query.exec(query_set_balance)
         logger.info('Set Balance: ' + str(balance))
         connect.close()
 
     def check_month_rest(self, date):
-        pass
+        _, old_date = self.get_balance(2)
+        if old_date != date:
+            rest = self.get_balance()
+            self.set_balance(rest, 2, date)
+            logger.info('Month rest changed')
 
