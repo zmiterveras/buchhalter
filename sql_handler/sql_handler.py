@@ -179,7 +179,7 @@ class SqlHandler:
         balance = 0
         connect, query = self.connect_db()
         query_get_balance = '''
-        select balance from Balance
+        select balance from Balance where id=1
         '''
         query.exec(query_get_balance)
         if query.isActive():
@@ -196,7 +196,7 @@ class SqlHandler:
     def set_balance(self, balance: int):
         connect, query = self.connect_db()
         query_set_balance = '''
-        update Balance set balance=%d''' % balance
+        update Balance set balance=%d where id=1''' % balance
         query.exec(query_set_balance)
         logger.info('Set Balance: ' + str(balance))
         connect.close()
