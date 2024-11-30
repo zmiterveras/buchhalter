@@ -136,12 +136,13 @@ class MainWindow(QtWidgets.QMainWindow):
             window.resize(475, 350)
 
     def check_db(self):
+        date, _ = get_current_month()
         if not self.db_handler.is_db_available():
             logger.info('DB is not exist')
-            date, _ = get_current_month()
             self.db_handler.create_db(date)
         else:
             logger.info('DB is available')
+            self.db_handler.check_month_rest(date)
 
     def show_current_date(self):
         label_date = QtWidgets.QLabel(get_current_date())
