@@ -175,23 +175,24 @@ class SqlHandler:
         balance = balance + debit - credit
         self.set_balance(balance)
 
-    def get_balance(self) -> int:
-        balance = 0
+    def get_balance(self, id_=1) -> int | (int, str):
+        balance, date = 0, '0'
         connect, query = self.connect_db()
         query_get_balance = '''
-        select balance from Balance where id=1
-        '''
+        select balance from Balance where id=%d
+        ''' % id_
         query.exec(query_get_balance)
         if query.isActive():
             query.first()
             while query.isValid():
                 balance = query.value('balance')
+                date = query.value('date')
                 query.next()
                 logger.info('Got Balance: ' + str(balance))
         else:
             logger.error('Problem with query: get_balance')
         connect.close()
-        return balance
+        return balance if id_ == 1 else balance, date
 
     def set_balance(self, balance: int):
         connect, query = self.connect_db()
@@ -200,4 +201,7 @@ class SqlHandler:
         query.exec(query_set_balance)
         logger.info('Set Balance: ' + str(balance))
         connect.close()
+
+    def check_month_rest(self, date):
+        pass
 
