@@ -21,6 +21,7 @@ class MenuLanguages:
         'expense': 'Expenses',
         'food': 'Food',
         'gift': 'Gift',
+        'household': 'Household',
         'income': 'Incomes',
         'internet': 'Internet',
         'medicine': 'Medicine',
@@ -70,6 +71,7 @@ class MenuLanguages:
         'expense': 'Расходы',
         'food': 'Еда',
         'gift': 'Подарки',
+        'household': 'Бытовое',
         'income': 'Доходы',
         'internet': 'Интернет',
         'medicine': 'Медицина',
@@ -112,7 +114,8 @@ class MenuLanguages:
                 'pets',
                 'television',
                 'transport',
-                'utility']
+                'utility',
+                'household']
 
     cat_keys_debit = ['other',
                       'salary',

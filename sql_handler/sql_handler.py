@@ -14,11 +14,11 @@ class SqlHandler:
     def __init__(self, root_path: str):
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
 
-    def create_db(self):
+    def create_db(self, date):
         connect, query = self.connect_db()
         self.create_table(connect, query, 'Credit')
         self.create_table(connect, query, 'Debit')
-        self.create_balance(connect, query)
+        self.create_balance(connect, query, date)
         self.create_accounts(connect, query)
         self.create_category(connect, query, 'Category_Credit')
         self.create_category(connect, query, 'Category_Debit')
@@ -34,20 +34,22 @@ class SqlHandler:
             query.exec(query_create_credit)
             query.clear()
 
-    def create_balance(self, connect, query):
+    def create_balance(self, connect, query, date):
         if 'Balance' not in connect.tables():
             query_create_balance = '''
-            create table Balance (id integer primary key autoincrement, balance integer)
+            create table Balance (id integer primary key autoincrement, balance integer, date text)
             '''
             query.exec(query_create_balance)
             query.clear()
-            self.fill_balance(query)
+            self.fill_balance(query, date)
 
-    def fill_balance(self, query):
-        query_fill_balance = '''
-        insert into Balance values (null, 0)
-        '''
-        query.exec(query_fill_balance)
+    def fill_balance(self, query, date):
+        dates = [date, date]
+        values = [0, 0]
+        query.prepare('insert into Balance values (null, :value, :date)')
+        query.bindValue(':value', values)
+        query.bindValue(':date', dates)
+        query.execBatch()
         query.clear()
 
     def create_accounts(self, connect, query):
