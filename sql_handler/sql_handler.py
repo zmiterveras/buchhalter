@@ -142,7 +142,8 @@ class SqlHandler:
         connect.close()
         return last_time_span_values
 
-    def add_value(self, date: str, value: int, cat_id: int, note: str, id_: None | int, old_value: int, table_name: str):
+    def add_value(self, date: str, value: int, cat_id: int, note: str, id_: None | int,
+                  old_value: int, table_name: str, rest=False):
         connect, query = self.connect_db()
         if not id_:
             query.prepare('insert into %s values (null, :date, :value, :cat_id, :note)' % table_name)
@@ -159,7 +160,8 @@ class SqlHandler:
         query.exec_()
         query.clear()
         connect.close()
-        self.update_balance(credit=delta_value) if table_name == 'Credit' else self.update_balance(debit=delta_value)
+        if not rest:
+            self.update_balance(credit=delta_value) if table_name == 'Credit' else self.update_balance(debit=delta_value)
         logger.info('Add new record to ' + table_name)
 
     def delete_value(self, id_: int, table_name: str, value: int):
@@ -171,7 +173,7 @@ class SqlHandler:
         self.update_balance(credit=-value) if table_name == 'Credit' else self.update_balance(debit=-value)
 
     def update_balance(self, credit: int=0, debit: int=0):
-        balance, _ = self.get_balance()
+        balance = self.get_balance()
         balance = balance + debit - credit
         self.set_balance(balance)
 
@@ -207,10 +209,13 @@ class SqlHandler:
         logger.info('Set Balance: ' + str(balance))
         connect.close()
 
-    def check_month_rest(self, date):
+    def check_month_rest(self, date: str, note: str):
         _, old_date = self.get_balance(2)
         if old_date != date:
             rest = self.get_balance()
             self.set_balance(rest, 2, date)
+            self.add_value(date, rest, 1, note, None, 0, 'Debit', True)
             logger.info('Month rest changed')
+
+
 

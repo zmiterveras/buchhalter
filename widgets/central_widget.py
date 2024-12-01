@@ -60,10 +60,6 @@ class CentralWidget(QtWidgets.QWidget):
     def get_current_income(self, date: str) -> int:
         return self.sql_handler.get_current_value(date, 'Debit')
 
-    def get_current_rest(self) -> int:
-        rest, _ = self.sql_handler.get_balance(2)
-        return rest
-
     def get_last_time_span_values(self, date: str, table_names: list) -> []:
         return self.sql_handler.get_last_time_span_values(date, table_names)
 

@@ -142,7 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.db_handler.create_db(date)
         else:
             logger.info('DB is available')
-            self.db_handler.check_month_rest(date)
+            self.db_handler.check_month_rest(date, self.interface_language['rest'])
 
     def show_current_date(self):
         label_date = QtWidgets.QLabel(get_current_date())
