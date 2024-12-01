@@ -11,14 +11,15 @@ logger = getLogger(__name__)
 
 
 class SqlHandler:
-    def __init__(self, root_path: str):
+    def __init__(self, root_path: str, date):
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
+        self.date = date
 
-    def create_db(self, date):
+    def create_db(self):
         connect, query = self.connect_db()
         self.create_table(connect, query, 'Credit')
         self.create_table(connect, query, 'Debit')
-        self.create_balance(connect, query, date)
+        self.create_balance(connect, query, self.date)
         self.create_accounts(connect, query)
         self.create_category(connect, query, 'Category_Credit')
         self.create_category(connect, query, 'Category_Debit')
@@ -209,13 +210,14 @@ class SqlHandler:
         logger.info('Set Balance: ' + str(balance))
         connect.close()
 
-    def check_month_rest(self, date: str, note: str):
+    def check_month_rest(self, note: str):
         _, old_date = self.get_balance(2)
-        if old_date != date:
+        if old_date != self.date:
             rest = self.get_balance()
-            self.set_balance(rest, 2, date)
-            self.add_value(date, rest, 1, note, None, 0, 'Debit', True)
+            self.set_balance(rest, 2, self.date)
+            self.add_value(self.date, rest, 1, note, None, 0, 'Debit', True)
             logger.info('Month rest changed')
 
-
+    def check_new_record_date(self, date, table_name):
+        pass
 

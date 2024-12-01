@@ -29,7 +29,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.menu_bar = self.menuBar()
         self.set_interface_language(menu_language)
         self.make_menu()
-        self.db_handler = SqlHandler(self.app_dir)
+        self.date_month, _ = get_current_month()
+        self.db_handler = SqlHandler(self.app_dir, self.date_month)
         self.check_db()
         self.set_simple_balance_view()
         self.status_bar = self.statusBar()
@@ -97,8 +98,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.view = MonthBalanceView(self.interface_language, self.db_handler)
             self.setCentralWidget(self.view)
-            current_month_date, _ = get_current_month()
-            self.view.balance_screen(current_month_date)
+            self.view.balance_screen(self.date_month)
             self.update_view()
             window.resize(475, 350)
 
@@ -130,19 +130,17 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.view = MonthIncomeView(self.interface_language, self.db_handler)
             self.setCentralWidget(self.view)
-            current_month_date, _ = get_current_month()
-            self.view.balance_screen(current_month_date)
+            self.view.balance_screen(self.date_month)
             self.update_view()
             window.resize(475, 350)
 
     def check_db(self):
-        date, _ = get_current_month()
         if not self.db_handler.is_db_available():
             logger.info('DB is not exist')
-            self.db_handler.create_db(date)
+            self.db_handler.create_db()
         else:
             logger.info('DB is available')
-            self.db_handler.check_month_rest(date, self.interface_language['rest'])
+            self.db_handler.check_month_rest(self.interface_language['rest'])
 
     def show_current_date(self):
         label_date = QtWidgets.QLabel(get_current_date())
