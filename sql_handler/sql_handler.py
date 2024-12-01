@@ -171,15 +171,15 @@ class SqlHandler:
         self.update_balance(credit=-value) if table_name == 'Credit' else self.update_balance(debit=-value)
 
     def update_balance(self, credit: int=0, debit: int=0):
-        balance = self.get_balance()
+        balance, _ = self.get_balance()
         balance = balance + debit - credit
         self.set_balance(balance)
 
-    def get_balance(self, id_=1) -> int | (int, str):
+    def get_balance(self, id_=1) -> int | tuple[int, str]:
         balance, date = 0, '0'
         connect, query = self.connect_db()
         query_get_balance = '''
-        select balance from Balance where id=%d
+        select balance, date from Balance where id=%d
         ''' % id_
         query.exec(query_get_balance)
         if query.isActive():
@@ -192,7 +192,8 @@ class SqlHandler:
         else:
             logger.error('Problem with query: get_balance')
         connect.close()
-        return balance if id_ == 1 else balance, date
+        return balance if id_ == 1 else (balance, date)
+
 
     def set_balance(self, balance: int, id_=1, date=None):
         connect, query = self.connect_db()
@@ -201,7 +202,7 @@ class SqlHandler:
             update Balance set balance=%d where id=1''' % balance
         else:
             query_set_balance = '''
-            update Balance set balance=%d, date=%s where id=2''' % balance, date
+            update Balance set balance=%d, date='%s' where id=2''' % (balance, date)
         query.exec(query_set_balance)
         logger.info('Set Balance: ' + str(balance))
         connect.close()
