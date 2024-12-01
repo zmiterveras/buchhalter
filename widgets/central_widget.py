@@ -8,6 +8,7 @@ from logging import getLogger
 
 from sql_handler.sql_handler import SqlHandler
 from tools.money_parser import get_int_dec
+from tools.date_time_tool import get_current_date
 
 logger = getLogger(__name__)
 
@@ -150,11 +151,12 @@ class CentralWidget(QtWidgets.QWidget):
         value = self.value_int.value() * 100 + self.value_dec.value()
         category = self.category.currentIndex() + 1
         note = self.note.text()
-        logger.info(flag + ': ' + date + '/' + str(value) + '/' + str(category) + '/' + note)
-        table_name = 'Credit' if flag == 'expense' else 'Debit'
-        self.add_value_to_db(date, value, category, note, id_, table_name)
-        self.add_new_value_widget.close()
-        self.balance_update(table_name)
+        if self.check_values_date(date):
+            logger.info(flag + ': ' + date + '/' + str(value) + '/' + str(category) + '/' + note)
+            table_name = 'Credit' if flag == 'expense' else 'Debit'
+            self.add_value_to_db(date, value, category, note, id_, table_name)
+            self.add_new_value_widget.close()
+            self.balance_update(table_name)
 
     def delete_value(self, flag, change):
         id_, value, _, _ = self.get_from_record(change)
@@ -221,6 +223,14 @@ class CentralWidget(QtWidgets.QWidget):
                                                     buttons=QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
                                                     defaultButton=QtWidgets.QMessageBox.No)
             return result, row
+
+    def check_values_date(self, received_date):
+        current_date = get_current_date('day')
+        if current_date < received_date:
+            QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
+                                          self.interface_languages['warn_date'])
+            return False
+        return True
 
     def test(self):
         logger.info('Test')

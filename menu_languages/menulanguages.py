@@ -50,6 +50,7 @@ class MenuLanguages:
         'warn_change_text': 'Do you really want to %s record',
         'warn_select_record': 'No record selected',
         'warn_change': 'change',
+        'warn_date': 'Invalid date received',
         'warn_delete': 'delete',
         'week': 'Week'
     }
@@ -101,6 +102,7 @@ class MenuLanguages:
         'warn_change_text': 'Вы действительно хотите %s запись',
         'warn_select_record': 'Не выбрана запись',
         'warn_change': 'изменить',
+        'warn_date': 'Получена недопустимая дата',
         'warn_delete': 'удалить',
         'week': 'Неделя'
     }
