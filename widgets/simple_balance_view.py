@@ -37,7 +37,7 @@ class SimpleBalanceView(CentralWidget):
 
     def show_current_income(self, box: QtWidgets.QVBoxLayout, date: str):
         box.addWidget(QtWidgets.QLabel(self.interface_languages['income']))
-        current_income = self.get_current_income(date)
+        current_income = self.get_current_income(date) + self.get_current_rest()
         self.current_income_label = QtWidgets.QLabel(get_view_money(current_income))
         box.addWidget(self.current_income_label)
 
