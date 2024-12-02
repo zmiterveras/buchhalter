@@ -8,7 +8,7 @@ from logging import getLogger
 
 from sql_handler.sql_handler import SqlHandler
 from tools.money_parser import get_int_dec
-from tools.date_time_tool import get_current_date
+from tools.date_time_tool import get_current_date, get_current_month, get_next_month
 
 logger = getLogger(__name__)
 
@@ -234,13 +234,20 @@ class CentralWidget(QtWidgets.QWidget):
 
     def validation_new_record(self, date, value: int, cat_id: int, note: str, id_: None | int,
                   old_value: int, table_name: str):
+        current_date, _ = get_current_month()
         self.sql_handler.add_value(date, value, cat_id, note, id_, old_value, table_name)
-        self.check_new_record_date(date, value, cat_id, note, id_, old_value, table_name)
+        self.check_new_record_date(date, value, table_name, current_date)
 
-    def check_new_record_date(self, date, value: int, cat_id: int, note: str, id_: None | int,
-                  old_value: int, table_name: str):
-        if date < self.date:
-            next_month = 0
+    def check_new_record_date(self, date, value: int, table_name: str, current_date: str):
+        if date < current_date:
+            next_month = get_next_month(date)
+            old_rest = self.sql_handler.get_rest(next_month)
+            if old_rest:
+                new_rest = old_rest[0][2] - value if table_name == 'Credit' else old_rest[0][2] + value
+                self.sql_handler.add_value(next_month, new_rest, 1, old_rest[0][3], old_rest[0][0], 0,
+                                           'Debit', True)
+                self.check_new_record_date(next_month, value, table_name, current_date)
+
 
     def test(self):
         logger.info('Test')

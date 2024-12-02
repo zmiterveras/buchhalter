@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from typing import List, Tuple, Any
 
 from PyQt5 import QtSql
 from logging import getLogger
@@ -217,6 +218,29 @@ class SqlHandler:
             self.set_balance(rest, 2, self.date)
             self.add_value(self.date, rest, 1, note, None, 0, 'Debit', True)
             logger.info('Month rest changed')
+
+    def get_rest(self, date: str) -> list[tuple[int, str, int, str]]:
+        rest = []
+        connect, query = self.connect_db()
+        query_get_rest = '''
+        select id, date, value, cat_id, note 
+        from Debit
+        where date='%s' and cat_id=1 and note in ('Rest', 'Остаток')
+        ''' % date
+        query.exec(query_get_rest)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                rest.append((query.value('id'), query.value('date'), query.value('value'), query.value('note')))
+                query.next()
+                logger.info('Got rest: ' + str(rest))
+        else:
+            logger.error('Problem with query: get_rest')
+        connect.close()
+        return rest
+
+
+
 
 
 
