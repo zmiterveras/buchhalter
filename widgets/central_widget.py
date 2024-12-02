@@ -25,6 +25,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.make_view_buttons_box()
         self.btn_submit_choose_viewing = QtWidgets.QPushButton(self.interface_languages['select'])
         self.old_value = 0
+        self.last_month = False
 
     def make_widget(self):
         self.top_widget = QtWidgets.QVBoxLayout()
@@ -237,9 +238,13 @@ class CentralWidget(QtWidgets.QWidget):
         current_date, _ = get_current_month()
         self.sql_handler.add_value(date, value, cat_id, note, id_, old_value, table_name)
         self.check_new_record_date(date, value, table_name, current_date)
+        if table_name == 'Credit' and self.last_month:
+            self.balance_update('Debit')
+            self.last_month = False
 
     def check_new_record_date(self, date, value: int, table_name: str, current_date: str):
         if date < current_date:
+            self.last_month = True
             logger.debug('check_new_record_date: Old Month')
             next_month = get_next_month(date)
             old_rest = self.sql_handler.get_rest(next_month)
