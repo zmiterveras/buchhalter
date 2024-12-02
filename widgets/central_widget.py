@@ -232,6 +232,16 @@ class CentralWidget(QtWidgets.QWidget):
             return False
         return True
 
+    def validation_new_record(self, date, value: int, cat_id: int, note: str, id_: None | int,
+                  old_value: int, table_name: str):
+        self.sql_handler.add_value(date, value, cat_id, note, id_, old_value, table_name)
+        self.check_new_record_date(date, value, cat_id, note, id_, old_value, table_name)
+
+    def check_new_record_date(self, date, value: int, cat_id: int, note: str, id_: None | int,
+                  old_value: int, table_name: str):
+        if date < self.date:
+            next_month = 0
+
     def test(self):
         logger.info('Test')
 

@@ -218,6 +218,7 @@ class SqlHandler:
             self.add_value(self.date, rest, 1, note, None, 0, 'Debit', True)
             logger.info('Month rest changed')
 
-    def check_new_record_date(self, date, table_name):
-        pass
+
+
+
 
