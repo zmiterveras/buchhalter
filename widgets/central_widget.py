@@ -165,7 +165,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.balance_update(table_name)
 
     def add_value_to_db(self, date, value, category, note, id_, table_name):
-        self.sql_handler.add_value(date, value, category, note, id_, self.old_value, table_name)
+        self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
 
     def delete_value_from_db(self, id_, table_name, value):
@@ -240,6 +240,7 @@ class CentralWidget(QtWidgets.QWidget):
 
     def check_new_record_date(self, date, value: int, table_name: str, current_date: str):
         if date < current_date:
+            logger.debug('check_new_record_date: Old Month')
             next_month = get_next_month(date)
             old_rest = self.sql_handler.get_rest(next_month)
             if old_rest:
@@ -247,6 +248,7 @@ class CentralWidget(QtWidgets.QWidget):
                 self.sql_handler.add_value(next_month, new_rest, 1, old_rest[0][3], old_rest[0][0], 0,
                                            'Debit', True)
                 self.check_new_record_date(next_month, value, table_name, current_date)
+
 
 
     def test(self):
