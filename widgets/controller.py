@@ -21,7 +21,7 @@ class Controller(CentralWidget):
         return self.sql_handler.get_current_value(date, 'Debit')
 
     def get_last_time_span_values(self, date: str, table_names: list) -> []:
-        return self.sql_handler.get_last_time_span_values(date, table_names)
+        return self.sql_handler.get_time_span_values(date, table_names)
 
     def add_value_to_db(self, date, value, category, note, id_, table_name):
         self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)

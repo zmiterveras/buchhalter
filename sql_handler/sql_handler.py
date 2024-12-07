@@ -121,28 +121,29 @@ class SqlHandler:
 
         return value_sum
 
-    def get_last_time_span_values(self, date: str, table_names: list) -> []:
-        last_time_span_values = []
-        logger.debug('Timespan: ' + date)
+    def get_time_span_values(self, start_date: str, table_names: list, stop_date: str | None = None) -> []:
+        time_span_values = []
+        logger.debug('Timespan: ' + start_date)
         connect, query = self.connect_db()
-        query_get_month_values = '''
+        query_get_span_values = '''
         select cr.id, cr.date, cr.value, cat.category_en, cr.note  
         from %s cr join %s cat 
         on cr.cat_id = cat.id
-        where cr.date>="%s"
-        order by cr.date
-        ''' % (table_names[0], table_names[1], date)
-        query.exec(query_get_month_values)
+        ''' % (table_names[0], table_names[1])
+        where_values = ' where cr.date>="%s"' % start_date if not stop_date \
+            else ' where cr.date>="%s" and cr.date<="%s"' % (start_date, stop_date)
+        query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
+        query.exec(query_get_span_values)
         if query.isActive():
             query.first()
             while query.isValid():
-                last_time_span_values.append((query.value('id'), query.value('date'), query.value('value'),
+                time_span_values.append((query.value('id'), query.value('date'), query.value('value'),
                                                query.value('category_en'), query.value('note')))
                 query.next()
         else:
             logger.error('Problem with query: get_last_time_span_credits')
         connect.close()
-        return last_time_span_values
+        return time_span_values
 
     def add_value(self, date: str, value: int, cat_id: int, note: str, id_: None | int,
                   old_value: int, table_name: str, rest=False):
