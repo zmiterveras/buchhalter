@@ -19,6 +19,7 @@ class MenuLanguages:
         'edit': 'Edit',
         'edit_record': 'Edit record',
         'expense': 'Expenses',
+        'fit_beauty': 'Fitness and beauty',
         'food': 'Food',
         'gift': 'Gift',
         'household': 'Household',
@@ -71,6 +72,7 @@ class MenuLanguages:
         'edit': 'Редакт.',
         'edit_record': 'Редакт.запись',
         'expense': 'Расходы',
+        'fit_beauty': 'Фитнес и красота',
         'food': 'Еда',
         'gift': 'Подарки',
         'household': 'Бытовое',
@@ -119,7 +121,8 @@ class MenuLanguages:
                 'television',
                 'transport',
                 'utility',
-                'household']
+                'household',
+                'fit_beauty']
 
     cat_keys_debit = ['other',
                       'salary',

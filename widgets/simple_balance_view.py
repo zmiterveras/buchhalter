@@ -9,11 +9,12 @@ from tools.date_time_tool import get_current_month
 from widgets.central_widget import CentralWidget
 from logging import getLogger
 
+from widgets.controller import Controller
 
 logger = getLogger(__name__)
 
 
-class SimpleBalanceView(CentralWidget):
+class SimpleBalanceView(Controller):
 
     def start_screen(self, date: str):
         self.show_current_balance()

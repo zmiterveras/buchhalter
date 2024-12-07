@@ -7,11 +7,12 @@ from widgets.central_widget import CentralWidget
 from tools.money_parser import get_view_money
 from logging import getLogger
 from tools.date_time_tool import get_current_date, get_current_month
+from widgets.controller import Controller
 
 logger = getLogger(__name__)
 
 
-class MonthBalanceView(CentralWidget):
+class MonthBalanceView(Controller):
 
     def balance_screen(self, date: str):
         balance = get_view_money(self.get_current_balance())
