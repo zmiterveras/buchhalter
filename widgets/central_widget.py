@@ -7,8 +7,6 @@ from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
 from sql_handler.sql_handler import SqlHandler
-from tools.money_parser import get_int_dec
-from tools.date_time_tool import get_current_date, get_current_month, get_next_month
 
 logger = getLogger(__name__)
 
