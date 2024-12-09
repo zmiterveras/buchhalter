@@ -184,6 +184,7 @@ class CentralWidget(QtWidgets.QWidget):
         for widget in (self.calendar_start, self.calendar_stop, btn_choose):
             choose_time_span_box.addWidget(widget)
         btn_choose.clicked.connect(self.test)
+        self.choose_time_span_widget.show()
 
 
     def get_row(self, table_view, standard_item, col):
