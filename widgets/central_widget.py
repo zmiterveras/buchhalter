@@ -83,6 +83,10 @@ class CentralWidget(QtWidgets.QWidget):
         date_list = values[3].split('.')
         widgets[3].setDate(QtCore.QDate(int(date_list[0]), int(date_list[1]), int(date_list[2])))
 
+    def set_calendar(self, calendar: QtWidgets.QDateEdit):
+        calendar.setCalendarPopup(True)
+        calendar.setDisplayFormat('yyyy.MM.dd')
+        calendar.setDate(datetime.date.today())
 
     def add_new_value(self, flag, change=None):
         logger.info("Add New " + flag)
@@ -91,9 +95,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.add_new_value_widget.setWindowModality(QtCore.Qt.WindowModal)
         self.add_new_value_widget.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         self.calendar = QtWidgets.QDateEdit()
-        self.calendar.setCalendarPopup(True)
-        self.calendar.setDisplayFormat('yyyy.MM.dd')
-        self.calendar.setDate(datetime.date.today())
+        self.set_calendar(self.calendar)
         self.value_int = QtWidgets.QSpinBox()
         self.value_int.setMaximum(100000)
         self.value_dec = QtWidgets.QSpinBox()
@@ -170,6 +172,13 @@ class CentralWidget(QtWidgets.QWidget):
         type_viewing = self.cb_viewing.currentIndex()
         self.choose_viewing_widget.close()
         return type_viewing
+
+    def choose_time_span(self):
+        self.choose_time_span_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
+        choose_time_cpan_box = QtWidgets.QVBoxLayout()
+        self.calendar_start = QtWidgets.QDateEdit()
+        self.calendar_stop = QtWidgets.QDateEdit()
+
 
     def get_row(self, table_view, standard_item, col):
         row_number = table_view.currentIndex().row()
