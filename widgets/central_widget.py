@@ -175,14 +175,17 @@ class CentralWidget(QtWidgets.QWidget):
 
     def choose_time_span(self):
         self.choose_time_span_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
-        choose_time_span_box = QtWidgets.QVBoxLayout()
         self.calendar_start = QtWidgets.QDateEdit()
         self.calendar_stop = QtWidgets.QDateEdit()
         self.set_calendar(self.calendar_start)
         self.set_calendar(self.calendar_stop)
+        form = QtWidgets.QFormLayout()
         btn_choose = QtWidgets.QPushButton(self.interface_languages['choose'])
-        for widget in (self.calendar_start, self.calendar_stop, btn_choose):
-            choose_time_span_box.addWidget(widget)
+        for name, widget in ((self.interface_languages['start_date'], self.calendar_start),
+                            (self.interface_languages['stop_date'], self.calendar_stop)):
+            form.addRow(name, widget)
+        form.addRow(btn_choose)
+        self.choose_time_span_widget.setLayout(form)
         btn_choose.clicked.connect(self.test)
         self.choose_time_span_widget.show()
 
