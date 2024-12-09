@@ -135,6 +135,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.update_view()
             window.resize(475, 350)
 
+    def set_selected_period(self):
+        pass
+
     def check_db(self):
         if not self.db_handler.is_db_available():
             logger.info('DB is not exist')
