@@ -186,6 +186,11 @@ class CentralWidget(QtWidgets.QWidget):
         btn_choose.clicked.connect(self.test)
         self.choose_time_span_widget.show()
 
+    def get_times(self) -> tuple:
+        start_date = self.calendar_start.text()
+        stop_date = self.calendar_stop.text()
+        self.choose_time_span_widget.close()
+        return start_date, stop_date
 
     def get_row(self, table_view, standard_item, col):
         row_number = table_view.currentIndex().row()
