@@ -56,6 +56,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['week'], self.set_week_balance_view)
         viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
+        viewing.addAction(self.interface_language['selected_period'])
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
