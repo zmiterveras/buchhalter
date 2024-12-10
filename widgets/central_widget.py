@@ -174,7 +174,9 @@ class CentralWidget(QtWidgets.QWidget):
         return type_viewing
 
     def choose_time_span(self):
-        self.choose_time_span_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
+        self.choose_time_span_widget = QtWidgets.QWidget()
+        self.table_cb = QtWidgets.QComboBox()
+        self.table_cb.addItems([self.interface_languages['expense'], self.interface_languages['income']])
         self.calendar_start = QtWidgets.QDateEdit()
         self.calendar_stop = QtWidgets.QDateEdit()
         self.set_calendar(self.calendar_start)
@@ -184,17 +186,16 @@ class CentralWidget(QtWidgets.QWidget):
         for name, widget in ((self.interface_languages['start_date'], self.calendar_start),
                             (self.interface_languages['stop_date'], self.calendar_stop)):
             form.addRow(name, widget)
-        form.addRow(btn_choose)
-        self.choose_time_span_widget.setLayout(form)
-        btn_choose.clicked.connect(self.test)
-        # self.choose_time_span_widget.show()
-        return self.choose_time_span_widget
 
-    def get_times(self) -> tuple:
+    def get_times(self):
+        table_choose = self.table_cb.currentText()
+        table_name = 'Credit' if table_choose == 'expense' else 'Debit'
         start_date = self.calendar_start.text()
         stop_date = self.calendar_stop.text()
+        logger.info('Start date: ' + start_date)
+        logger.info('Stop date: ' + stop_date)
         self.choose_time_span_widget.close()
-        return start_date, stop_date
+
 
     def get_row(self, table_view, standard_item, col):
         row_number = table_view.currentIndex().row()

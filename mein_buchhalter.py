@@ -9,6 +9,7 @@ from sql_handler.sql_handler import SqlHandler
 from widgets.day_balance_view import DayBalanceView
 from widgets.month_balance_view import MonthBalanceView
 from widgets.month_income_view import MonthIncomeView
+from widgets.selected_period_view import SelectedPeriodView
 from widgets.simple_balance_view import SimpleBalanceView
 from tools.date_time_tool import get_current_date, get_current_month, get_last_week
 from tools.my_logger import logger
@@ -56,7 +57,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['week'], self.set_week_balance_view)
         viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
-        viewing.addAction(self.interface_language['selected_period'])
+        viewing.addAction(self.interface_language['selected_period'], self.set_selected_period)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
@@ -136,7 +137,10 @@ class MainWindow(QtWidgets.QMainWindow):
             window.resize(475, 350)
 
     def set_selected_period(self):
-        pass
+        self.view = SelectedPeriodView(self.interface_language, self.db_handler)
+        self.setCentralWidget(self.view)
+        self.view.selected_period()
+        self.update_view()
 
     def check_db(self):
         if not self.db_handler.is_db_available():
