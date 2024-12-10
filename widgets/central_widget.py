@@ -187,7 +187,8 @@ class CentralWidget(QtWidgets.QWidget):
         form.addRow(btn_choose)
         self.choose_time_span_widget.setLayout(form)
         btn_choose.clicked.connect(self.test)
-        self.choose_time_span_widget.show()
+        # self.choose_time_span_widget.show()
+        return self.choose_time_span_widget
 
     def get_times(self) -> tuple:
         start_date = self.calendar_start.text()
