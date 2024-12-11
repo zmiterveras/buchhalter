@@ -21,7 +21,7 @@ class Controller(CentralWidget):
         return self.sql_handler.get_current_value(date, 'Debit')
 
     def get_last_time_span_values(self, date: str, table_names: list) -> []:
-        return self.sql_handler.get_time_span_values(date, table_names)
+        return self.sql_handler.get_time_span_values(date, table_names, None)
 
     def get_span_time_values(self, start_date: str, table_names: list, stop_date: str) -> []:
         return self.sql_handler.get_time_span_values(start_date, table_names, stop_date)
