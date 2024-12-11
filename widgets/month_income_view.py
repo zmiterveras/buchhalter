@@ -13,8 +13,8 @@ logger = getLogger(__name__)
 
 class MonthIncomeView(MonthBalanceView):
 
-    def set_table(self, date: str, table_names=['Debit', 'Category_Debit'], name='income'):
-        super().set_table(date, table_names, name)
+    def set_table(self, start_date: str, table_names=['Debit', 'Category_Debit'], name='income'):
+        super().set_table(start_date, table_names, name)
 
     def balance_update(self, current_balance: str):
         match current_balance:
