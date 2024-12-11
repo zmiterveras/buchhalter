@@ -20,7 +20,7 @@ class MonthBalanceView(Controller):
         self.label_balance = QtWidgets.QLabel(self.interface_languages['current_balance'] + ' ' + balance)
         self.view_box.addWidget(label_month)
         self.view_box.addWidget(self.label_balance)
-        self.set_table(date)
+        self.set_table(date, None)
 
     def set_title_label(self):
         month = get_current_date('month')
@@ -29,7 +29,7 @@ class MonthBalanceView(Controller):
     def get_data(self, start_date: str, table_names: list, stop_date: str):
         return unpacking(self.get_last_time_span_values(start_date, table_names, stop_date))
 
-    def set_table(self, start_date: str, table_names=['Credit', 'Category_Credit'], name='expense', stop_date=None):
+    def set_table(self, start_date: str, stop_date: str | None, table_names=['Credit', 'Category_Credit'], name='expense'):
         ids, dates, values, categories, notes = self.get_data(start_date, table_names, stop_date)
         total_value = get_view_money(self.get_current_expense(start_date)) \
             if name == 'expense' else get_view_money(self.get_current_income(start_date))
