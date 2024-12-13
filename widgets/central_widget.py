@@ -189,7 +189,7 @@ class CentralWidget(QtWidgets.QWidget):
 
     def get_times(self):
         table_choose = self.table_cb.currentText()
-        table_name = 'Credit' if table_choose == 'expense' else 'Debit'
+        table_names = 'Credit' if table_choose == 'expense' else 'Debit'
         start_date = self.calendar_start.text()
         stop_date = self.calendar_stop.text()
         logger.info('Start date: ' + start_date)
