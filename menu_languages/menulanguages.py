@@ -57,7 +57,9 @@ class MenuLanguages:
         'warn_select_record': 'No record selected',
         'warn_change': 'change',
         'warn_date': 'Invalid date received',
+        'warn_dates': 'Stop date is older than start date',
         'warn_delete': 'delete',
+        'warn_same_dates': 'Same dates',
         'week': 'Week'
     }
     ru = {
@@ -115,7 +117,9 @@ class MenuLanguages:
         'warn_select_record': 'Не выбрана запись',
         'warn_change': 'изменить',
         'warn_date': 'Получена недопустимая дата',
+        'warn_dates': 'Конечная дата старше начальной даты',
         'warn_delete': 'удалить',
+        'warn_same_dates': 'Одинаковые даты',
         'week': 'Неделя'
     }
     cat_keys_credit = ['other',

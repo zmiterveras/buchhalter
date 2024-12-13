@@ -65,6 +65,22 @@ class Controller(CentralWidget):
             return False
         return True
 
+    def check_values_span_dates(self, start_date, stop_date):
+        check_start = self.check_values_date(start_date)
+        check_stop = self.check_values_date(stop_date)
+        if start_date == stop_date:
+            QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
+                                          self.interface_languages['warn_same_dates'])
+            check_equal = False
+        elif start_date > stop_date:
+            QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
+                                          self.interface_languages['warn_date'])
+            check_equal = False
+        else:
+            check_equal = True
+        return check_start and check_stop and check_equal
+
+
     def validation_new_record(self, date, value: int, cat_id: int, note: str, id_: None | int,
                   old_value: int, table_name: str):
         current_date, _ = get_current_month()
@@ -89,3 +105,5 @@ class Controller(CentralWidget):
     def set_table_view(self,start_date: str, stop_date: str, table: str):
         table_names = ('Credit', 'Category_Credit') if table == 'expense' else ('Debit', 'Category_Debit')
         logger.debug('Table names: ' + str(table_names))
+        if self.check_values_span_dates(start_date, stop_date):
+            logger.debug('Check dates: True')
