@@ -186,7 +186,9 @@ class CentralWidget(QtWidgets.QWidget):
         for name, widget in ((self.interface_languages['start_date'], self.calendar_start),
                             (self.interface_languages['stop_date'], self.calendar_stop)):
             form.addRow(name, widget)
+        form.addRow(btn_choose)
         self.choose_time_span_widget.setLayout(form)
+        return self.choose_time_span_widget
 
     def get_times(self):
         table_choose = self.table_cb.currentText()
