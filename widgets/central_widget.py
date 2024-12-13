@@ -186,15 +186,15 @@ class CentralWidget(QtWidgets.QWidget):
         for name, widget in ((self.interface_languages['start_date'], self.calendar_start),
                             (self.interface_languages['stop_date'], self.calendar_stop)):
             form.addRow(name, widget)
+        self.choose_time_span_widget.setLayout(form)
 
     def get_times(self):
         table_choose = self.table_cb.currentText()
-        table_names = 'Credit' if table_choose == 'expense' else 'Debit'
         start_date = self.calendar_start.text()
         stop_date = self.calendar_stop.text()
         logger.info('Start date: ' + start_date)
         logger.info('Stop date: ' + stop_date)
-        self.choose_time_span_widget.close()
+        self.set_table_view(start_date, stop_date, table_choose)
 
 
     def get_row(self, table_view, standard_item, col):

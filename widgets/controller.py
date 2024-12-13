@@ -85,3 +85,7 @@ class Controller(CentralWidget):
                 self.sql_handler.add_value(next_month, new_rest, 1, old_rest[0][3], old_rest[0][0], 0,
                                            'Debit', True)
                 self.check_new_record_date(next_month, value, table_name, current_date)
+
+    def set_table_view(self,start_date: str, stop_date: str, table: str):
+        table_names = ('Credit', 'Category_Credit') if table == 'expense' else ('Debit', 'Category_Debit')
+        logger.debug('Table names: ' + str(table_names))
