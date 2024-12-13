@@ -61,7 +61,7 @@ class Controller(CentralWidget):
         current_date = get_current_date('day')
         if current_date < received_date:
             QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
-                                          self.interface_languages['warn_date'])
+                                          self.interface_languages['warn_date'] + ': ' + received_date )
             return False
         return True
 
