@@ -103,7 +103,7 @@ class Controller(CentralWidget):
                 self.check_new_record_date(next_month, value, table_name, current_date)
 
     def set_table_view(self,start_date: str, stop_date: str, table: str):
-        table_names = ('Credit', 'Category_Credit') if table == 'Expense' else ('Debit', 'Category_Debit')
-        logger.debug('Table names: ' + str(table_names))
+        table_names = ('Credit', 'Category_Credit') if table == 'Expenses' else ('Debit', 'Category_Debit')
         if self.check_values_span_dates(start_date, stop_date):
-            logger.debug('Check dates: True')
+            self.clear_view_box()
+            self.set_table(start_date, stop_date, table_names, table.lower()[:-1])
