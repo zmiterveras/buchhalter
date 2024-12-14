@@ -184,7 +184,8 @@ class CentralWidget(QtWidgets.QWidget):
         form = QtWidgets.QFormLayout()
         btn_choose = QtWidgets.QPushButton(self.interface_languages['choose'])
         btn_choose.clicked.connect(self.get_times)
-        for name, widget in ((self.interface_languages['start_date'], self.calendar_start),
+        for name, widget in ((self.interface_languages['data_type'], self.table_cb),
+                            (self.interface_languages['start_date'], self.calendar_start),
                             (self.interface_languages['stop_date'], self.calendar_stop)):
             form.addRow(name, widget)
         form.addRow(btn_choose)
