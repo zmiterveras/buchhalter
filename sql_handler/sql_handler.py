@@ -12,9 +12,10 @@ logger = getLogger(__name__)
 
 
 class SqlHandler:
-    def __init__(self, root_path: str, date):
+    def __init__(self, root_path: str, date, language: str):
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
         self.date = date
+
 
     def create_db(self):
         connect, query = self.connect_db()
