@@ -15,7 +15,14 @@ class SqlHandler:
     def __init__(self, root_path: str, date, language: str):
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
         self.date = date
+        self.set_category_language(language)
 
+    def set_category_language(self, language):
+        match language:
+            case 'en':
+                self.category_language = 'category_en'
+            case 'ru':
+                self.category_language = 'category_ru'
 
     def create_db(self):
         connect, query = self.connect_db()

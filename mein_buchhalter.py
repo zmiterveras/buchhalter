@@ -31,7 +31,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_interface_language(menu_language)
         self.make_menu()
         self.date_month, _ = get_current_month()
-        self.db_handler = SqlHandler(self.app_dir, self.date_month)
+        self.db_handler = SqlHandler(self.app_dir, self.date_month, menu_language)
         self.check_db()
         self.set_simple_balance_view()
         self.status_bar = self.statusBar()
