@@ -134,10 +134,10 @@ class SqlHandler:
         logger.debug('Timespan: ' + start_date)
         connect, query = self.connect_db()
         query_get_span_values = '''
-        select cr.id, cr.date, cr.value, cat.category_en, cr.note  
+        select cr.id, cr.date, cr.value, cat.%s, cr.note  
         from %s cr join %s cat 
         on cr.cat_id = cat.id
-        ''' % (table_names[0], table_names[1])
+        ''' % (self.category_language, table_names[0], table_names[1])
         where_values = ' where cr.date>="%s"' % start_date if not stop_date \
             else ' where cr.date>="%s" and cr.date<="%s"' % (start_date, stop_date)
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
@@ -146,7 +146,7 @@ class SqlHandler:
             query.first()
             while query.isValid():
                 time_span_values.append((query.value('id'), query.value('date'), query.value('value'),
-                                               query.value('category_en'), query.value('note')))
+                                               query.value('%s' % self.category_language), query.value('note')))
                 query.next()
         else:
             logger.error('Problem with query: get_last_time_span_credits')
