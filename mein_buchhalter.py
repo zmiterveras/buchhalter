@@ -58,6 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['day'], self.set_day_balance_view)
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
         viewing.addAction(self.interface_language['selected_period'], self.set_selected_period)
+        viewing.addAction(self.interface_language['category'], self.set_category_view)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
@@ -141,6 +142,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.view)
         self.view.selected_period()
         self.update_view()
+
+    def set_category_view(self):
+        pass
 
     def check_db(self):
         if not self.db_handler.is_db_available():
