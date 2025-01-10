@@ -192,6 +192,22 @@ class CentralWidget(QtWidgets.QWidget):
         self.choose_time_span_widget.setLayout(self.form)
         return self.choose_time_span_widget
 
+    def choose_category(self):
+        chose_time_span_widget = self.choose_time_span()
+        self.category_cb = QtWidgets.QComboBox()
+        self.category_cb.addItems(self.cat_keys_credit)
+        self.form.insertRow(1, self.interface_languages['category'], self.category_cb)
+        self.table_cb.currentIndexChanged.connect(self.change_table)
+        return chose_time_span_widget
+
+    def change_table(self):
+        self.category_cb.clear()
+        match self.table_cb.currentText():
+            case 'Expenses':
+                self.category_cb.addItems(self.cat_keys_credit)
+            case 'Incomes':
+                self.category_cb.addItems(self.cat_keys_debit)
+
     def get_times(self):
         table_choose = self.table_cb.currentText()
         start_date = self.calendar_start.text()
