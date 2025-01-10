@@ -6,6 +6,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
+from widgets.category_selected_period_view import CategorySelectedPeriodView
 from widgets.day_balance_view import DayBalanceView
 from widgets.month_balance_view import MonthBalanceView
 from widgets.month_income_view import MonthIncomeView
@@ -144,7 +145,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_view()
 
     def set_category_view(self):
-        pass
+        self.view = CategorySelectedPeriodView(self.interface_language, self.db_handler)
+        self.setCentralWidget(self.view)
+        self.view.selected_category()
+        self.update_view()
 
     def check_db(self):
         if not self.db_handler.is_db_available():
