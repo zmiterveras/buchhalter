@@ -181,15 +181,15 @@ class CentralWidget(QtWidgets.QWidget):
         self.calendar_stop = QtWidgets.QDateEdit()
         self.set_calendar(self.calendar_start)
         self.set_calendar(self.calendar_stop)
-        form = QtWidgets.QFormLayout()
+        self.form = QtWidgets.QFormLayout()
         btn_choose = QtWidgets.QPushButton(self.interface_languages['choose'])
         btn_choose.clicked.connect(self.get_times)
         for name, widget in ((self.interface_languages['data_type'], self.table_cb),
                             (self.interface_languages['start_date'], self.calendar_start),
                             (self.interface_languages['stop_date'], self.calendar_stop)):
-            form.addRow(name, widget)
-        form.addRow(btn_choose)
-        self.choose_time_span_widget.setLayout(form)
+            self.form.addRow(name, widget)
+        self.form.addRow(btn_choose)
+        self.choose_time_span_widget.setLayout(self.form)
         return self.choose_time_span_widget
 
     def get_times(self):
