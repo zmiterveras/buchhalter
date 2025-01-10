@@ -50,6 +50,7 @@ class MenuLanguages:
         'stop_date': 'Stop Date',
         'sum': 'Sum:',
         'television': 'Television',
+        'transfer': 'Transfer',
         'transport': 'Transport',
         'utility': 'Utility',
         'viewing': 'Viewing',
@@ -111,6 +112,7 @@ class MenuLanguages:
         'stop_date': 'Конечная дата',
         'sum': 'Итого:',
         'television': 'Телевидение',
+        'transfer': 'Трансфер',
         'transport': 'Транспорт',
         'utility': 'Коммунальные',
         'viewing': 'Просмотр',
@@ -138,7 +140,8 @@ class MenuLanguages:
                 'transport',
                 'utility',
                 'household',
-                'fit_beauty']
+                'fit_beauty',
+                'transfer']
 
     cat_keys_debit = ['other',
                       'salary',

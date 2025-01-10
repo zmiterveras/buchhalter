@@ -126,10 +126,10 @@ class SqlHandler:
         else:
             logger.error('Problem with query: get_current_' + name)
         connect.close()
-
         return value_sum
 
-    def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None) -> []:
+    def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None,
+                             category: int | None) -> []:
         time_span_values = []
         logger.debug('Timespan: ' + start_date)
         connect, query = self.connect_db()
@@ -140,6 +140,8 @@ class SqlHandler:
         ''' % (self.category_language, table_names[0], table_names[1])
         where_values = ' where cr.date>="%s"' % start_date if not stop_date \
             else ' where cr.date>="%s" and cr.date<="%s"' % (start_date, stop_date)
+        if category:
+            where_values = where_values + ' and cr.cat_id="%d"' % category
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
         query.exec(query_get_span_values)
         if query.isActive():
