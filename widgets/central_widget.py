@@ -182,18 +182,20 @@ class CentralWidget(QtWidgets.QWidget):
         self.set_calendar(self.calendar_start)
         self.set_calendar(self.calendar_stop)
         self.form = QtWidgets.QFormLayout()
-        btn_choose = QtWidgets.QPushButton(self.interface_languages['choose'])
-        btn_choose.clicked.connect(self.get_times)
+        self.btn_choose = QtWidgets.QPushButton(self.interface_languages['choose'])
+        self.btn_choose.clicked.connect(self.get_times)
         for name, widget in ((self.interface_languages['data_type'], self.table_cb),
                             (self.interface_languages['start_date'], self.calendar_start),
                             (self.interface_languages['stop_date'], self.calendar_stop)):
             self.form.addRow(name, widget)
-        self.form.addRow(btn_choose)
+        self.form.addRow(self.btn_choose)
         self.choose_time_span_widget.setLayout(self.form)
         return self.choose_time_span_widget
 
     def choose_category(self):
         chose_time_span_widget = self.choose_time_span()
+        self.btn_choose.clicked.disconnect()
+        self.btn_choose.clicked.connect(lambda: self.get_times(True))
         self.category_cb = QtWidgets.QComboBox()
         self.category_cb.addItems(self.cat_keys_credit)
         self.form.insertRow(1, self.interface_languages['category'], self.category_cb)
@@ -208,12 +210,14 @@ class CentralWidget(QtWidgets.QWidget):
             case 'Incomes':
                 self.category_cb.addItems(self.cat_keys_debit)
 
-    def get_times(self):
+    def get_times(self, category: bool = False):
         table_choose = self.table_cb.currentText()
         start_date = self.calendar_start.text()
         stop_date = self.calendar_stop.text()
         logger.info('Start date: ' + start_date)
         logger.info('Stop date: ' + stop_date)
+        if category:
+            cat_id = self.category_cb.currentIndex() + 1
         self.set_table_view(start_date, stop_date, table_choose)
 
 
