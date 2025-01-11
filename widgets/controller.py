@@ -26,6 +26,9 @@ class Controller(CentralWidget):
     def get_span_time_values(self, start_date: str, table_names: tuple, stop_date: str) -> []:
         return self.sql_handler.get_time_span_values(start_date, table_names, stop_date)
 
+    def get_time_span_category_values(self, start_date: str, table_names: tuple, stop_date: str) -> []:
+        return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category_id)
+
     def add_value_to_db(self, date, value, category, note, id_, table_name):
         self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0

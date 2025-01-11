@@ -218,6 +218,7 @@ class CentralWidget(QtWidgets.QWidget):
         logger.info('Stop date: ' + stop_date)
         if category:
             cat_id = self.category_cb.currentIndex() + 1
+            self.category_id = cat_id
         self.set_table_view(start_date, stop_date, table_choose)
 
 
