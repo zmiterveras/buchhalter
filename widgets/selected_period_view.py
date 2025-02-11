@@ -14,3 +14,10 @@ class SelectedPeriodView(MonthBalanceView):
         choose_period_widget = self.choose_time_span()
         self.view_box.addWidget(choose_period_widget)
 
+    def balance_update(self, current_balance: str):
+        """
+        this class don't use this method,
+        but method is needed to avoid the crash
+        """
+        pass
+
