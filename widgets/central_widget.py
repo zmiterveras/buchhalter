@@ -197,7 +197,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.btn_choose.clicked.disconnect()
         self.btn_choose.clicked.connect(lambda: self.get_times(True))
         self.category_cb = QtWidgets.QComboBox()
-        self.category_cb.addItems(self.cat_keys_credit)
+        self.category_cb.addItems([self.interface_languages[key] for key in self.cat_keys_credit])
         self.form.insertRow(1, self.interface_languages['category'], self.category_cb)
         self.table_cb.currentIndexChanged.connect(self.change_table)
         return chose_time_span_widget
