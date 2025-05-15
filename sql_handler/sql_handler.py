@@ -110,12 +110,14 @@ class SqlHandler:
     def is_db_available(self):
         return True if os.path.exists(self.database) else False
 
-    def get_current_value(self, date: str, name: str) -> int:
+    def get_current_value(self, start_date: str, name: str, stop_date: str | None) -> int:
         value_sum = 0
         connect, query = self.connect_db()
         query_get_current_value = '''
         select sum(value) as value_sum from %s where date>="%s"
-        ''' % (name, date)
+        ''' % (name, start_date)
+        if stop_date:
+            query_get_current_value += ''' and date<="%s"''' % stop_date
         query.exec(query_get_current_value)
         if query.isActive():
             query.first()
