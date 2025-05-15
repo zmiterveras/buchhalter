@@ -129,7 +129,7 @@ class SqlHandler:
         return value_sum
 
     def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None,
-                             category: int | None = None) -> []:
+                             category: int | None = None) -> list:
         time_span_values = []
         logger.debug('Timespan: ' + start_date)
         connect, query = self.connect_db()
