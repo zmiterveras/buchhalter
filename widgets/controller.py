@@ -23,6 +23,9 @@ class Controller(CentralWidget):
     def get_span_time_total_value(self, start_date: str, name: str, stop_date: str):
         return self.sql_handler.get_current_value(start_date, name, stop_date)
 
+    def get_span_time_category_total_value(self, start_date: str, name: str, stop_date: str, cat_id: int):
+        return self.sql_handler.get_current_value(start_date, name, stop_date, cat_id)
+
     def get_last_time_span_values(self, date: str, table_names: tuple, stop_date: str) -> list:
         return self.sql_handler.get_time_span_values(date, table_names, stop_date)
 
