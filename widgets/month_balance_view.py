@@ -29,10 +29,13 @@ class MonthBalanceView(Controller):
     def get_data(self, start_date: str, table_names: tuple, stop_date: str):
         return unpacking(self.get_last_time_span_values(start_date, table_names, stop_date))
 
+    def get_total_value(self, start_date: str, name: str, stop_date: str | None) -> str:
+        return  get_view_money(self.get_current_expense(start_date)) \
+            if name == 'expense' else get_view_money(self.get_current_income(start_date))
+
     def set_table(self, start_date: str, stop_date: str | None, table_names=('Credit', 'Category_Credit'), name='expense'):
         ids, dates, values, categories, notes = self.get_data(start_date, table_names, stop_date)
-        total_value = get_view_money(self.get_current_expense(start_date)) \
-            if name == 'expense' else get_view_money(self.get_current_income(start_date))
+        total_value = self.get_total_value(start_date, name, stop_date)
         self.table_view = QtWidgets.QTableView(parent=None)
         self.standard_item = QtGui.QStandardItemModel(parent=None)
         for row in range(0, len(ids)):
@@ -43,7 +46,7 @@ class MonthBalanceView(Controller):
             item5 = QtGui.QStandardItem(notes[row])
             self.standard_item.appendRow([item1, item2, item3, item4, item5])
         total_row = []
-        for i in [0, self.interface_languages['sum'], str(total_value), '']:
+        for i in [0, self.interface_languages['sum'], total_value, '']:
             total_row.append(QtGui.QStandardItem(i))
         self.standard_item.appendRow(total_row)
         self.standard_item.setHorizontalHeaderLabels(['id', self.interface_languages['date'],
