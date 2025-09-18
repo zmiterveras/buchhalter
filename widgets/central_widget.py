@@ -3,6 +3,9 @@
 import datetime
 
 from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import QDateTime
+from PyQt5.QtWidgets import QDateTimeEdit
+
 from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
@@ -83,10 +86,12 @@ class CentralWidget(QtWidgets.QWidget):
         date_list = values[3].split('.')
         widgets[3].setDate(QtCore.QDate(int(date_list[0]), int(date_list[1]), int(date_list[2])))
 
-    def set_calendar(self, calendar: QtWidgets.QDateEdit):
-        calendar.setCalendarPopup(True)
-        calendar.setDisplayFormat('yyyy.MM.dd')
+    def set_calendar(self, calendar: QtWidgets.QDateEdit, is_pop_up: bool = True, display_format: str = 'yyyy.MM.dd'):
+        calendar.setCalendarPopup(is_pop_up)
+        calendar.setDisplayFormat(display_format)
         calendar.setDate(datetime.date.today())
+        if not is_pop_up:
+            calendar.setSelectedSection(QDateTimeEdit.Section.MonthSection)
 
     def add_new_value(self, flag, change=None):
         logger.info("Add New " + flag)
@@ -216,10 +221,10 @@ class CentralWidget(QtWidgets.QWidget):
         stop_date = self.calendar_stop.text()
         logger.info('Start date: ' + start_date)
         logger.info('Stop date: ' + stop_date)
-        if category:
-            cat_id = self.category_cb.currentIndex() + 1
-            self.category_id = cat_id
-        self.set_table_view(start_date, stop_date, table_choose)
+        # if category:
+        #     cat_id = self.category_cb.currentIndex() + 1
+        #     self.category_id = cat_id
+        # self.set_table_view(start_date, stop_date, table_choose)
 
 
     def get_row(self, table_view, standard_item, col):
