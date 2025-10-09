@@ -207,6 +207,13 @@ class CentralWidget(QtWidgets.QWidget):
         self.table_cb.currentIndexChanged.connect(self.change_table)
         return chose_time_span_widget
 
+    def choose_note(self):
+        choose_time_span_widget = self.choose_category()
+        self.btn_choose.clicked.disconnect()
+        self.note_field = QtWidgets.QLineEdit()
+        self.form.insertRow(2, self.interface_languages['note'], self.note_field)
+        return choose_time_span_widget
+
     def change_table(self):
         self.category_cb.clear()
         match self.table_cb.currentText():
@@ -221,10 +228,10 @@ class CentralWidget(QtWidgets.QWidget):
         stop_date = self.calendar_stop.text()
         logger.info('Start date: ' + start_date)
         logger.info('Stop date: ' + stop_date)
-        # if category:
-        #     cat_id = self.category_cb.currentIndex() + 1
-        #     self.category_id = cat_id
-        # self.set_table_view(start_date, stop_date, table_choose)
+        if category:
+            cat_id = self.category_cb.currentIndex() + 1
+            self.category_id = cat_id
+        self.set_table_view(start_date, stop_date, table_choose)
 
 
     def get_row(self, table_view, standard_item, col):

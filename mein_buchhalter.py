@@ -10,6 +10,7 @@ from widgets.category_selected_period_view import CategorySelectedPeriodView
 from widgets.day_balance_view import DayBalanceView
 from widgets.month_balance_view import MonthBalanceView
 from widgets.month_income_view import MonthIncomeView
+from widgets.note_category_selected_period import NoteCategorySelectedPeriodView
 from widgets.selected_period_view import SelectedPeriodView
 from widgets.simple_balance_view import SimpleBalanceView
 from tools.date_time_tool import get_current_date, get_current_month, get_last_week
@@ -60,6 +61,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
         viewing.addAction(self.interface_language['selected_period'], self.set_selected_period)
         viewing.addAction(self.interface_language['category'], self.set_category_view)
+        viewing.addAction(self.interface_language['note'], self.set_note_view)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
@@ -148,6 +150,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.view = CategorySelectedPeriodView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
         self.view.selected_category()
+        self.update_view()
+
+    def set_note_view(self):
+        self.view = NoteCategorySelectedPeriodView(self.interface_language, self.db_handler)
+        self.setCentralWidget(self.view)
+        self.view.selected_note()
         self.update_view()
 
     def check_db(self):
