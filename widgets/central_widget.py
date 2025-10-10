@@ -222,7 +222,7 @@ class CentralWidget(QtWidgets.QWidget):
             case 'Incomes':
                 self.category_cb.addItems(self.cat_keys_debit)
 
-    def get_times(self, category: bool = False):
+    def get_times(self, category: bool = False, note: bool = False):
         table_choose = self.table_cb.currentText()
         start_date = self.calendar_start.text()
         stop_date = self.calendar_stop.text()
@@ -231,6 +231,8 @@ class CentralWidget(QtWidgets.QWidget):
         if category:
             cat_id = self.category_cb.currentIndex() + 1
             self.category_id = cat_id
+        if note:
+            note_record = self.note_field.text()
         self.set_table_view(start_date, stop_date, table_choose)
 
 

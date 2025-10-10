@@ -134,9 +134,7 @@ class SqlHandler:
 
     def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None,
                              category: int | None = None) -> list:
-        time_span_values = []
         logger.debug('Timespan: ' + start_date)
-        connect, query = self.connect_db()
         query_get_span_values = '''
         select cr.id, cr.date, cr.value, cat.%s, cr.note  
         from %s cr join %s cat 
@@ -147,12 +145,18 @@ class SqlHandler:
         if category:
             where_values = where_values + ' and cr.cat_id="%d"' % category
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
-        query.exec(query_get_span_values)
+        time_span_values = self.get_time_span_values_execute(query_get_span_values)
+        return time_span_values
+
+    def get_time_span_values_execute(self, query_str: str) -> list:
+        time_span_values = []
+        connect, query = self.connect_db()
+        query.exec(query_str)
         if query.isActive():
             query.first()
             while query.isValid():
                 time_span_values.append((query.value('id'), query.value('date'), query.value('value'),
-                                               query.value('%s' % self.category_language), query.value('note')))
+                                         query.value('%s' % self.category_language), query.value('note')))
                 query.next()
         else:
             logger.error('Problem with query: get_last_time_span_credits')
