@@ -61,7 +61,9 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
         viewing.addAction(self.interface_language['selected_period'], self.set_selected_period)
         viewing.addAction(self.interface_language['category'], self.set_category_view)
-        viewing.addAction(self.interface_language['note'], self.set_note_view)
+        note = viewing.addMenu(self.interface_language['note'])
+        note.addAction(self.interface_language['note_with'], self.set_note_view)
+        note.addAction(self.interface_language['note_without'], lambda: self.set_note_view(False))
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
@@ -152,10 +154,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.view.selected_category()
         self.update_view()
 
-    def set_note_view(self):
+    def set_note_view(self, category: bool = True):
         self.view = NoteCategorySelectedPeriodView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
-        self.view.selected_note()
+        self.view.selected_note(category)
         self.update_view()
 
     def check_db(self):

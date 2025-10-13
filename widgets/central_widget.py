@@ -207,11 +207,12 @@ class CentralWidget(QtWidgets.QWidget):
         self.table_cb.currentIndexChanged.connect(self.change_table)
         return chose_time_span_widget
 
-    def choose_note(self):
-        choose_time_span_widget = self.choose_category()
+    def choose_note(self, category: bool):
+        choose_time_span_widget = self.choose_category() if category else self.choose_time_span()
         self.btn_choose.clicked.disconnect()
         self.note_field = QtWidgets.QLineEdit()
-        self.form.insertRow(2, self.interface_languages['note'], self.note_field)
+        self.form.insertRow(2 if category else 1,
+                            self.interface_languages['note'], self.note_field)
         return choose_time_span_widget
 
     def change_table(self):
@@ -233,6 +234,7 @@ class CentralWidget(QtWidgets.QWidget):
             self.category_id = cat_id
         if note:
             note_record = self.note_field.text()
+            self.note_search_record = note_record
         self.set_table_view(start_date, stop_date, table_choose)
 
 

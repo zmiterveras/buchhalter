@@ -14,8 +14,8 @@ logger = getLogger(__name__)
 
 class NoteCategorySelectedPeriodView(MonthBalanceView):
 
-    def selected_note(self):
+    def selected_note(self, category: bool):
         title = QtWidgets.QLabel(self.interface_languages['note'])
         self.view_box.addWidget(title)
-        choose_note_widget = self.choose_note()
+        choose_note_widget = self.choose_note(category)
         self.view_box.addWidget(choose_note_widget)
