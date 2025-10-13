@@ -133,7 +133,7 @@ class SqlHandler:
         return value_sum
 
     def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None,
-                             category: int | None = None) -> list:
+                             category: int | None = None, note: str | None = None) -> list:
         logger.debug('Timespan: ' + start_date)
         query_get_span_values = '''
         select cr.id, cr.date, cr.value, cat.%s, cr.note  
@@ -144,6 +144,8 @@ class SqlHandler:
             else ' where cr.date>="%s" and cr.date<="%s"' % (start_date, stop_date)
         if category:
             where_values = where_values + ' and cr.cat_id="%d"' % category
+        if note:
+            where_values= where_values + ' and (select LOWER(cr.note) from %s) %s' % (table_names[0], note)
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
         time_span_values = self.get_time_span_values_execute(query_get_span_values)
         return time_span_values
