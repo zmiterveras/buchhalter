@@ -168,6 +168,30 @@ class SqlHandler:
         connect.close()
         return time_span_values
 
+    def get_diagram_values(self, start_date: str, stop_date: str, table_names: tuple):
+        query_get_diagram_values = '''
+        select cat.%s as cat_name, sum(tab.value) as cat_sum 
+        from %s tab join %s cat
+        on tab.cat_id = cat.id
+        where tab.date>="%s" and tab.date<="%s"
+        group by tab.cat_id 
+        ''' % (self.category_language, table_names[0], table_names[1], start_date, stop_date)
+
+    def get_diagram_values_execute(self, query_str) -> list :
+        diagram_values = []
+        connect, query = self.connect_db()
+        query.exec(query_str)
+        if query.isActive():
+            query.first()
+            while query.isValid():
+                diagram_values.append((query.value('cat_name'), query.value('cat_sum')))
+                query.next()
+        else:
+            logger.error('Problem with query: get_diagram_values')
+        connect.close()
+        return diagram_values
+
+
     def add_value(self, date: str, value: int, cat_id: int, note: str, id_: None | int,
                   old_value: int, table_name: str, rest=False):
         connect, query = self.connect_db()
