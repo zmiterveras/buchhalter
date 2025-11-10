@@ -9,4 +9,9 @@ logger = getLogger(__name__)
 
 
 class DiagramView(Controller):
-    pass
+
+    def selected_period(self):
+        title = QtWidgets.QLabel(self.interface_languages['select_period_table'])
+        self.view_box.addWidget(title)
+        choose_period_widget = self.choose_time_span()
+        self.view_box.addWidget(choose_period_widget)
