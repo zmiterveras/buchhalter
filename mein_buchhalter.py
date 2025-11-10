@@ -8,6 +8,7 @@ from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
 from widgets.category_selected_period_view import CategorySelectedPeriodView
 from widgets.day_balance_view import DayBalanceView
+from widgets.diagram_view import DiagramView
 from widgets.month_balance_view import MonthBalanceView
 from widgets.month_income_view import MonthIncomeView
 from widgets.note_category_selected_period import NoteCategorySelectedPeriodView
@@ -61,6 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
         viewing.addAction(self.interface_language['selected_period'], self.set_selected_period)
         viewing.addAction(self.interface_language['category'], self.set_category_view)
+        viewing.addAction(self.interface_language['diagram'], self.set_diagram_view)
         note = viewing.addMenu(self.interface_language['note'])
         note.addAction(self.interface_language['note_with'], self.set_note_view)
         note.addAction(self.interface_language['note_without'], lambda: self.set_note_view(False))
@@ -158,6 +160,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.view = NoteCategorySelectedPeriodView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
         self.view.selected_note(category)
+        self.update_view()
+
+    def set_diagram_view(self):
+        self.view = DiagramView(self.interface_language, self.db_handler)
+        self.setCentralWidget(self.view)
+        self.view.selected_period()
         self.update_view()
 
     def check_db(self):
