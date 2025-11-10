@@ -10,6 +10,7 @@ from menu_languages.menulanguages import MenuLanguages
 from logging import getLogger
 
 from sql_handler.sql_handler import SqlHandler
+from tools.note_search_parser import note_search_parser
 
 logger = getLogger(__name__)
 
@@ -208,8 +209,12 @@ class CentralWidget(QtWidgets.QWidget):
         return chose_time_span_widget
 
     def choose_note(self, category: bool):
+        self.category_flag = category
         choose_time_span_widget = self.choose_category() if category else self.choose_time_span()
         self.btn_choose.clicked.disconnect()
+        self.btn_choose.clicked.connect(
+            lambda: self.get_times(True, True)) if category else self.btn_choose.clicked.connect(
+            lambda: self.get_times(False, True))
         self.note_field = QtWidgets.QLineEdit()
         self.form.insertRow(2 if category else 1,
                             self.interface_languages['note'], self.note_field)
@@ -233,8 +238,8 @@ class CentralWidget(QtWidgets.QWidget):
             cat_id = self.category_cb.currentIndex() + 1
             self.category_id = cat_id
         if note:
-            note_record = self.note_field.text()
-            self.note_search_record = note_record
+            note_record = self.note_field.text().strip()
+            self.note_search_record = note_search_parser(note_record)
         self.set_table_view(start_date, stop_date, table_choose)
 
 

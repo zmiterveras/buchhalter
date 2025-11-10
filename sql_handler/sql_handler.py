@@ -134,7 +134,7 @@ class SqlHandler:
 
     def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None,
                              category: int | None = None, note: str | None = None) -> list:
-        logger.debug('Timespan: ' + start_date)
+        # logger.debug('Timespan: ' + start_date)
         query_get_span_values = '''
         select cr.id, cr.date, cr.value, cat.%s, cr.note  
         from %s cr join %s cat 
@@ -143,14 +143,17 @@ class SqlHandler:
         where_values = ' where cr.date>="%s"' % start_date if not stop_date \
             else ' where cr.date>="%s" and cr.date<="%s"' % (start_date, stop_date)
         if category:
+            logger.debug('Category: ' + str(category) + '->' + str(type(category)))
             where_values = where_values + ' and cr.cat_id="%d"' % category
         if note:
-            where_values= where_values + ' and (select LOWER(cr.note) from %s) %s' % (table_names[0], note)
+            # where_values= where_values + ' and (select LOWER(note) from %s) %s' % (table_names[0], note)
+            where_values = where_values + ' and cr.note %s' % note
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
         time_span_values = self.get_time_span_values_execute(query_get_span_values)
         return time_span_values
 
     def get_time_span_values_execute(self, query_str: str) -> list:
+        logger.debug('Query: \n' + query_str)
         time_span_values = []
         connect, query = self.connect_db()
         query.exec(query_str)

@@ -35,6 +35,18 @@ class Controller(CentralWidget):
     def get_time_span_category_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
         return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category_id)
 
+    def get_time_span_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
+        if self.category_flag:
+            response_list = (self.sql_handler.get_time_span_values(
+                start_date, table_names, stop_date, self.category_id, self.note_search_record))
+        else:
+            response_list = (self.sql_handler.get_time_span_values(
+                    start_date, table_names, stop_date, None, self.note_search_record))
+        return response_list
+
+    # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
+    #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
+
     def add_value_to_db(self, date, value, category, note, id_, table_name):
         self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
