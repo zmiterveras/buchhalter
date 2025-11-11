@@ -44,6 +44,9 @@ class Controller(CentralWidget):
                     start_date, table_names, stop_date, None, self.note_search_record))
         return response_list
 
+    def get_diagram_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
+        return  self.sql_handler.get_diagram_values(start_date, stop_date, table_names)
+
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
     #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
 
