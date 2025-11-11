@@ -176,7 +176,7 @@ class SqlHandler:
         where tab.date>="%s" and tab.date<="%s"
         group by tab.cat_id 
         ''' % (self.category_language, table_names[0], table_names[1], start_date, stop_date)
-        return self.get_time_span_values_execute(query_get_diagram_values)
+        return self.get_diagram_values_execute(query_get_diagram_values)
 
     def get_diagram_values_execute(self, query_str) -> list :
         diagram_values = []

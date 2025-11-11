@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtGui
 from logging import getLogger
 from widgets.controller import Controller
 from tools.data_unpacking import unpacking_diagram
+from tools.matplotlib_canvas import MplCanvas
 
 
 logger = getLogger(__name__)
@@ -22,3 +23,9 @@ class DiagramView(Controller):
 
     def set_table(self,start_date: str, stop_date: str, table_names: tuple, table: str):
         cat_names, values, values_str = self.get_data(start_date, stop_date, table_names)
+        mpl_canvas = MplCanvas(self, 5, 4, 100)
+        # mpl_canvas.axes.plot([0,1,2,3,4], [10, 15, 5, 10, 25])
+        mpl_canvas.axes.pie(values, labels=cat_names)
+        # mpl_canvas.axes.pie([10, 42, 16], labels=['a', 'b', 'c'])
+        self.view_box.addWidget(mpl_canvas)
+
