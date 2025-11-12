@@ -24,8 +24,10 @@ class DiagramView(Controller):
     def set_table(self,start_date: str, stop_date: str, table_names: tuple, table: str):
         cat_names, values, values_str = self.get_data(start_date, stop_date, table_names)
         mpl_canvas = MplCanvas(self, 5, 4, 100)
-        # mpl_canvas.axes.plot([0,1,2,3,4], [10, 15, 5, 10, 25])
-        mpl_canvas.axes.pie(values, labels=cat_names)
-        # mpl_canvas.axes.pie([10, 42, 16], labels=['a', 'b', 'c'])
+        mpl_canvas.axes.pie(values, labels=cat_names, autopct='%1.1f%%')
+        table_name = self.interface_languages['expense'] if table_names[0] == 'Credit' \
+            else self.interface_languages['income']
+        title = f'{table_name} {self.interface_languages['diagram'].lower()}: {start_date} - {stop_date}'
+        self.view_box.addWidget(QtWidgets.QLabel(title))
         self.view_box.addWidget(mpl_canvas)
 
