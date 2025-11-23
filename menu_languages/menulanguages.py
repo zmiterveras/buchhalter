@@ -135,7 +135,9 @@ class MenuLanguages:
     cat_keys_credit = ['other',
                 'amuse',
                 'clothes',
+                'fit_beauty',
                 'food',
+                'household',
                 'internet',
                 'medicine',
                 'mobile',
@@ -143,11 +145,9 @@ class MenuLanguages:
                 'perfume',
                 'pets',
                 'television',
+                'transfer',
                 'transport',
-                'utility',
-                'household',
-                'fit_beauty',
-                'transfer']
+                'utility']
 
     cat_keys_debit = ['other',
                       'salary',

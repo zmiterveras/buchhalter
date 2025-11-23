@@ -3,7 +3,6 @@
 import datetime
 
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtCore import QDateTime
 from PyQt5.QtWidgets import QDateTimeEdit
 
 from menu_languages.menulanguages import MenuLanguages
@@ -147,7 +146,7 @@ class CentralWidget(QtWidgets.QWidget):
         category = self.category.currentIndex() + 1
         note = self.note.text()
         if self.check_values_date(date):
-            logger.info(flag + ': ' + date + '/' + str(value) + '/' + str(category) + '/' + note)
+            logger.info(f'{flag}: {date}/{str(value)}/{str(category)}/{note}')
             table_name = 'Credit' if flag == 'expense' else 'Debit'
             self.add_value_to_db(date, value, category, note, id_, table_name)
             self.add_new_value_widget.close()
