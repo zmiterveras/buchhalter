@@ -3,7 +3,6 @@
 from PyQt5 import QtWidgets, QtGui
 
 from tools.data_unpacking import unpacking
-from widgets.central_widget import CentralWidget
 from tools.money_parser import get_view_money
 from logging import getLogger
 from tools.date_time_tool import get_current_date, get_current_month

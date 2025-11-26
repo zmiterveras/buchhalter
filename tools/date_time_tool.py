@@ -1,11 +1,10 @@
 import datetime
 from logging import getLogger
 
-
 logger = getLogger(__name__)
 
 
-def get_current_date(formatting: str='default') -> str:
+def get_current_date(formatting: str = 'default') -> str:
     current_date = datetime.date.today()
     match formatting:
         case 'default':
@@ -20,14 +19,11 @@ def get_current_date(formatting: str='default') -> str:
 def get_current_month() -> tuple:
     current_date = datetime.date.today()
     month = current_date.month
-    year = current_date.year
-    if month < 10:
-        month = '0' + str(month)
-    logger.info('get current date')
-    return str(year) + '.' + str(month) + '.' + '01', str(month)
+    first_day_current_month = current_date.replace(day=1)
+    return first_day_current_month.strftime('%Y.%m.%d'), str(month)
 
 
-def get_last_week(purpose: str='default') -> str:
+def get_last_week(purpose: str ='default') -> str:
     current_date = datetime.date.today()
     last_week = current_date - datetime.timedelta(days=7)
     match purpose:
@@ -35,6 +31,7 @@ def get_last_week(purpose: str='default') -> str:
             return last_week.strftime('%Y.%m.%d')
         case 'view':
             return last_week.strftime('%d %B %Y')
+
 
 def get_next_month(month: str) -> str:
     list_month = month.split('.')
@@ -44,9 +41,3 @@ def get_next_month(month: str) -> str:
     if dt_next.day != 1:
         dt_next = dt_next.replace(day=1)
     return dt_next.strftime('%Y.%m.%d')
-
-
-
-
-
-
