@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets, QtCore
 
 from tools.money_parser import get_view_money
 from tools.date_time_tool import get_current_month
-from widgets.central_widget import CentralWidget
 from logging import getLogger
 
 from widgets.controller import Controller

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets
 from logging import getLogger
 
 from tools.date_time_tool import get_current_date, get_last_week

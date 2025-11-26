@@ -50,7 +50,7 @@ class Controller(CentralWidget):
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
     #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
 
-    def add_value_to_db(self, date, value, category, note, id_, table_name):
+    def add_value_to_db(self, date: str, value, category, note, id_, table_name):
         self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
 
@@ -114,7 +114,7 @@ class Controller(CentralWidget):
             self.balance_update('Debit')
             self.last_month = False
 
-    def check_new_record_date(self, date, value: int, table_name: str, current_date: str):
+    def check_new_record_date(self, date: str, value: int, table_name: str, current_date: str):
         if date < current_date:
             self.last_month = True
             logger.debug('check_new_record_date: Old Month')

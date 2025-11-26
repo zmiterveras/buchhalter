@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from typing import List, Tuple, Any
-
 from PyQt5 import QtSql
 from logging import getLogger
 
