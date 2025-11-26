@@ -18,13 +18,13 @@ def get_current_date(formatting: str = 'default') -> str:
     return current_date
 
 
-def get_current_month() -> tuple:
+def get_current_month() -> tuple[str, str]:
     current_date = datetime.date.today()
     month = current_date.month
     first_day_current_month = current_date.replace(day=1)
     return first_day_current_month.strftime(string_format), str(month)
 
-def get_start_end_month(next_month_start: str) -> tuple:
+def get_start_end_month(next_month_start: str) -> tuple[str, str]:
     date_object = datetime.datetime.strptime(next_month_start, string_format).date()
     last_day = date_object - datetime.timedelta(days=1)
     first_day = last_day.replace(day=1)

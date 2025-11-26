@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QDateTimeEdit
 
 from menu_languages.menulanguages import MenuLanguages
@@ -93,7 +93,7 @@ class CentralWidget(QtWidgets.QWidget):
         if not is_pop_up:
             calendar.setSelectedSection(QDateTimeEdit.Section.MonthSection)
 
-    def add_new_value(self, flag, change=None):
+    def add_new_value(self, flag: str, change: None|list=None):
         logger.info("Add New " + flag)
         self.add_new_value_widget = QtWidgets.QWidget(parent=self, flags=QtCore.Qt.Window)
         self.add_new_value_widget.setWindowTitle(self.interface_languages['new_' + flag])
@@ -139,7 +139,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.add_new_value_widget.setLayout(form)
         self.add_new_value_widget.show()
 
-    def get_value(self, id_, flag):
+    def get_value(self, id_: None | int, flag: str):
         logger.debug('Get value id: ' + str(id_))
         date = self.calendar.text()
         value = self.value_int.value() * 100 + self.value_dec.value()
@@ -152,7 +152,7 @@ class CentralWidget(QtWidgets.QWidget):
             self.add_new_value_widget.close()
             self.balance_update(table_name)
 
-    def delete_value(self, flag, change):
+    def delete_value(self, flag: str, change: list):
         id_, value, _, _ = self.get_from_record(change)
         table_name = 'Credit' if flag == 'expense' else 'Debit'
         self.delete_value_from_db(id_, table_name, value)
@@ -242,7 +242,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.set_table_view(start_date, stop_date, table_choose)
 
 
-    def get_row(self, table_view, standard_item, col):
+    def get_row(self, table_view: QtWidgets.QTableView, standard_item: QtGui.QStandardItemModel, col: int):
         row_number = table_view.currentIndex().row()
         row = []
         for i in range(col):

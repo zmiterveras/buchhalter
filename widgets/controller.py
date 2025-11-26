@@ -4,7 +4,7 @@ from tools.date_time_tool import get_current_date, get_current_month, get_next_m
 from tools.money_parser import get_int_dec
 from widgets.central_widget import CentralWidget
 from logging import getLogger
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 logger = getLogger(__name__)
 
@@ -50,11 +50,11 @@ class Controller(CentralWidget):
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
     #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
 
-    def add_value_to_db(self, date: str, value, category, note, id_, table_name):
+    def add_value_to_db(self, date: str, value: int, category: int, note: str, id_: None | int, table_name: str):
         self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
 
-    def delete_value_from_db(self, id_, table_name, value):
+    def delete_value_from_db(self, id_: int, table_name: str, value: int):
         self.sql_handler.delete_value(id_, table_name, value)
 
     def get_from_record(self, record: list) -> tuple:
@@ -63,7 +63,8 @@ class Controller(CentralWidget):
         value = val_int * 100 + val_dec
         return id_, value, val_int, val_dec
 
-    def change(self, table_view, standard_item, col, flag) -> (int, list):
+    def change(self, table_view: QtWidgets.QTableView, standard_item: QtGui.QStandardItemModel,
+               col: int, flag: str) -> tuple[int, list]:
         match flag:
             case 'delete':
                 warn_word = self.interface_languages['warn_delete']
@@ -81,7 +82,7 @@ class Controller(CentralWidget):
                                                     defaultButton=QtWidgets.QMessageBox.No)
             return result, row
 
-    def check_values_date(self, received_date):
+    def check_values_date(self, received_date: str):
         current_date = get_current_date('day')
         if current_date < received_date:
             QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
@@ -89,7 +90,7 @@ class Controller(CentralWidget):
             return False
         return True
 
-    def check_values_span_dates(self, start_date, stop_date):
+    def check_values_span_dates(self, start_date: str, stop_date: str):
         check_start = self.check_values_date(start_date)
         check_stop = self.check_values_date(stop_date)
         if start_date == stop_date:

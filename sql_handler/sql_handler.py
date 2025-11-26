@@ -10,12 +10,12 @@ logger = getLogger(__name__)
 
 
 class SqlHandler:
-    def __init__(self, root_path: str, date, language: str):
+    def __init__(self, root_path: str, date: str, language: str):
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
         self.date = date
         self.set_category_language(language)
 
-    def set_category_language(self, language):
+    def set_category_language(self, language: str):
         match language:
             case 'en':
                 self.category_language = 'category_en'
@@ -33,7 +33,7 @@ class SqlHandler:
         connect.close()
         logger.info('Created database')
 
-    def create_table(self, connect, query, name):
+    def create_table(self, connect, query, name: str):
         if name not in connect.tables():
             query_create_credit = '''
             create table %s (id integer primary key autoincrement,
@@ -42,7 +42,7 @@ class SqlHandler:
             query.exec(query_create_credit)
             query.clear()
 
-    def create_balance(self, connect, query, date):
+    def create_balance(self, connect, query, date: str):
         if 'Balance' not in connect.tables():
             query_create_balance = '''
             create table Balance (id integer primary key autoincrement, balance integer, date text)
@@ -51,7 +51,7 @@ class SqlHandler:
             query.clear()
             self.fill_balance(query, date)
 
-    def fill_balance(self, query, date):
+    def fill_balance(self, query, date: str):
         dates = [date, date]
         values = [0, 0]
         query.prepare('insert into Balance values (null, :value, :date)')
@@ -69,7 +69,7 @@ class SqlHandler:
             query.exec(query_create_accounts)
             query.clear()
 
-    def create_category(self, connect, query, name):
+    def create_category(self, connect, query, name: str):
         if name not in connect.tables():
             query_create_category = '''
             create table %s (id integer primary key autoincrement, category_en text, category_ru text)
@@ -78,7 +78,7 @@ class SqlHandler:
             query.clear()
             self.fill_category(query, flag=name)
 
-    def get_category_names(self, flag):
+    def get_category_names(self, flag: str):
         from menu_languages.menulanguages import MenuLanguages
         en_dict = MenuLanguages.en
         ru_dict = MenuLanguages.ru
@@ -89,7 +89,7 @@ class SqlHandler:
             self.en_names = [en_dict[name] for name in MenuLanguages.cat_keys_debit]
             self.ru_names = [ru_dict[name] for name in MenuLanguages.cat_keys_debit]
 
-    def fill_category(self, query, flag):
+    def fill_category(self, query, flag: str):
         self.get_category_names(flag)
         table_name = 'Category_Credit' if flag == 'Category_Credit' else 'Category_Debit'
         query.prepare("insert into %s values (null, :en_names, :ru_names)" % table_name)
@@ -176,7 +176,7 @@ class SqlHandler:
         ''' % (self.category_language, table_names[0], table_names[1], start_date, stop_date)
         return self.get_diagram_values_execute(query_get_diagram_values)
 
-    def get_diagram_values_execute(self, query_str) -> list :
+    def get_diagram_values_execute(self, query_str: str) -> list :
         diagram_values = []
         connect, query = self.connect_db()
         query.exec(query_str)
