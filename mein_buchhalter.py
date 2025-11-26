@@ -62,10 +62,11 @@ class MainWindow(QtWidgets.QMainWindow):
         viewing.addAction(self.interface_language['income'], self.set_month_income_view)
         viewing.addAction(self.interface_language['selected_period'], self.set_selected_period)
         viewing.addAction(self.interface_language['category'], self.set_category_view)
-        viewing.addAction(self.interface_language['diagram'], self.set_diagram_view)
         note = viewing.addMenu(self.interface_language['note'])
         note.addAction(self.interface_language['note_with'], self.set_note_view)
         note.addAction(self.interface_language['note_without'], lambda: self.set_note_view(False))
+        graphics = viewing.addMenu(self.interface_language['graphics'])
+        graphics.addAction(self.interface_language['diagram'], self.set_diagram_view)
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
