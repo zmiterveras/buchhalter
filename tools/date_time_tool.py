@@ -41,11 +41,9 @@ def get_last_week(purpose: str ='default') -> str:
             return last_week.strftime('%d %B %Y')
 
 
-def get_next_month(month: str) -> str:
-    list_month = month.split('.')
-    month_start = '.'.join(list_month[:2]) + '.01'
-    dt = datetime.date.fromisoformat(month_start.replace('.', '-'))
-    dt_next = dt + datetime.timedelta(days=31)
-    if dt_next.day != 1:
-        dt_next = dt_next.replace(day=1)
-    return dt_next.strftime(string_format)
+def get_next_month(date_str: str) -> str:
+    date_object = datetime.datetime.strptime(date_str, string_format).date()
+    if date_object.month == 12:
+        return datetime.date(date_object.year + 1, 1 , 1).strftime(string_format)
+    else:
+        return datetime.date(date_object.year, date_object.month + 1, 1).strftime(string_format)
