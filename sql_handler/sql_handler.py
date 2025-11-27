@@ -288,10 +288,3 @@ class SqlHandler:
         connect.close()
         return rest
 
-
-
-
-
-
-
-

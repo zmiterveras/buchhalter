@@ -28,6 +28,6 @@ class DiagramView(Controller):
         table_name = self.interface_languages['expense'] if table_names[0] == 'Credit' \
             else self.interface_languages['income']
         title = f'{table_name} {self.interface_languages['diagram'].lower()}: {start_date} - {stop_date}'
-        self.view_box.addWidget(QtWidgets.QLabel(title))
+        mpl_canvas.axes.set_title(title)
         self.view_box.addWidget(mpl_canvas)
 
