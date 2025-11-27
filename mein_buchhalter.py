@@ -179,6 +179,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.view)
         self.view.set_table()
         self.update_view()
+        window.resize(750, 555)
 
     def check_db(self):
         if not self.db_handler.is_db_available():
