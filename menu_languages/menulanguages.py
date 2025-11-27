@@ -5,6 +5,7 @@ class MenuLanguages:
     en = {
         'add': 'Add',
         'amuse': 'Amusements',
+        'bar_graph': 'Bar graph',
         'bonus': 'Bonuses',
         'category': 'Category',
         'change_expense': 'Change Expense',
@@ -71,6 +72,7 @@ class MenuLanguages:
     ru = {
         'add': 'Добавить',
         'amuse': 'Развлечения',
+        'bar_graph': 'Столбчатая диаграмма',
         'bonus': 'Премия',
         'category': 'Категория',
         'change_expense': 'Изменить расход',

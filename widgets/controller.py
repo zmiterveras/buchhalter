@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from tools.date_time_tool import get_current_date, get_current_month, get_next_month
+from tools.date_time_tool import get_current_date, get_current_month, get_next_month, get_start_end_month
 from tools.money_parser import get_int_dec
 from widgets.central_widget import CentralWidget
 from logging import getLogger
@@ -46,6 +46,19 @@ class Controller(CentralWidget):
 
     def get_diagram_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
         return  self.sql_handler.get_diagram_values(start_date, stop_date, table_names)
+
+    def get_bar_graph_values(self, period: bool, name: str) -> tuple[list, list]:
+        dates = self.get_bar_graph_periods(period)
+        names = self.get_bar_graph_names(dates)
+        values = []
+        table = 'Credit' if name == 'expense' else 'Debit'
+        for start, stop in dates:
+            value = self.sql_handler.get_current_value(start, table, stop)
+            values.append(value/100)
+        values.reverse()
+        names.reverse()
+        return values, names
+
 
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
     #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
@@ -132,3 +145,20 @@ class Controller(CentralWidget):
         if self.check_values_span_dates(start_date, stop_date):
             self.clear_view_box()
             self.set_table(start_date, stop_date, table_names, table.lower()[:-1])
+
+    def get_bar_graph_periods(self, period: bool) -> list:
+        months = 12 if period else 6
+        periods = []
+        current_months, _ = get_current_month()
+        for i in range(months):
+            first_day, last_day = get_start_end_month(current_months)
+            periods.append((first_day, last_day))
+            current_months = first_day
+        return periods
+
+    def get_bar_graph_names(self, periods: list) -> list:
+        names = []
+        for i in periods:
+            names.append(i[0][2:7])
+        return names
+

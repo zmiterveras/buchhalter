@@ -6,6 +6,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 from menu_languages.menulanguages import MenuLanguages
 from sql_handler.sql_handler import SqlHandler
+from widgets.bar_graph_view import BarGraphView
 from widgets.category_selected_period_view import CategorySelectedPeriodView
 from widgets.day_balance_view import DayBalanceView
 from widgets.diagram_view import DiagramView
@@ -67,6 +68,9 @@ class MainWindow(QtWidgets.QMainWindow):
         note.addAction(self.interface_language['note_without'], lambda: self.set_note_view(False))
         graphics = viewing.addMenu(self.interface_language['graphics'])
         graphics.addAction(self.interface_language['diagram'], self.set_diagram_view)
+        bar_graph = graphics.addMenu(self.interface_language['bar_graph'])
+        bar_graph.addAction(self.interface_language['bar_graph'], self.set_bar_graph_view)
+
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
@@ -169,6 +173,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.view.selected_period()
         self.update_view()
         window.resize(750, 555)
+
+    def set_bar_graph_view(self):
+        self.view = BarGraphView(self.interface_language, self.db_handler)
+        self.setCentralWidget(self.view)
+        self.view.set_table()
+        self.update_view()
 
     def check_db(self):
         if not self.db_handler.is_db_available():
