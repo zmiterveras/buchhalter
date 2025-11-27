@@ -69,7 +69,15 @@ class MainWindow(QtWidgets.QMainWindow):
         graphics = viewing.addMenu(self.interface_language['graphics'])
         graphics.addAction(self.interface_language['diagram'], self.set_diagram_view)
         bar_graph = graphics.addMenu(self.interface_language['bar_graph'])
-        bar_graph.addAction(self.interface_language['bar_graph'], self.set_bar_graph_view)
+        bar_graph.addAction(f'{self.interface_language['expense']} {self.interface_language['half_year']}',
+                            self.set_bar_graph_view)
+        bar_graph.addAction(f'{self.interface_language['expense']} {self.interface_language['year']}',
+                            lambda: self.set_bar_graph_view(True))
+        bar_graph.addAction(f'{self.interface_language['income']} {self.interface_language['half_year']}',
+                            lambda: self.set_bar_graph_view(name='income'))
+        bar_graph.addAction(f'{self.interface_language['income']} {self.interface_language['year']}',
+                            lambda: self.set_bar_graph_view(period=True, name='income'))
+
 
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
@@ -174,12 +182,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_view()
         window.resize(750, 555)
 
-    def set_bar_graph_view(self):
+    def set_bar_graph_view(self, period: bool = False, type_info: bool = False, name: str = 'expense'):
         self.view = BarGraphView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
-        self.view.set_table()
+        self.view.set_table(period, type_info, name)
         self.update_view()
-        window.resize(750, 555)
+        window.resize(750, 555) if not period else window.resize(1100, 555)
 
     def check_db(self):
         if not self.db_handler.is_db_available():

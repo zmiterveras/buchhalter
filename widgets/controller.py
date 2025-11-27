@@ -159,6 +159,6 @@ class Controller(CentralWidget):
     def get_bar_graph_names(self, periods: list) -> list:
         names = []
         for i in periods:
-            names.append(i[0][2:7])
+            names.append(i[0][:7])
         return names
 

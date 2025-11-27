@@ -12,7 +12,7 @@ from tools.matplotlib_canvas import MplCanvas
 
 class BarGraphView(Controller):
 
-    def set_table(self, period: bool = False, type_info: bool = False, name: str = 'expense'):
+    def set_table(self, period: bool, type_info: bool, name: str):
         time_interval = self.interface_languages['year'] if period else self.interface_languages['half_year']
         values, names = self.get_bar_graph_values(period, name)
         mpl_canvas = MplCanvas(self, 5, 4, 100)
