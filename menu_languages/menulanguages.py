@@ -27,6 +27,7 @@ class MenuLanguages:
         'food': 'Food',
         'gift': 'Gift',
         'graphics': 'Graphics',
+        'half_year': 'Half-Year',
         'household': 'Household',
         'income': 'Incomes',
         'internet': 'Internet',
@@ -67,7 +68,8 @@ class MenuLanguages:
         'warn_dates': 'Stop date is older than start date',
         'warn_delete': 'delete',
         'warn_same_dates': 'Same dates',
-        'week': 'Week'
+        'week': 'Week',
+        'year': 'Year'
     }
     ru = {
         'add': 'Добавить',
@@ -94,6 +96,7 @@ class MenuLanguages:
         'food': 'Еда',
         'gift': 'Подарки',
         'graphics': 'Графики',
+        'half_year': 'Полугодие',
         'household': 'Бытовое',
         'income': 'Доходы',
         'internet': 'Интернет',
@@ -134,7 +137,8 @@ class MenuLanguages:
         'warn_dates': 'Конечная дата старше начальной даты',
         'warn_delete': 'удалить',
         'warn_same_dates': 'Одинаковые даты',
-        'week': 'Неделя'
+        'week': 'Неделя',
+        'year': 'Год'
     }
     cat_keys_credit = ['other',
                 'amuse',
