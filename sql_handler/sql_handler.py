@@ -109,8 +109,6 @@ class SqlHandler:
         return True if os.path.exists(self.database) else False
 
     def get_current_value(self, start_date: str, name: str, stop_date: str | None, cat_id: int | None = None) -> int:
-        value_sum = 0
-        connect, query = self.connect_db()
         query_get_current_value = '''
         select sum(value) as value_sum from %s where date>="%s"
         ''' % (name, start_date)
@@ -118,15 +116,20 @@ class SqlHandler:
             query_get_current_value += ''' and date<="%s"''' % stop_date
         if cat_id:
             query_get_current_value += ''' and cat_id="%d"''' % cat_id
-        query.exec(query_get_current_value)
+        return self.get_current_value_execute(query_get_current_value)
+
+    def get_current_value_execute(self, query_str: str) -> int:
+        value_sum = 0
+        connect, query = self.connect_db()
+        query.exec(query_str)
         if query.isActive():
             query.first()
             while query.isValid():
                 value_sum = 0 if query.isNull('value_sum') else query.value('value_sum')
                 query.next()
-                logger.info('get_current_' + name + ': ' + str(value_sum))
+                logger.info('get_current_: ' + str(value_sum))
         else:
-            logger.error('Problem with query: get_current_' + name)
+            logger.error('Problem with query: get_current_')
         connect.close()
         return value_sum
 
@@ -147,8 +150,7 @@ class SqlHandler:
             # where_values= where_values + ' and (select LOWER(note) from %s) %s' % (table_names[0], note)
             where_values = where_values + ' and cr.note %s' % note
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
-        time_span_values = self.get_time_span_values_execute(query_get_span_values)
-        return time_span_values
+        return self.get_time_span_values_execute(query_get_span_values)
 
     def get_time_span_values_execute(self, query_str: str) -> list:
         logger.debug('Query: \n' + query_str)
