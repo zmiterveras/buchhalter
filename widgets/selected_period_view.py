@@ -16,7 +16,7 @@ class SelectedPeriodView(MonthBalanceView):
 
     def get_total_value(self, start_date: str, name: str, stop_date: str) -> str:
         return  get_view_money(self.get_span_time_total_value(start_date, 'Credit', stop_date)) \
-            if name == 'expense' else get_view_money(self.get_current_income(start_date))
+            if name == 'expense' else get_view_money(self.get_span_time_total_value(start_date, 'Debit', stop_date))
 
     def balance_update(self, current_balance: str):
         """
