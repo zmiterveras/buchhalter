@@ -63,8 +63,12 @@ class Controller(CentralWidget):
     def get_bar_graph_values_detailed(self, period: bool, name: str, language: str):
         dates = self.get_bar_graph_periods(period)
         names = self.get_bar_graph_names(dates)
-        table = 'Credit' if name == 'expense' else 'Debit'
+        tables = 'Credit', 'Category_Credit' if name == 'expense' else 'Debit', 'Category_Debit'
         cat_names = get_category_names(language, name)
+        cat_values_list = []
+        for start, stop in dates:
+            month = self.sql_handler.get_diagram_values(start, stop, tables)
+            cat_values_list.append(month)
 
 
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
