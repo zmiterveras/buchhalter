@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from tools.date_time_tool import get_current_date, get_current_month, get_next_month, get_start_end_month
 from tools.money_parser import get_int_dec
+from tools.tools import get_category_names
 from widgets.central_widget import CentralWidget
 from logging import getLogger
 from PyQt5 import QtWidgets, QtGui
@@ -63,6 +64,7 @@ class Controller(CentralWidget):
         dates = self.get_bar_graph_periods(period)
         names = self.get_bar_graph_names(dates)
         table = 'Credit' if name == 'expense' else 'Debit'
+        cat_names = get_category_names(language, name)
 
 
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
