@@ -59,6 +59,11 @@ class Controller(CentralWidget):
         names.reverse()
         return values, names
 
+    def get_bar_graph_values_detailed(self, period: bool, name: str):
+        dates = self.get_bar_graph_periods(period)
+        names = self.get_bar_graph_names(dates)
+        table = 'Credit' if name == 'expense' else 'Debit'
+
 
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
     #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
