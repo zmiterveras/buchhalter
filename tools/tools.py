@@ -5,10 +5,10 @@ from menu_languages.menulanguages import MenuLanguages
 logger = getLogger(__name__)
 
 def get_category_names(language: str, table: str) -> list:
-    match table:
-        case 'expense':
-            return [MenuLanguages.en[name] for name in MenuLanguages.cat_keys_credit] if language == 'en' \
-                else [MenuLanguages.ru[name] for name in MenuLanguages.cat_keys_credit]
+    match language:
+        case 'en':
+            return [MenuLanguages.en[name] for name in MenuLanguages.cat_keys_credit] if table == 'expense' \
+                else [MenuLanguages.en[name] for name in MenuLanguages.cat_keys_debit]
         case _:
-            return [MenuLanguages.en[name] for name in MenuLanguages.cat_keys_debit] if language == 'en' \
+            return [MenuLanguages.ru[name] for name in MenuLanguages.cat_keys_credit] if table == 'expense' \
                 else [MenuLanguages.ru[name] for name in MenuLanguages.cat_keys_debit]
