@@ -59,7 +59,7 @@ class Controller(CentralWidget):
         names.reverse()
         return values, names
 
-    def get_bar_graph_values_detailed(self, period: bool, name: str):
+    def get_bar_graph_values_detailed(self, period: bool, name: str, language: str):
         dates = self.get_bar_graph_periods(period)
         names = self.get_bar_graph_names(dates)
         table = 'Credit' if name == 'expense' else 'Debit'
