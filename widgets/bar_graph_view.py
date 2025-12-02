@@ -14,10 +14,25 @@ class BarGraphView(Controller):
 
     def set_table(self, period: bool, type_info: bool, name: str):
         time_interval = self.interface_languages['year'] if period else self.interface_languages['half_year']
-        values, names = self.get_bar_graph_values(period, name)
         mpl_canvas = MplCanvas(self, 5, 4, 100)
-        mpl_canvas.axes.set_title(f'{time_interval}: {names[0]} - {names[-1]}')
         mpl_canvas.axes.grid(axis="y", linestyle="--", linewidth=0.5)
+        mpl_canvas.axes.set_xlabel(self.interface_languages['year_month'])
         mpl_canvas.axes.set_ylabel(self.interface_languages[name])
-        mpl_canvas.axes.bar(names, values)
+        if type_info:
+            values, names = [], []
+            bar_container = self.run_bar_brief(mpl_canvas, names, values)
+        else:
+            values, names = self.get_data(period, name, type_info)
+            bar_container = self.run_bar_brief(mpl_canvas, names, values)
+        mpl_canvas.axes.set_title(f'{time_interval}: {names[0]} - {names[-1]}')
+        mpl_canvas.axes.bar_label(bar_container, fmt='{:.2f}')
         self.view_box.addWidget(mpl_canvas)
+
+    def run_bar_brief(self, mpl_canvas: MplCanvas, names: list, values: list):
+        return mpl_canvas.axes.bar(names, values)
+
+    def get_data(self, period: bool, name: str, type_info: bool):
+        if not type_info:
+            return self.get_bar_graph_values(period, name)
+        else:
+            return self.get_bar_graph_values(period, name)

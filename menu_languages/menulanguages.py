@@ -69,7 +69,8 @@ class MenuLanguages:
         'warn_delete': 'delete',
         'warn_same_dates': 'Same dates',
         'week': 'Week',
-        'year': 'Year'
+        'year': 'Year',
+        'year_month':'year.month'
     }
     ru = {
         'add': 'Добавить',
@@ -138,7 +139,8 @@ class MenuLanguages:
         'warn_delete': 'удалить',
         'warn_same_dates': 'Одинаковые даты',
         'week': 'Неделя',
-        'year': 'Год'
+        'year': 'Год',
+        'year_month': 'год.месяц'
     }
     cat_keys_credit = ['other',
                 'amuse',
