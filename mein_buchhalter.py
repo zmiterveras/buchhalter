@@ -79,7 +79,6 @@ class MainWindow(QtWidgets.QMainWindow):
                             lambda: self.set_bar_graph_view(period=True, name='income'))
 
 
-
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
         editing.addAction(self.interface_language['delete_record'], lambda: self.change_record('delete'))
@@ -185,7 +184,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def set_bar_graph_view(self, period: bool = False, type_info: bool = False, name: str = 'expense'):
         self.view = BarGraphView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
-        self.view.set_table(period, type_info, name)
+        self.view.set_table(period, type_info, name, menu_language)
         self.update_view()
         window.resize(750, 555) if not period else window.resize(1100, 555)
 

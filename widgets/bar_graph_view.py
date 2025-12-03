@@ -19,8 +19,8 @@ class BarGraphView(Controller):
         mpl_canvas.axes.set_xlabel(self.interface_languages['year_month'])
         mpl_canvas.axes.set_ylabel(self.interface_languages[name])
         if type_info:
-            values, names = [], []
-            bar_container = self.run_bar_brief(mpl_canvas, names, values)
+            names, cat_values = self.get_data(period, name, type_info, language)
+            bar_container = self.run_bar_full(mpl_canvas, names, cat_values)
         else:
             values, names = self.get_data(period, name, type_info, language)
             bar_container = self.run_bar_brief(mpl_canvas, names, values)
@@ -30,6 +30,15 @@ class BarGraphView(Controller):
 
     def run_bar_brief(self, mpl_canvas: MplCanvas, names: list, values: list):
         return mpl_canvas.axes.bar(names, values)
+
+    def run_bar_full(self, mpl_canvas: MplCanvas, names: list, cat_values: dict):
+        bar_container = None
+        bottom = [0] * len(names)
+        for cat_name, values in cat_values.items():
+            bar_container = mpl_canvas.axes.bar(names, values, label=cat_name, bottom=bottom)
+            bottom += values
+        mpl_canvas.axes.legend(loc='upper right')
+        return bar_container
 
     def get_data(self, period: bool, name: str, type_info: bool, language: str):
         if not type_info:
