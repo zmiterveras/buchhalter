@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from PyQt5 import QtWidgets
+import numpy as np
 from logging import getLogger
-
-from matplotlib.lines import lineStyles
-
 from widgets.controller import Controller
-from tools.data_unpacking import unpacking_diagram
 from tools.matplotlib_canvas import MplCanvas
+
+logger = getLogger(__name__)
 
 
 class BarGraphView(Controller):
@@ -33,11 +31,11 @@ class BarGraphView(Controller):
 
     def run_bar_full(self, mpl_canvas: MplCanvas, names: list, cat_values: dict):
         bar_container = None
-        bottom = [0] * len(names)
+        bottom = np.zeros(len(names))
         for cat_name, values in cat_values.items():
             bar_container = mpl_canvas.axes.bar(names, values, label=cat_name, bottom=bottom)
             bottom += values
-        mpl_canvas.axes.legend(loc='upper right')
+        mpl_canvas.axes.legend(bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0)
         return bar_container
 
     def get_data(self, period: bool, name: str, type_info: bool, language: str):

@@ -77,6 +77,15 @@ class MainWindow(QtWidgets.QMainWindow):
                             lambda: self.set_bar_graph_view(name='income'))
         bar_graph.addAction(f'{self.interface_language['income']} {self.interface_language['year']}',
                             lambda: self.set_bar_graph_view(period=True, name='income'))
+        bar_graph_detailed = graphics.addMenu(self.interface_language['bar_graph_detailed'])
+        bar_graph_detailed.addAction(f'{self.interface_language['expense']} {self.interface_language['half_year']}',
+                            lambda: self.set_bar_graph_view(type_info=True))
+        bar_graph_detailed.addAction(f'{self.interface_language['expense']} {self.interface_language['year']}',
+                            lambda: self.set_bar_graph_view(True, True))
+        bar_graph_detailed.addAction(f'{self.interface_language['income']} {self.interface_language['half_year']}',
+                            lambda: self.set_bar_graph_view(type_info=True, name='income'))
+        bar_graph_detailed.addAction(f'{self.interface_language['income']} {self.interface_language['year']}',
+                            lambda: self.set_bar_graph_view(True, True,'income'))
 
 
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
