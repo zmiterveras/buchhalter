@@ -60,7 +60,7 @@ class Controller(CentralWidget):
         names.reverse()
         return values, names
 
-    def get_bar_graph_values_detailed(self, period: bool, name: str, language: str):
+    def get_bar_graph_values_detailed(self, period: bool, name: str, language: str) -> tuple[list, dict]:
         dates = self.get_bar_graph_periods(period)
         names = self.get_bar_graph_names(dates)
         tables = 'Credit', 'Category_Credit' if name == 'expense' else 'Debit', 'Category_Debit'
@@ -69,6 +69,8 @@ class Controller(CentralWidget):
         for start, stop in dates:
             month = self.sql_handler.get_diagram_values(start, stop, tables)
             cat_values_list.append(month)
+        cat_items_dict = self.get_bar_graph_detailed_dict(cat_names, cat_values_list)
+        return names, cat_items_dict
 
 
     # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
@@ -172,4 +174,21 @@ class Controller(CentralWidget):
         for i in periods:
             names.append(i[0][:7])
         return names
+
+    def get_bar_graph_detailed_dict(self, cat_names: list, cat_values: list) -> dict:
+        cat_items_dict = self.create_cat_items_dict(cat_names)
+        for name in cat_names:
+            for items in cat_values:
+                d = dict(items)
+                if name not in d.keys():
+                    cat_items_dict[name].append(0)
+                else:
+                    cat_items_dict[name].append(d[name])
+        return cat_items_dict
+
+    def create_cat_items_dict(self, cat_names: list) -> dict:
+        cat_items_dict = {}
+        for name in cat_names:
+            cat_items_dict[name] = []
+        return cat_items_dict
 
