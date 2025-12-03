@@ -178,8 +178,9 @@ class Controller(CentralWidget):
         return names
 
     def get_bar_graph_detailed_dict(self, cat_names: list, cat_values: list) -> dict:
-        cat_items_dict = self.create_cat_items_dict(cat_names)
-        for name in cat_names:
+        cat_names_detailed = self.get_cat_names_specified(cat_names, cat_values)
+        cat_items_dict = self.create_cat_items_dict(cat_names_detailed)
+        for name in cat_names_detailed:
             for items in cat_values:
                 d = dict(items)
                 if name not in d.keys():
@@ -193,4 +194,13 @@ class Controller(CentralWidget):
         for name in cat_names:
             cat_items_dict[name] = []
         return cat_items_dict
+
+    def get_cat_names_specified(self, cat_names: list, cat_values: list ):
+        cat_names_specified = []
+        for name in cat_names:
+            for items in cat_values:
+                d = dict(items)
+                if name in d.keys():
+                    cat_names_specified.append(name)
+        return list(set(cat_names_specified))
 
