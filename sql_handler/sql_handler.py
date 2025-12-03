@@ -185,7 +185,7 @@ class SqlHandler:
         if query.isActive():
             query.first()
             while query.isValid():
-                diagram_values.append((query.value('cat_name'), query.value('cat_sum')))
+                diagram_values.append((query.value('cat_name'), query.value('cat_sum')/100))
                 query.next()
         else:
             logger.error('Problem with query: get_diagram_values')

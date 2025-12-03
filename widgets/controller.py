@@ -69,6 +69,8 @@ class Controller(CentralWidget):
         for start, stop in dates:
             month = self.sql_handler.get_diagram_values(start, stop, tables)
             cat_values_list.append(month)
+        cat_values_list.reverse()
+        names.reverse()
         cat_items_dict = self.get_bar_graph_detailed_dict(cat_names, cat_values_list)
         return names, cat_items_dict
 
