@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from logging import getLogger
+
+from tools.tools import get_colors
 from widgets.controller import Controller
 from tools.matplotlib_canvas import MplCanvas
 
@@ -12,7 +14,7 @@ class BarGraphView(Controller):
 
     def set_table(self, period: bool, type_info: bool, name: str, language: str):
         time_interval = self.interface_languages['year'] if period else self.interface_languages['half_year']
-        mpl_canvas = MplCanvas(self, 5, 4, 100)
+        mpl_canvas = MplCanvas(self)
         mpl_canvas.axes.grid(axis="y", linestyle="--", linewidth=0.5)
         mpl_canvas.axes.set_xlabel(self.interface_languages['year_month'])
         mpl_canvas.axes.set_ylabel(self.interface_languages[name])
