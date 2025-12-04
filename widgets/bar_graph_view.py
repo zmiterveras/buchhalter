@@ -3,7 +3,6 @@
 import numpy as np
 from logging import getLogger
 
-from tools.tools import get_colors
 from widgets.controller import Controller
 from tools.matplotlib_canvas import MplCanvas
 
