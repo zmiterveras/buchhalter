@@ -12,3 +12,13 @@ def get_category_names(language: str, table: str) -> list:
         case _:
             return [MenuLanguages.ru[name] for name in MenuLanguages.cat_keys_credit] if table == 'expense' \
                 else [MenuLanguages.ru[name] for name in MenuLanguages.cat_keys_debit]
+
+def get_explode_list(values: list):
+    explode_list = []
+    sums = sum(values)
+    for i in values:
+        if i / sums <= 0.03:
+            explode_list.append(0.1)
+        else:
+            explode_list.append(0.03)
+    return explode_list
