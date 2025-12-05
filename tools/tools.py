@@ -1,8 +1,8 @@
 from logging import getLogger
-
 from menu_languages.menulanguages import MenuLanguages
 
 logger = getLogger(__name__)
+
 
 def get_category_names(language: str, table: str) -> list:
     match language:
