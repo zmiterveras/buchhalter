@@ -26,3 +26,10 @@ class CategorySelectedPeriodView(MonthBalanceView):
     def get_total_value(self, start_date: str, name: str, stop_date: str) -> str:
         return  get_view_money(self.get_span_time_category_total_value(start_date, 'Credit', stop_date, self.category_id)) \
             if name == 'expense' else get_view_money(self.get_span_time_total_value(start_date, 'Debit', stop_date))
+
+    def balance_update(self, current_balance: str):
+        """
+        this class don't use this method,
+        but method is needed to avoid the crash
+        """
+        pass

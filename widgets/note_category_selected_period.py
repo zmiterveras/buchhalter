@@ -21,3 +21,10 @@ class NoteCategorySelectedPeriodView(MonthBalanceView):
 
     def get_data(self, start_date: str, table_names: tuple, stop_date: str):
         return unpacking(self.get_time_span_note_values(start_date, table_names, stop_date))
+
+    def balance_update(self, current_balance: str):
+        """
+        this class don't use this method,
+        but method is needed to avoid the crash
+        """
+        pass
