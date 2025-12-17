@@ -164,7 +164,13 @@ class CentralWidget(QtWidgets.QWidget):
                         self.interface_languages['month_view'],
                         self.interface_languages['week'],
                         self.interface_languages['day'],
-                        self.interface_languages['income']]
+                        self.interface_languages['income'],
+                        self.interface_languages['selected_period'],
+                        self.interface_languages['category'],
+                        self.interface_languages['note'],
+                        self.interface_languages['diagram'],
+                        self.interface_languages['bar_graph'],
+                        self.interface_languages['bar_graph_detailed']]
         choose_viewing_box = QtWidgets.QVBoxLayout()
         self.cb_viewing = QtWidgets.QComboBox()
         self.cb_viewing.addItems(viewing_list)

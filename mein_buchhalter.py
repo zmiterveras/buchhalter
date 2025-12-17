@@ -113,7 +113,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def select_view(self):
         type_viewing = self.view.get_type_viewing()
-        match type_viewing:
+        self.run_selected_view(type_viewing)
+
+    def run_selected_view(self, view: int):
+        match view:
             case 0:
                 self.set_simple_balance_view()
             case 1:
@@ -124,6 +127,18 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.set_day_balance_view()
             case 4:
                 self.set_month_income_view()
+            case 5:
+                self.set_selected_period()
+            case 6:
+                self.set_category_view()
+            case 7:
+                self.set_note_view()
+            case 8:
+                self.set_diagram_view()
+            case 9:
+                self.set_bar_graph_view()
+            case 10:
+                self.set_bar_graph_view(type_info=True)
 
     def set_simple_balance_view(self):
         if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
@@ -182,18 +197,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.view)
         self.view.selected_period()
         self.update_view()
+        window.resize(475, 350)
 
     def set_category_view(self):
         self.view = CategorySelectedPeriodView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
         self.view.selected_category()
         self.update_view()
+        window.resize(475, 350)
 
     def set_note_view(self, category: bool = True):
         self.view = NoteCategorySelectedPeriodView(self.interface_language, self.db_handler)
         self.setCentralWidget(self.view)
         self.view.selected_note(category)
         self.update_view()
+        window.resize(475, 350)
 
     def set_diagram_view(self):
         self.view = DiagramView(self.interface_language, self.db_handler)
