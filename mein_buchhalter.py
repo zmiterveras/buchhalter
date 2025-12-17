@@ -101,6 +101,9 @@ class MainWindow(QtWidgets.QMainWindow):
         settings_menu.addAction('russian')
         settings_menu.addSeparator()
 
+    def change_interface_language(self):
+        pass
+
 
     def update_view(self):
         self.view.btn_close.clicked.connect(self.close)
