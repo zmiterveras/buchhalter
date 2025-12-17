@@ -52,8 +52,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def make_menu(self):
         my_menu_viewing = self.menu_bar.addMenu(self.interface_language['viewing'])
         my_menu_edit = self.menu_bar.addMenu(self.interface_language['edit'])
+        my_menu_settings = self.menu_bar.addMenu(self.interface_language['settings'])
         self.make_viewing_menu(my_menu_viewing)
         self.make_edit_menu(my_menu_edit)
+        self.make_settings_menu(my_menu_settings)
+
 
     def make_viewing_menu(self, viewing: QtWidgets.QMenuBar):
         viewing.addAction(self.interface_language['simple_view'], self.set_simple_balance_view)
@@ -91,6 +94,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def make_edit_menu(self, editing: QtWidgets.QMenuBar):
         editing.addAction(self.interface_language['edit_record'], self.change_record)
         editing.addAction(self.interface_language['delete_record'], lambda: self.change_record('delete'))
+
+    def make_settings_menu(self, settings_menu: QtWidgets.QMenuBar):
+        settings_menu.addSection('Menu language')
+        settings_menu.addAction('english')
+        settings_menu.addAction('russian')
+        settings_menu.addSeparator()
 
 
     def update_view(self):
