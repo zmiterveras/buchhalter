@@ -97,12 +97,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def make_settings_menu(self, settings_menu: QtWidgets.QMenuBar):
         settings_menu.addSection('Menu language')
-        settings_menu.addAction('english')
-        settings_menu.addAction('russian')
+        settings_menu.addAction('english', lambda: self.change_interface_language('en'))
+        settings_menu.addAction('russian', lambda: self.change_interface_language('ru'))
         settings_menu.addSeparator()
 
-    def change_interface_language(self):
-        pass
+    def change_interface_language(self,  language: str):
+        saved_view = self.view.__class__.__name__
+        self.set_interface_language(language)
+        self.menu_bar.clear()
+        self.make_menu()
+        self.run_selected_view(saved_view)
+        self.update_view()
 
 
     def update_view(self):
@@ -115,33 +120,34 @@ class MainWindow(QtWidgets.QMainWindow):
         type_viewing = self.view.get_type_viewing()
         self.run_selected_view(type_viewing)
 
-    def run_selected_view(self, view: int):
+    def run_selected_view(self, view: int | str):
+        change_language = True if type(view) == str else False
         match view:
-            case 0:
-                self.set_simple_balance_view()
-            case 1:
-                self.set_month_balance_view()
-            case 2:
-                self.set_week_balance_view()
-            case 3:
-                self.set_day_balance_view()
-            case 4:
-                self.set_month_income_view()
-            case 5:
+            case 0 | 'SimpleBalanceView':
+                self.set_simple_balance_view(change_language)
+            case 1 | 'MonthBalanceView':
+                self.set_month_balance_view(change_language)
+            case 2 | 'WeekBalanceView':
+                self.set_week_balance_view(change_language)
+            case 3 | 'DayBalanceView':
+                self.set_day_balance_view(change_language)
+            case 4 | 'MonthIncomeView':
+                self.set_month_income_view(change_language)
+            case 5 | 'SelectedPeriodView':
                 self.set_selected_period()
-            case 6:
+            case 6 | 'CategorySelectedPeriodView':
                 self.set_category_view()
-            case 7:
+            case 7 | 'NoteCategorySelectedPeriodView':
                 self.set_note_view()
-            case 8:
+            case 8 | 'DiagramView':
                 self.set_diagram_view()
-            case 9:
+            case 9 | 'BarGraphView':
                 self.set_bar_graph_view()
-            case 10:
+            case 10 | 'BarGraphView':
                 self.set_bar_graph_view(type_info=True)
 
-    def set_simple_balance_view(self):
-        if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView':
+    def set_simple_balance_view(self, change_language: bool = False):
+        if hasattr(self, 'view') and self.view.__class__.__name__ == 'SimpleBalanceView' and not change_language:
             logger.info('Class: SimpleBalanceView')
         else:
             self.view = SimpleBalanceView(self.interface_language, self.db_handler)
@@ -150,8 +156,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.view.start_screen(current_month_date)
             self.update_view()
 
-    def set_month_balance_view(self):
-        if self.view.__class__.__name__ == 'MonthBalanceView':
+    def set_month_balance_view(self, change_language: bool = False):
+        if self.view.__class__.__name__ == 'MonthBalanceView' and not change_language:
             logger.info('Class: MonthBalanceView')
         else:
             self.view = MonthBalanceView(self.interface_language, self.db_handler)
@@ -160,8 +166,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.update_view()
             window.resize(475, 350)
 
-    def set_week_balance_view(self):
-        if self.view.__class__.__name__ == 'WeekBalanceView':
+    def set_week_balance_view(self, change_language: bool = False):
+        if self.view.__class__.__name__ == 'WeekBalanceView' and not change_language:
             logger.info('Class: WeekBalanceView')
         else:
             self.view = WeekBalanceView(self.interface_language, self.db_handler)
@@ -171,8 +177,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.update_view()
             window.resize(475, 350)
 
-    def set_day_balance_view(self):
-        if self.view.__class__.__name__ == 'DayBalanceView':
+    def set_day_balance_view(self, change_language: bool = False):
+        if self.view.__class__.__name__ == 'DayBalanceView' and not change_language:
             logger.info('Class: DayBalanceView')
         else:
             self.view = DayBalanceView(self.interface_language, self.db_handler)
@@ -182,8 +188,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.update_view()
             window.resize(475, 350)
 
-    def set_month_income_view(self):
-        if self.view.__class__.__name__ == 'MonthIncomeView':
+    def set_month_income_view(self, change_language: bool = False):
+        if self.view.__class__.__name__ == 'MonthIncomeView' and not change_language:
             logger.info('Class: MonthIncomeView')
         else:
             self.view = MonthIncomeView(self.interface_language, self.db_handler)
