@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sqlite3
 from PyQt5 import QtSql
 from logging import getLogger
+from tools.tools import regexp_match
 
 
 logger = getLogger(__name__)
@@ -14,6 +16,7 @@ class SqlHandler:
         self.database = os.path.join(root_path, 'bases/buchhaltungDB.sqlite')
         self.date = date
         self.set_category_language(language)
+        self.note_search = ''
 
     def set_category_language(self, language: str):
         match language:
@@ -120,6 +123,9 @@ class SqlHandler:
 
     def get_current_value_execute(self, query_str: str) -> int:
         value_sum = 0
+        if self.note_search:
+            value_sum = self.execute_query_sum_reg_exp(query_str + self.note_search % {'key': 'note'})
+            return value_sum
         connect, query = self.connect_db()
         query.exec(query_str)
         if query.isActive():
@@ -135,7 +141,6 @@ class SqlHandler:
 
     def get_time_span_values(self, start_date: str, table_names: tuple, stop_date: str | None,
                              category: int | None = None, note: str | None = None) -> list:
-        # logger.debug('Timespan: ' + start_date)
         query_get_span_values = '''
         select cr.id, cr.date, cr.value, cat.%s, cr.note  
         from %s cr join %s cat 
@@ -144,11 +149,11 @@ class SqlHandler:
         where_values = ' where cr.date>="%s"' % start_date if not stop_date \
             else ' where cr.date>="%s" and cr.date<="%s"' % (start_date, stop_date)
         if category:
-            logger.debug('Category: ' + str(category) + '->' + str(type(category)))
             where_values = where_values + ' and cr.cat_id="%d"' % category
         if note:
-            # where_values= where_values + ' and (select LOWER(note) from %s) %s' % (table_names[0], note)
-            where_values = where_values + ' and cr.note %s' % note
+            self.note_search = note
+            where_values = where_values + self.note_search % {'key': 'cr.note'}
+            return self.execute_query_reg_exp(query_get_span_values + where_values + ' order by cr.date')
         query_get_span_values = query_get_span_values + where_values + ' order by cr.date'
         return self.get_time_span_values_execute(query_get_span_values)
 
@@ -287,4 +292,27 @@ class SqlHandler:
             logger.error('Problem with query: get_rest')
         connect.close()
         return rest
+
+    def execute_query_reg_exp(self, reg_exp_query: str):
+        time_span_values = []
+        conn, curs = self.open_db_sqlite_reg_exp()
+        curs.execute(reg_exp_query)
+        for row in curs.fetchall():
+            time_span_values.append((row[0], row[1], row[2], row[3], row[4]))
+        conn.close()
+        return time_span_values
+
+    def execute_query_sum_reg_exp(self, reg_exp_query: str):
+        conn, curs = self.open_db_sqlite_reg_exp()
+        curs.execute(reg_exp_query)
+        row = curs.fetchone()
+        conn.close()
+        self.note_search = ''
+        return row[0]
+
+    def open_db_sqlite_reg_exp(self):
+        conn = sqlite3.connect(self.database)
+        conn.create_function('regexp', 2, regexp_match)
+        curs = conn.cursor()
+        return conn, curs
 

@@ -1,3 +1,4 @@
+import re
 from logging import getLogger
 from menu_languages.menulanguages import MenuLanguages
 
@@ -22,3 +23,8 @@ def get_explode_list(values: list):
         else:
             explode_list.append(0.03)
     return explode_list
+
+def regexp_match(pattern: str, input_string: str):
+    if input_string is None:
+        return False
+    return bool(re.search(pattern, input_string))

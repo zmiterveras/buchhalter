@@ -27,6 +27,7 @@ class CentralWidget(QtWidgets.QWidget):
         self.btn_submit_choose_viewing = QtWidgets.QPushButton(self.interface_languages['select'])
         self.old_value = 0
         self.last_month = False
+        self.category_id = None
 
     def make_widget(self):
         self.top_widget = QtWidgets.QVBoxLayout()
