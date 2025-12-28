@@ -293,7 +293,7 @@ class SqlHandler:
         connect.close()
         return rest
 
-    def execute_query_reg_exp(self, reg_exp_query: str):
+    def execute_query_reg_exp(self, reg_exp_query: str) -> list:
         time_span_values = []
         conn, curs = self.open_db_sqlite_reg_exp()
         curs.execute(reg_exp_query)
@@ -302,7 +302,7 @@ class SqlHandler:
         conn.close()
         return time_span_values
 
-    def execute_query_sum_reg_exp(self, reg_exp_query: str):
+    def execute_query_sum_reg_exp(self, reg_exp_query: str) -> int:
         conn, curs = self.open_db_sqlite_reg_exp()
         curs.execute(reg_exp_query)
         row = curs.fetchone()
