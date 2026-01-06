@@ -6,7 +6,6 @@ from logging import getLogger
 from PyQt5 import QtWidgets
 
 from tools.data_unpacking import unpacking
-from tools.money_parser import get_view_money
 from widgets.category_selected_period_view import CategorySelectedPeriodView
 
 logger = getLogger(__name__)
