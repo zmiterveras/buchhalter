@@ -7,12 +7,12 @@ from PyQt5 import QtWidgets
 
 from tools.data_unpacking import unpacking
 from tools.money_parser import get_view_money
-from widgets.month_balance_view import MonthBalanceView
+from widgets.selected_period_view import SelectedPeriodView
 
 logger = getLogger(__name__)
 
 
-class CategorySelectedPeriodView(MonthBalanceView):
+class CategorySelectedPeriodView(SelectedPeriodView):
 
     def selected_category(self):
         title = QtWidgets.QLabel(self.interface_languages['category'])
@@ -27,9 +27,3 @@ class CategorySelectedPeriodView(MonthBalanceView):
         return  get_view_money(self.get_span_time_category_total_value(start_date, 'Credit', stop_date, self.category_id)) \
             if name == 'expense' else get_view_money(self.get_span_time_total_value(start_date, 'Debit', stop_date))
 
-    def balance_update(self, current_balance: str):
-        """
-        this class don't use this method,
-        but method is needed to avoid the crash
-        """
-        pass

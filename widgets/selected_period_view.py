@@ -23,5 +23,4 @@ class SelectedPeriodView(MonthBalanceView):
         this class don't use this method,
         but method is needed to avoid the crash
         """
-        pass
 
