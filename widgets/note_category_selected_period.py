@@ -19,5 +19,5 @@ class NoteCategorySelectedPeriodView(CategorySelectedPeriodView):
         choose_note_widget = self.choose_note(category)
         self.view_box.addWidget(choose_note_widget)
 
-    def get_data(self, start_date: str, table_names: tuple, stop_date: str):
+    def get_data(self, start_date: str, table_names: tuple, stop_date: str) -> tuple:
         return unpacking(self.get_time_span_note_values(start_date, table_names, stop_date))

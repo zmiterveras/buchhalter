@@ -20,7 +20,7 @@ class CategorySelectedPeriodView(SelectedPeriodView):
         choose_category = self.choose_category()
         self.view_box.addWidget(choose_category)
 
-    def get_data(self, start_date: str, table_names: tuple, stop_date: str):
+    def get_data(self, start_date: str, table_names: tuple, stop_date: str) -> tuple:
         return unpacking(self.get_time_span_category_values(start_date, table_names, stop_date))
 
     def get_total_value(self, start_date: str, name: str, stop_date: str) -> str:

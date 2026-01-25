@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 
 class WeekBalanceView(MonthBalanceView):
 
-    def set_title_label(self):
+    def set_title_label(self) -> QtWidgets.QLabel:
         current_date = get_current_date()
         last_week_date = get_last_week('view')
         return QtWidgets.QLabel(self.interface_languages['week'] + ': ' +

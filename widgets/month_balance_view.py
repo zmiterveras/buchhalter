@@ -21,11 +21,11 @@ class MonthBalanceView(Controller):
         self.view_box.addWidget(self.label_balance)
         self.set_table(start_date, stop_date)
 
-    def set_title_label(self):
+    def set_title_label(self) -> QtWidgets.QLabel:
         month = get_current_date('month')
         return QtWidgets.QLabel(self.interface_languages['month'] + ': ' + month)
 
-    def get_data(self, start_date: str, table_names: tuple, stop_date: str):
+    def get_data(self, start_date: str, table_names: tuple, stop_date: str) -> tuple:
         return unpacking(self.get_last_time_span_values(start_date, table_names, stop_date))
 
     def get_total_value(self, start_date: str, name: str, stop_date: str | None) -> str:

@@ -74,10 +74,6 @@ class Controller(CentralWidget):
         cat_items_dict = self.get_bar_graph_detailed_dict(cat_names, cat_values_list)
         return names, cat_items_dict
 
-
-    # def get_time_span_category_note_values(self, start_date: str, table_names: tuple, stop_date: str) -> list:
-    #     return self.sql_handler.get_time_span_values(start_date, table_names, stop_date, self.category, self.note_search_record)
-
     def add_value_to_db(self, date: str, value: int, category: int, note: str, id_: None | int, table_name: str):
         self.validation_new_record(date, value, category, note, id_, self.old_value, table_name)
         self.old_value = 0
@@ -110,7 +106,7 @@ class Controller(CentralWidget):
                                                     defaultButton=QtWidgets.QMessageBox.No)
             return result, row
 
-    def check_values_date(self, received_date: str):
+    def check_values_date(self, received_date: str) -> bool:
         current_date = get_current_date('day')
         if current_date < received_date:
             QtWidgets.QMessageBox.warning(None, self.interface_languages['warning'],
@@ -118,7 +114,7 @@ class Controller(CentralWidget):
             return False
         return True
 
-    def check_values_span_dates(self, start_date: str, stop_date: str):
+    def check_values_span_dates(self, start_date: str, stop_date: str) -> bool:
         check_start = self.check_values_date(start_date)
         check_stop = self.check_values_date(stop_date)
         if start_date == stop_date:
@@ -195,7 +191,7 @@ class Controller(CentralWidget):
             cat_items_dict[name] = []
         return cat_items_dict
 
-    def get_cat_names_specified(self, cat_names: list, cat_values: list ):
+    def get_cat_names_specified(self, cat_names: list, cat_values: list) -> list:
         cat_names_specified = []
         for name in cat_names:
             for items in cat_values:

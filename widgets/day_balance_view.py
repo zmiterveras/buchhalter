@@ -11,6 +11,6 @@ logger = getLogger(__name__)
 
 class DayBalanceView(MonthBalanceView):
 
-    def set_title_label(self):
+    def set_title_label(self) -> QtWidgets.QLabel:
         current_date = get_current_date()
         return QtWidgets.QLabel(self.interface_languages['day'] + ': ' + current_date)
